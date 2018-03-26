@@ -4,6 +4,14 @@
     <form id="loginForm" method="post" enctype="multipart/form-data">
       <table border="0px" id="loginTable">
         <form-input v-for="element in formElements" v-bind:type="element.type" v-bind:caption="element.caption" v-bind:name="element.name" v-bind:key="element.id" />
+        <!-- TODO make this a form-input -->
+        <tr><td style="width:40%"></td><td>Role</td><td>
+          <select name="role">
+            <option value="tenant">Tenant</option>
+            <option value="landlord">Landlord</option>
+            <option value="maint">Maintenance Worker</option>
+          </select>
+        <td style="width:40%"></td></td></tr>
       </table>
       <p><input type="submit" value="Register" /></p>
     </form>
@@ -54,12 +62,6 @@ export default {
           name: 'name',
           caption: 'Your Name'
         },
-        {
-          id: 6,
-          type: 'text',
-          name: 'role',
-          caption: 'Role'
-        }
       ]
     }
   }
@@ -67,7 +69,7 @@ export default {
 
 Vue.component('form-input', {
   props: ['type', 'name', 'caption'],
-  template: '<tr><td style="width:40%"></td><td>{{ caption }}</td><td><input v-bind:type="type" v-bind:name="name" v-bind:placeholder="caption" /><td style="width:40%"></td></td>'
+  template: '<tr><td style="width:40%"></td><td>{{ caption }}</td><td><input v-bind:type="type" v-bind:name="name" v-bind:placeholder="caption" /><td style="width:40%"></td></td></tr>'
 })
 </script>
 
