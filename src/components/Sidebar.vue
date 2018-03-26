@@ -2,8 +2,8 @@
   <div id="sidebar">
     <p>You are not logged in.</p>
     <ul id="sidebaroptions">
-      <li class="first"><router-link to="/Login">Log In</router-link></li>
-      <li><router-link to="/Register">Register</router-link></li>
+      <li class="first"><a href="#/Login">Log In</a></li>
+      <li><a href="#/Register">Register</a></li>
     </ul>
   </div>
 </template>

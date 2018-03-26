@@ -1,11 +1,11 @@
 <template>
   <div class="hello" id="loginForm">
-    <h2>Log In</h2>
+    <h2>Register</h2>
     <form id="loginForm" method="post" enctype="multipart/form-data">
       <table border="0px" id="loginTable">
         <form-input v-for="element in formElements" v-bind:type="element.type" v-bind:caption="element.caption" v-bind:name="element.name" v-bind:key="element.id" />
       </table>
-      <p><input type="submit" value="Log in!" /></p>
+      <p><input type="submit" value="Register" /></p>
     </form>
   </div>
 </template>
@@ -14,7 +14,7 @@
 import Vue from 'vue'
 
 export default {
-  name: 'LoginPage',
+  name: 'Register',
   data () {
     return {
       formElements: [
@@ -29,6 +29,36 @@ export default {
           type: 'password',
           name: 'password',
           caption: 'Password'
+        },
+        {
+          id: 2,
+          type: 'password',
+          name: 'cpassword',
+          caption: 'Confirm Password'
+        },
+        {
+          id: 3,
+          type: 'email',
+          name: 'email',
+          caption: 'Email Address'
+        },
+        {
+          id: 4,
+          type: 'text',
+          name: 'phone',
+          caption: 'Phone Number'
+        },
+        {
+          id: 5,
+          type: 'text',
+          name: 'name',
+          caption: 'Your Name'
+        },
+        {
+          id: 6,
+          type: 'text',
+          name: 'role',
+          caption: 'Role'
         }
       ]
     }
