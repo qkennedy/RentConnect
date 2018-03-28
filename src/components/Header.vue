@@ -1,5 +1,5 @@
 <template>
-  <div id="header">
+  <div class="header">
     <h1 id="headerH1">RentConnect?</h1>
   </div>
 </template>
