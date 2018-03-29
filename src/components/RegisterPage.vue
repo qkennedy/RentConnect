@@ -11,7 +11,7 @@
             <option value="landlord">Landlord</option>
             <option value="maint">Maintenance Worker</option>
           </select>
-        <td style="width:40%"></td></td></tr>
+        <td style="width:40%"></td></tr>
       </table>
       <p><input type="submit" value="Register" /></p>
     </form>
@@ -61,7 +61,7 @@ export default {
           type: 'text',
           name: 'name',
           caption: 'Your Name'
-        },
+        }
       ]
     }
   }
