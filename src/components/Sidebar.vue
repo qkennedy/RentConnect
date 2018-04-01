@@ -1,7 +1,7 @@
 <template>
   <div id="sidebar">
     <p>You are not logged in.</p>
-    <ul id="sidebaroptions">
+    <ul class="optionlist" id="sidebaroptions">
       <li class="first"><a href="#/Login">Log In</a></li>
       <li><a href="#/Register">Register</a></li>
     </ul>
@@ -41,16 +41,17 @@ export default {
   padding:0;
 }
 
-#sidebaroptions li.first {
+.optionlist li.first {
   border-bottom: none;
 }
 
-#sidebaroptions li {
+.optionlist li {
   list-style-type: none;
   padding-left:0px;
   margin-left:0px;
   text-align:center;
   border: 1px solid #000;
+  display:block;
 }
 
 #container {
