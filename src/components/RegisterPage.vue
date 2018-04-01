@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import Vue from 'vue'
+import Components from '@/components/UIComponents'
 
 export default {
   name: 'Register',
@@ -64,13 +64,11 @@ export default {
         }
       ]
     }
+  },
+  components: {
+    Components
   }
 }
-
-Vue.component('form-input', {
-  props: ['type', 'name', 'caption'],
-  template: '<tr><td style="width:40%"></td><td>{{ caption }}</td><td><input v-bind:type="type" v-bind:name="name" v-bind:placeholder="caption" /><td style="width:40%"></td></td></tr>'
-})
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

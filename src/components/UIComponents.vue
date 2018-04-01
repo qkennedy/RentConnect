@@ -14,4 +14,9 @@ Vue.component('property-li-info', {
   props: ['address', 'rentdate', 'rentamt', 'late'],
   template: '<p>Address: {{ address }}<br />Rent: {{ rentamt }}<br />Due: {{ rentdate }}</p>'
 })
+
+Vue.component('form-input', {
+  props: ['type', 'name', 'caption'],
+  template: '<tr><td style="width:40%"></td><td>{{ caption }}</td><td><input v-bind:type="type" v-bind:name="name" v-bind:placeholder="caption" /><td style="width:40%"></td></td>'
+})
 </script>
