@@ -1,6 +1,6 @@
 <template>
-  <div class="hello" id="tenantPortal">
-    <h2>Tenant Portal</h2>
+  <div class="hello" id="landlordPortal">
+    <h2>Landlord Portal</h2>
 
     <div class="left">
         <h3>Notifications</h3>
@@ -10,10 +10,10 @@
         <h3>Options</h3>
         <ul class="optionlist">
           <!-- TODO: fill these with appropriate URLs and fill out address and whatever as appropriate -->
-          <li class="first"><a href="#/">Contact landlord</a></li>
-          <li><a href="#/">My apartment:</a><br />Address: 1234 Sesame Street<br />Rent due: $1000.00, March 31</li>
+          <li class="first"><a href="#/">Notify tenants</a></li>
+          <li><a href="#/">My properties</a><property-li-info address="1234 Sesame Street" rentamt="$960.00" rentdate="March 31" late="true"></property-li-info><a href="#/">View all</a></li>
           <li><a href="#/">View finances</a></li>
-          <li><a href="#/">Maintenance requests</a></li>
+          <li><a href="#/">Maintenance requests</a><br />55 unread</li>
           <li><a href="#/">Documents</a></li>
         </ul>
     </div>
@@ -31,13 +31,13 @@ export default {
         // TODO: replace this with a way to get these from the backend
         {
           id: 0,
-          title: 'Rent due',
-          contents: 'Your rent is due'
+          title: 'New maintenance request',
+          contents: 'Alex submitted a maintenance request'
         },
         {
           id: 1,
-          title: 'Maintenance request comment',
-          contents: 'Your maintenance request has received a new comment: <br /><i>I fixed it.</i>'
+          title: 'New application',
+          contents: 'Andrea submitted an application to view a property.'
         }
       ]
     }
@@ -57,7 +57,32 @@ ul {
   list-style-type: none;
   padding: 0;
 }
+li {
+  display: inline-block;
+  margin: 0 10px;
+}
 a {
   color: #42b983;
+}
+
+.left {
+    float:left;
+    text-align:left;
+    padding-left: 5px;
+}
+.left .notification p {
+    margin-left:10px;
+}
+
+.right {
+    float:right;
+    background-color:#FF3;
+    padding-right:0px;
+    margin-right:0px;
+}
+
+.right li {
+    padding-right:0px;
+    margin-right:0px;
 }
 </style>

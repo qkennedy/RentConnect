@@ -49,6 +49,7 @@ export default {
   list-style-type: none;
   padding-left:0px;
   margin-left:0px;
+  margin-right:0px;
   text-align:center;
   border: 1px solid #000;
   display:block;

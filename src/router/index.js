@@ -4,6 +4,7 @@ import IndexPage from '@/components/IndexPage'
 import LoginPage from '@/components/LoginPage'
 import RegisterPage from '@/components/RegisterPage'
 import TenantPortal from '@/components/TenantPortal'
+import LandlordPortal from '@/components/LandlordPortal'
 
 Vue.use(Router)
 
@@ -28,6 +29,11 @@ export default new Router({
       path: '/TenantPortal/',
       name: 'TenantPortal',
       component: TenantPortal
+    },
+    {
+      path: '/LandlordPortal/',
+      name: 'LandlordPortal',
+      component: LandlordPortal
     }
   ]
 })
