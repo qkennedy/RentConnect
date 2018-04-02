@@ -8,8 +8,9 @@
 //declare this every time and automate the begin and end portions
 //also should move away so we can mock this out
 var mysql = require('mysql');
+var Database = require('./database')
 
-var connection = mysql.createConnection({
+var database = new Database({
   host     : 'localhost',
   user     : 'root',
   password : 'postgres',
@@ -17,46 +18,70 @@ var connection = mysql.createConnection({
 });
 module.exports = {
 
-  getUserById: async function(id) {
-    connection.connect();
-    var user;
-    connection.query('select *   from user where id = ?;', [id],
-     function (error, results, fields) {
-      if (error) throw error;
-      console.log('the user is: ', results[0]);
-      user = results[0]
-    });
-    connection.end();
-    return user
+  getUserById: function(id) {
+    let user;
+      database.open()
+      return database.query('select *   from user where id = ?;', [id]).then( rows => {
+        user = rows[0];
+        return database.close()
+      } )
+      .then( () => {
+        user.role = this.convertRole(user)
+        return user;
+     });
   },
 
-  //Need to make a function to convert roles from int to string
-  createUser: async function(user) {
-    connection.connect();
-    var results = await connection.query(`insert into user (id, username, password, email, cell_number, role)
-                      values(null, ?,?,?,?,?);`,
-     [user.username, user.password, user.email, user.cellNumber, user.role],
-     function (error, results, fields) {
-      if (error) throw error;
-    });
-    console.log(results[0]);
-    connection.end();
-    return results[0];
+  getBasicDetails: function(id) {
+    let user;
+    database.open()
+    return database.query('select (username, email, cell_number)   from user where id = ?;', [id]).then( rows => {
+      user = rows[0];
+      return database.close()
+    } )
+    .then( () => {
+    return user;
+   });
   },
+
+  getBasicDetByIdArray: function(idArr) {
+    let users;
+    database.open()
+    return database.query('select (username, email, cell_number)   from user where id in ?;', [idArr]).then( rows => {
+      users = rows;
+      return database.close()
+    } )
+    .then( () => {
+    return users;
+   });
+  },
+
+  createUser: function(user) {
+    //need to add a method to hash password
+    database.open();
+    return database.query(`insert into user (id, username, password, email, cell_number, role)
+                      values(null, ?,?,?,?,?);`,
+                      [user.username, user.password, user.email, user.cellNumber, user.role]).then( rows => {
+      user = rows[0];
+      return database.close();
+    } );
+  },
+
+  //LandLordSpecific
+
 
   convertRole: function(user) {
     switch(user.role) {
       case 1:
-        user.role = 'tenant'
+        return 'tenant'
         break;
       case 2:
-        user.role = 'landlord'
+        return 'landlord'
         break;
       case 3:
-        user.role = 'maintenanceWorker'
+        return 'maintenanceWorker'
         break;
       default:
-        user.role = 'prospectiveUser'
+        return 'prospectiveUser'
         break;
     }
     return user

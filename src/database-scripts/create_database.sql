@@ -2,7 +2,7 @@
 CREATE DATABASE RentConnect;
 
 -- Create User Table
-
+--TODO add actual name as a col
 CREATE TABLE `rentconnect`.`user` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `username` VARCHAR(32) NOT NULL,
@@ -25,6 +25,7 @@ CREATE TABLE `rentconnect`.`user` (
     UNIQUE INDEX `id_UNIQUE` (`id` ASC));
 
 -- Create tenants table, it maps properties to tenants
+--I should reorder this, but I'm not gonna.
 CREATE TABLE `rentconnect`.`tenants` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `tenant_id` INT NULL,
