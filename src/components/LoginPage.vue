@@ -1,7 +1,7 @@
 <template>
-  <div class="hello" id="loginForm">
+  <div id="loginForm">
     <h2>Log In</h2>
-    <form id="loginForm" method="post" enctype="multipart/form-data">
+    <form class="fullPageForm" id="loginForm" method="post" enctype="multipart/form-data">
       <table border="0px" id="loginTable">
         <form-input v-for="element in formElements" v-bind:type="element.type" v-bind:caption="element.caption" v-bind:name="element.name" v-bind:key="element.id" />
       </table>
@@ -12,6 +12,8 @@
 
 <script>
 import Components from '@/components/UIComponents'
+
+document.title = 'Log in'
 
 export default {
   name: 'LoginPage',

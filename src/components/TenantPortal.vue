@@ -23,6 +23,8 @@
 <script>
 import Components from '@/components/UIComponents'
 
+document.title = 'Tenant portal'
+
 export default {
   name: 'TenantPortal',
   data () {

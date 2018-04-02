@@ -16,7 +16,8 @@ Vue.component('property-li-info', {
 })
 
 Vue.component('form-input', {
-  props: ['type', 'name', 'caption'],
-  template: '<tr><td style="width:40%"></td><td>{{ caption }}</td><td><input v-bind:type="type" v-bind:name="name" v-bind:placeholder="caption" /><td style="width:40%"></td></td>'
+  // TODO: if type is "yesno" then show radio buttons
+  props: ['type', 'name', 'caption', 'value'],
+  template: '<tr><td style="width:20%"></td><td>{{ caption }}</td><td><input v-bind:type="type" v-bind:name="name" v-bind:placeholder="caption" v-bind:value="value" /><td style="width:20%"></td></td>'
 })
 </script>

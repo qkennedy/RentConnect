@@ -38,6 +38,7 @@ export default {
     margin-right:0px;
     padding-left:0px;
     height:100%;
+    min-width:200px;
 }
 
 .right li {
@@ -50,9 +51,13 @@ ul {
   list-style-type: none;
   padding: 0;
 }
+
 li {
   display: inline-block;
   margin: 0 10px;
+}
+
+.fullPageForm table {
 }
 
 </style>

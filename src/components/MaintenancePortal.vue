@@ -5,16 +5,16 @@
     <div class="left">
         <h3>Notifications</h3>
         <notification-entry v-for="n in notifications" v-bind:title="n.title" v-bind:contents="n.contents" v-bind:key="n.id"></notification-entry>
+        <p style="text-align: center">
+          <a href="#">See more...</a>
+        </p>
     </div>
     <div class="right">
         <h3>Options</h3>
         <ul class="optionlist">
           <!-- TODO: fill these with appropriate URLs and fill out address and whatever as appropriate -->
-          <li class="first"><a href="#/">Notify tenants</a></li>
-          <li><a href="#/">My properties</a><property-li-info address="1234 Sesame Street" rentamt="$960.00" rentdate="March 31" late="true"></property-li-info><a href="#/">View all</a></li>
-          <li><a href="#/">View finances</a></li>
-          <li><a href="#/">Maintenance requests</a><br />55 unread</li>
-          <li><a href="#/">Documents</a></li>
+          <li class="first"><a href="#/">Active Requests</a></li>
+          <li><a href="#/">Request History</a></li>
         </ul>
     </div>
   </div>
@@ -31,12 +31,12 @@ export default {
         // TODO: replace this with a way to get these from the backend
         {
           id: 0,
-          title: 'New maintenance request',
-          contents: 'Alex submitted a maintenance request'
+          title: 'Maintenance request from Bob',
+          contents: 'My window broke!'
         },
         {
           id: 1,
-          title: 'New application',
+          title: 'Maintenance request closed',
           contents: 'Andrea submitted an application to view a property.'
         }
       ]
