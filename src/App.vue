@@ -57,7 +57,22 @@ li {
   margin: 0 10px;
 }
 
+.fullPageForm {
+  width:100%;
+}
+
 .fullPageForm table {
+  width: 100%;
+}
+
+.fullPageForm table .leftColumn {
+  text-align: right;
+  width:50%;
+}
+
+.fullPageForm table .rightColumn {
+  text-align: left;
+  width:50%;
 }
 
 </style>

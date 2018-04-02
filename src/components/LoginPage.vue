@@ -57,12 +57,4 @@ li {
 a {
   color: #42b983;
 }
-
-#loginForm {
-  text-align:center;
-}
-
-#loginTable {
-  width: 100%;
-}
 </style>

@@ -1,17 +1,20 @@
 <template>
-  <div class="hello" id="loginForm">
+  <div class="hello" id="registerForm">
     <h2>Register</h2>
-    <form id="loginForm" method="post" enctype="multipart/form-data">
+    <form class="fullPageForm" id="loginForm" method="post" enctype="multipart/form-data">
       <table border="0px" id="loginTable">
         <form-input v-for="element in formElements" v-bind:type="element.type" v-bind:caption="element.caption" v-bind:name="element.name" v-bind:key="element.id" />
         <!-- TODO make this a form-input -->
-        <tr><td style="width:40%"></td><td>Role</td><td>
-          <select name="role">
-            <option value="tenant">Tenant</option>
-            <option value="landlord">Landlord</option>
-            <option value="maint">Maintenance Worker</option>
-          </select>
-        <td style="width:40%"></td></tr>
+        <tr>
+          <td class="leftColumn">Role</td>
+          <td class="rightColumn">
+            <select name="role">
+              <option value="tenant">Tenant</option>
+              <option value="landlord">Landlord</option>
+              <option value="maint">Maintenance Worker</option>
+            </select>
+          </td>
+        </tr>
       </table>
       <p><input type="submit" value="Register" /></p>
     </form>
@@ -86,13 +89,5 @@ li {
 }
 a {
   color: #42b983;
-}
-
-#loginForm {
-  text-align:center;
-}
-
-#loginTable {
-  width: 100%;
 }
 </style>

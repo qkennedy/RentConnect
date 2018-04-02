@@ -1,6 +1,6 @@
 <template>
   <div class="hello" id="landlordPortal">
-    <h2>Landlord Portal</h2>
+    <h2>Maintenance Portal</h2>
 
     <div class="left">
         <h3>Notifications</h3>
@@ -46,6 +46,8 @@ export default {
     Components
   }
 }
+
+document.title = 'Maintenance Portal'
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

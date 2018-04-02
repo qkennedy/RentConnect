@@ -7,6 +7,7 @@ import TenantPortal from '@/components/TenantPortal'
 import LandlordPortal from '@/components/LandlordPortal'
 import UserProfilePage from '@/components/UserProfile'
 import MaintenancePortal from '@/components/MaintenancePortal'
+import ApplicationPage from '@/components/ApplicationPage'
 
 Vue.use(Router)
 
@@ -46,6 +47,11 @@ export default new Router({
       path: '/MaintenancePortal/',
       name: 'MaintenancePortal',
       component: MaintenancePortal
+    },
+    {
+      path: '/Apply',
+      name: 'ApplicationPage',
+      component: ApplicationPage
     }
   ]
 })
