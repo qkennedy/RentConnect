@@ -21,7 +21,7 @@ Vue.component('form-input', {
 })
 
 Vue.component('leftright-static-display', {
-  // TODO: force the value
+  // TODO: force the value to display
   props: ['type', 'name', 'caption', 'value'],
   template: '<tr><td class="leftColumn">{{ caption }}</td><td class="rightColumn"><input v-bind:type="type" v-bind:name="name" v-bind:placeholder="caption" v-bind:value="123" readonly="readonly" /></td></tr>'
 })

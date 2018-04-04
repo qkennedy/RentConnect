@@ -10,6 +10,8 @@ import MaintenancePortal from '@/components/MaintenancePortal'
 import ApplicationPage from '@/components/ApplicationPage'
 import ProcessApplicationPage from '@/components/ProcessApplicationPage'
 import FinancesPage from '@/components/FinancesPage'
+import SubmitMaintenanceRequestPage from '@/components/SubmitMaintenanceRequestPage'
+import ViewMaintenanceRequestPage from '@/components/ViewMaintenanceRequestPage'
 
 Vue.use(Router)
 
@@ -64,6 +66,16 @@ export default new Router({
       path: '/Finances',
       name: 'FinancesPage',
       component: FinancesPage
+    },
+    {
+      path: '/SubmitMaintenanceRequest',
+      name: 'SubmitMaintenanceRequestPage',
+      component: SubmitMaintenanceRequestPage
+    },
+    {
+      path: '/ViewMaintenanceRequest',
+      name: 'ViewMaintenanceRequestPage',
+      component: ViewMaintenanceRequestPage
     }
   ]
 })
