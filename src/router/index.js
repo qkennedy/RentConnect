@@ -8,6 +8,8 @@ import LandlordPortal from '@/components/LandlordPortal'
 import UserProfilePage from '@/components/UserProfile'
 import MaintenancePortal from '@/components/MaintenancePortal'
 import ApplicationPage from '@/components/ApplicationPage'
+import ProcessApplicationPage from '@/components/ProcessApplicationPage'
+import FinancesPage from '@/components/FinancesPage'
 
 Vue.use(Router)
 
@@ -52,6 +54,16 @@ export default new Router({
       path: '/Apply',
       name: 'ApplicationPage',
       component: ApplicationPage
+    },
+    {
+      path: '/ProcessApplication',
+      name: 'ProcessApplicationPage',
+      component: ProcessApplicationPage
+    },
+    {
+      path: '/Finances',
+      name: 'FinancesPage',
+      component: FinancesPage
     }
   ]
 })
