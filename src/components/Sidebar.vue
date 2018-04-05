@@ -4,6 +4,8 @@
     <ul class="optionlist" id="sidebaroptions">
       <li class="first"><a href="#/Login">Log In</a></li>
       <li><a href="#/Register">Register</a></li>
+      <li><a href="#/TenantPortal">Tenant Portal (temp)</a></li>
+      <li><a href="#/LandlordPortal">Landlord Portal (temp)</a></li>
     </ul>
   </div>
 </template>
@@ -41,10 +43,6 @@ export default {
   padding:0;
 }
 
-.optionlist li.first {
-  border-bottom: none;
-}
-
 .optionlist li {
   list-style-type: none;
   padding-left:0px;
@@ -53,6 +51,11 @@ export default {
   text-align:center;
   border: 1px solid #000;
   display:block;
+  border-top: none;
+}
+
+.optionlist li.first {
+  border-top: 1px solid #000;
 }
 
 #container {

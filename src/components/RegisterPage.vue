@@ -24,6 +24,8 @@
 <script>
 import Components from '@/components/UIComponents'
 
+document.title = 'Register'
+
 export default {
   name: 'Register',
   data () {

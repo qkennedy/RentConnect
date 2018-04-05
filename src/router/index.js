@@ -12,6 +12,7 @@ import ProcessApplicationPage from '@/components/ProcessApplicationPage'
 import FinancesPage from '@/components/FinancesPage'
 import SubmitMaintenanceRequestPage from '@/components/SubmitMaintenanceRequestPage'
 import ViewMaintenanceRequestPage from '@/components/ViewMaintenanceRequestPage'
+import BulkNotificationPage from '@/components/BulkNotificationPage'
 
 Vue.use(Router)
 
@@ -76,6 +77,11 @@ export default new Router({
       path: '/ViewMaintenanceRequest',
       name: 'ViewMaintenanceRequestPage',
       component: ViewMaintenanceRequestPage
+    },
+    {
+      path: '/BulkNotification',
+      name: 'BulkNotificationPage',
+      component: BulkNotificationPage
     }
   ]
 })

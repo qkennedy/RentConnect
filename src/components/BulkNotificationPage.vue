@@ -1,19 +1,21 @@
 <template>
   <div id="loginForm">
-    <h2>Submit Maintenance Request</h2>
+    <h2>Send Bulk Notification</h2>
     <form class="fullPageForm" id="loginForm" method="post" enctype="multipart/form-data">
       <table border="0px" id="loginTable">
         <form-input v-for="element in formElements" v-bind:type="element.type" v-bind:caption="element.caption" v-bind:name="element.name" v-bind:key="element.id" />
+        <tenant-checkbox-row v-for="tenant in tenants" v-bind:key="tenant.id" v-bind:name="tenant.name"></tenant-checkbox-row>
       </table>
-      <p><input type="submit" value="Submit" /></p>
+      <p><input type="submit" value="Send" /></p>
     </form>
   </div>
 </template>
 
 <script>
+import Vue from 'vue'
 import Components from '@/components/UIComponents'
 
-document.title = 'Submit Maintenance Request'
+document.title = 'Send Bulk Notification'
 
 export default {
   name: 'LoginPage',
@@ -23,20 +25,28 @@ export default {
         {
           id: 0,
           type: 'text',
-          name: 'location',
-          caption: 'Location'
+          name: 'subject',
+          caption: 'Subject'
         },
         {
           id: 1,
           type: 'textarea',
-          name: 'description',
-          caption: 'Description'
+          name: 'body',
+          caption: 'Body'
+        }
+      ],
+      tenants: [
+        {
+          id: 0,
+          name: 'John F. Kennedy'
+        },
+        {
+          id: 1,
+          name: 'Abraham Lincoln'
         },
         {
           id: 2,
-          type: 'file',
-          name: 'image',
-          caption: 'Image to attach'
+          name: 'Franklin D. Roosevelt'
         }
       ]
     }
@@ -45,6 +55,11 @@ export default {
     Components
   }
 }
+
+Vue.component('tenant-checkbox-row', {
+  props: ['name'],
+  template: '<tr><td class="leftColumn">{{ name }}</td><td class="rightColumn"><input type="checkbox" checked="checked" /></td></tr>'
+})
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
