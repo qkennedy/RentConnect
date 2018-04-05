@@ -1,0 +1,58 @@
+<template>
+  <div class="hello" id="viewDocumentPage">
+    <h2>View Document</h2>
+    <div style="text-align: left; padding-left: 5px">
+      <h3>{{ docTitle }}</h3>
+      <p>
+        Last updated: {{ lastUpdated }}<br />
+        <a href="#">View Document</a>
+      </p>
+      <h4>Upload New Version</h4>
+      <form>
+        <input type="file" /><br />
+        <input type="submit" value="Upload" />
+      </form>
+    </div>
+  </div>
+</template>
+
+<script>
+import Vue from 'vue'
+import Components from '@/components/UIComponents'
+
+document.title = 'View Document'
+
+export default {
+  name: 'ViewDocumentPage',
+  // TODO: get this from the backend
+  data () {
+    return {
+      docTitle: 'Sample Document Title',
+      lastUpdated: 'January 1, 1970',
+      fileLink: '#'
+    }
+  },
+  components: {
+    Components
+  }
+}
+
+Vue.component('document-table-row', {
+  props: ['title', 'link', 'lastUpdated'],
+  template: '<tr><td class="leftColumn"><router-link v-bind:to="link">{{ title }}</a></td><td class="rightColumn">{{ lastUpdated }}</td></tr>'
+})
+</script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped>
+h1, h2 {
+  font-weight: normal;
+}
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+a {
+  color: #42b983;
+}
+</style>

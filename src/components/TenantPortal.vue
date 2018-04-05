@@ -12,9 +12,9 @@
           <!-- TODO: fill these with appropriate URLs and fill out address and whatever as appropriate -->
           <li class="first"><a href="#/">Contact landlord</a></li>
           <li><a href="#/">My apartment:</a><br />Address: 1234 Sesame Street<br />Rent due: $1000.00, March 31</li>
-          <li><a href="#/Finances">View finances</a></li>
-          <li><a href="#/SubmitMaintenanceRequest">Maintenance requests</a></li>
-          <li><a href="#/">Documents</a></li>
+          <li><router-link to="Finances">View Finances</router-link></li>
+          <li><router-link to="SubmitMaintenanceRequest">Maintenance requests</router-link></li>
+          <li><router-link to="ManageDocuments">Manage Documents</router-link></li>
         </ul>
     </div>
   </div>

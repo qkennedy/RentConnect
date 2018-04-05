@@ -14,7 +14,7 @@
           <li><a href="#/">My properties</a><property-li-info address="1234 Sesame Street" rentamt="$960.00" rentdate="March 31" late="true"></property-li-info><a href="#/">View all</a></li>
           <li><a href="#/">View finances</a></li>
           <li><a href="#/">Maintenance requests</a><br />55 unread</li>
-          <li><a href="#/">Documents</a></li>
+          <li><router-link to="ManageDocuments">Documents</router-link></li>
         </ul>
     </div>
   </div>

@@ -2,7 +2,7 @@
   <div id="loginForm">
     <h2>View Maintenance Request</h2>
     <h3>Request details</h3>
-    <table border="0" class="maintenanceTable">
+    <table border="0" class="standardTable">
       <tr>
         <th>
           Location
@@ -156,13 +156,5 @@ li {
 }
 a {
   color: #42b983;
-}
-
-.maintenanceTable th, .maintenanceTable td {
-  text-align:left;
-}
-
-.maintenanceTable td {
-  padding-left: 5px;
 }
 </style>

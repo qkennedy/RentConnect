@@ -13,6 +13,8 @@ import FinancesPage from '@/components/FinancesPage'
 import SubmitMaintenanceRequestPage from '@/components/SubmitMaintenanceRequestPage'
 import ViewMaintenanceRequestPage from '@/components/ViewMaintenanceRequestPage'
 import BulkNotificationPage from '@/components/BulkNotificationPage'
+import ManageDocumentsPage from '@/components/ManageDocumentsPage'
+import ViewDocumentPage from '@/components/ViewDocumentPage'
 
 Vue.use(Router)
 
@@ -82,6 +84,16 @@ export default new Router({
       path: '/BulkNotification',
       name: 'BulkNotificationPage',
       component: BulkNotificationPage
+    },
+    {
+      path: '/ManageDocuments',
+      name: 'ManageDocumentsPage',
+      component: ManageDocumentsPage
+    },
+    {
+      path: '/ViewDocument/:id',
+      name: 'ViewDocumentPage',
+      component: ViewDocumentPage
     }
   ]
 })

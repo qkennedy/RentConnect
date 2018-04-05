@@ -75,4 +75,11 @@ li {
   width:50%;
 }
 
+.standardTable th, .standardTable td {
+  text-align:left;
+}
+
+.standardTable td, .standardTable th {
+  padding-left: 5px;
+}
 </style>
