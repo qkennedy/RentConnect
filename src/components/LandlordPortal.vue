@@ -24,7 +24,7 @@
 import Components from '@/components/UIComponents'
 
 export default {
-  name: 'TenantPortal',
+  name: 'LandlordPortal',
   data () {
     return {
       notifications: [
