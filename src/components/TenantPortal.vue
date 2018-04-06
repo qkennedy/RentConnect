@@ -1,10 +1,9 @@
 <template>
   <div class="hello" id="tenantPortal">
-    <h2>Tenant Portal</h2>
-
     <div class="left">
-        <h3>Notifications</h3>
-        <notification-entry v-for="n in notifications" v-bind:title="n.title" v-bind:contents="n.contents" v-bind:key="n.id"></notification-entry>
+      <h2>Tenant Portal</h2>
+      <h3>Notifications</h3>
+      <notification-entry v-for="n in notifications" v-bind:title="n.title" v-bind:contents="n.contents" v-bind:key="n.id"></notification-entry>
     </div>
     <div class="right">
         <h3>Options</h3>

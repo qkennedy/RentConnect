@@ -19,7 +19,7 @@
           Actions
         </th>
       </tr>
-      <property-entry v-for="prop in properties" v-bind:key="prop.id" v-bind:address="prop.address" v-bind:status="prop.status" v-bind:tenant="prop.tenant" v-bind:rentamt="prop.rentamt" v-bind:rentdue="prop.rentdue"></property-entry>
+      <property-entry v-for="prop in properties" v-bind:key="prop.id" v-bind:address="prop.address" v-bind:status="prop.status" v-bind:tenant="prop.tenant" v-bind:rentamt="prop.rentamt" v-bind:rentdue="prop.rentdue" v-bind:id="prop.id"></property-entry>
     </table>
   </div>
 </template>
@@ -55,7 +55,7 @@ export default {
 Vue.component('property-entry', {
   // TODO: make the finances, documents, edit listing link go to the right place (i.e. include the ID)
   props: ['id', 'address', 'status', 'tenant', 'rentamt', 'rentdue'],
-  template: '<tr><td>{{ address }}</td><td>{{ status }}</td><td>{{ tenant }}</td><td>{{ rentamt }}, due {{ rentdue }}</td><td><router-link to="/Finances">Finances</router-link><br /><router-link to="/ManageDocuments">Documents</router-link><br /><router-link to="/">Edit Listing</router-link></td></tr>'
+  template: '<tr><td>{{ address }}</td><td>{{ status }}</td><td>{{ tenant }}</td><td>{{ rentamt }}, due {{ rentdue }}</td><td><router-link v-bind:to="\'/Finances/\' + id">Finances</router-link><br /><router-link v-bind:to="\'/ManageDocuments/\' + id">Documents</router-link><br /><router-link v-bind:to="\'/EditListing/\' + id">Edit Listing</router-link></td></tr>'
 })
 </script>
 

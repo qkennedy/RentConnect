@@ -1,10 +1,9 @@
 <template>
   <div class="hello" id="landlordPortal">
-    <h2>Landlord Portal</h2>
-
     <div class="left">
-        <h3>Notifications</h3>
-        <notification-entry v-for="n in notifications" v-bind:title="n.title" v-bind:contents="n.contents" v-bind:key="n.id"></notification-entry>
+      <h2>Landlord Portal</h2>
+      <h3>Notifications</h3>
+      <notification-entry v-for="n in notifications" v-bind:title="n.title" v-bind:contents="n.contents" v-bind:key="n.id"></notification-entry>
     </div>
     <div class="right">
         <h3>Options</h3>
@@ -14,7 +13,6 @@
           <li><router-link to="MyProperties">My properties</router-link><property-li-info address="1234 Sesame Street" rentamt="$960.00" rentdate="March 31" late="true"></property-li-info><router-link to="MyProperties">View All</router-link></li>
           <li><router-link to="Finances">View finances</router-link></li>
           <li><router-link to="AllMaintenanceRequests">Maintenance requests</router-link><br />{{ unreadMaint }} unread</li>
-          <li><router-link to="ManageDocuments">Documents</router-link></li>
         </ul>
     </div>
   </div>

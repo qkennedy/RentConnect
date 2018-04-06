@@ -16,7 +16,7 @@
           Actions
         </th>
       </tr>
-      <maint-row v-for="req in maintRequests" v-bind:key="req.id" v-bind:property="req.property" v-bind:status="req.status" v-bind:lastUpdated="req.lastUpdated"></maint-row>
+      <maint-row v-for="req in maintRequests" v-bind:key="req.id" v-bind:property="req.property" v-bind:status="req.status" v-bind:lastUpdated="req.lastUpdated" v-bind:id="req.id"></maint-row>
     </table>
   </div>
 </template>
@@ -62,8 +62,8 @@ export default {
 
 Vue.component('maint-row', {
   // TODO: make "view" link to the specific page based on the id
-  props: ['property', 'status', 'lastUpdated'],
-  template: '<tr><td>{{ property }}</td><td v-if="status===\'unassigned\'" style="font-weight:bold; color:#900">Unassigned</td><td v-if="status===\'assigned\'" style="color:#060">Assigned</td><td v-if="status===\'closed\'">Closed</td><td>{{ lastUpdated }}</td><td><router-link to="/">View</router-link></td></tr>'
+  props: ['property', 'status', 'lastUpdated', 'id'],
+  template: '<tr><td>{{ property }}</td><td v-if="status===\'unassigned\'" style="font-weight:bold; color:#900">Unassigned</td><td v-if="status===\'assigned\'" style="color:#060">Assigned</td><td v-if="status===\'closed\'">Closed</td><td>{{ lastUpdated }}</td><td><router-link v-bind:to="\'/ViewMaintenanceRequest/\' + id">View</router-link></td></tr>'
 })
 
 document.title = 'Maintenance Requests'

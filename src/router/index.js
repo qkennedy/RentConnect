@@ -17,6 +17,7 @@ import ManageDocumentsPage from '@/components/ManageDocumentsPage'
 import ViewDocumentPage from '@/components/ViewDocumentPage'
 import MyPropertiesPage from '@/components/MyPropertiesPage'
 import AllMaintenanceRequestsPage from '@/components/AllMaintenanceRequestsPage'
+import EditListingPage from '@/components/EditListingPage'
 
 Vue.use(Router)
 
@@ -103,6 +104,11 @@ export default new Router({
       component: ManageDocumentsPage
     },
     {
+      path: '/ManageDocuments/:id',
+      name: 'ManageDocumentsPage',
+      component: ManageDocumentsPage
+    },
+    {
       path: '/ViewDocument/:id',
       name: 'ViewDocumentPage',
       component: ViewDocumentPage
@@ -111,6 +117,16 @@ export default new Router({
       path: '/MyProperties/',
       name: 'MyPropertiesPage',
       component: MyPropertiesPage
+    },
+    {
+      path: '/EditListing/:id',
+      name: 'EditListingPage',
+      component: EditListingPage
+    },
+    {
+      path: '/CreateListing/',
+      name: 'EditListingPage',
+      component: EditListingPage
     }
   ]
 })

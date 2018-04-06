@@ -1,20 +1,18 @@
 <template>
   <div class="hello" id="landlordPortal">
-    <h2>Maintenance Portal</h2>
-
     <div class="left">
-        <h3>Notifications</h3>
-        <notification-entry v-for="n in notifications" v-bind:title="n.title" v-bind:contents="n.contents" v-bind:key="n.id"></notification-entry>
-        <p style="text-align: center">
-          <a href="#">See more...</a>
-        </p>
+      <h2>Maintenance Portal</h2>
+      <h3>Notifications</h3>
+      <notification-entry v-for="n in notifications" v-bind:title="n.title" v-bind:contents="n.contents" v-bind:key="n.id"></notification-entry>
+      <p style="text-align: center">
+        <a href="#">See more...</a>
+      </p>
     </div>
     <div class="right">
         <h3>Options</h3>
         <ul class="optionlist">
           <!-- TODO: fill these with appropriate URLs and fill out address and whatever as appropriate -->
-          <li class="first"><a href="#/">Active Requests</a></li>
-          <li><a href="#/">Request History</a></li>
+          <li class="first"><router-link to="AllMaintenanceRequests">My Requests</router-link></li>
         </ul>
     </div>
   </div>
