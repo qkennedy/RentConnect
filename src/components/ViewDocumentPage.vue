@@ -5,6 +5,7 @@
       <h3>{{ docTitle }}</h3>
       <p>
         Last updated: {{ lastUpdated }}<br />
+        <!-- TODO: make this a link to the document PDF -->
         <a href="#">View Document</a>
       </p>
       <h4>Upload New Version</h4>

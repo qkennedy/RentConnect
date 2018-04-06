@@ -1,7 +1,7 @@
 <template>
-  <div id="loginForm">
+  <div id="notificationPage">
     <h2>Send Bulk Notification</h2>
-    <form class="fullPageForm" id="loginForm" method="post" enctype="multipart/form-data">
+    <form class="fullPageForm" id="notificationForm" method="post" enctype="multipart/form-data">
       <table border="0px" id="loginTable">
         <form-input v-for="element in formElements" v-bind:type="element.type" v-bind:caption="element.caption" v-bind:name="element.name" v-bind:key="element.id" />
         <tenant-checkbox-row v-for="tenant in tenants" v-bind:key="tenant.id" v-bind:name="tenant.name"></tenant-checkbox-row>
@@ -18,7 +18,7 @@ import Components from '@/components/UIComponents'
 document.title = 'Send Bulk Notification'
 
 export default {
-  name: 'LoginPage',
+  name: 'BulkNotificationPage',
   data () {
     return {
       formElements: [

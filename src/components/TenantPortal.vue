@@ -13,7 +13,7 @@
             Phone: <i v-if="landlordPhone===''">(not given)</i><span v-else>{{ landlordPhone }}</span><br />
             Email: {{ landlordEmail }}
           </li>
-          <li><b>My apartment:</b><br />Address: 1234 Sesame Street<br />Rent due: $1000.00, March 31</li>
+          <li><b>My apartment:</b><br />Address: {{ address }}<br />Rent due: {{ rentAmt }}, {{ rentDue }}</li>
           <li><router-link to="Finances">View Finances</router-link></li>
           <li><router-link to="SubmitMaintenanceRequest">Maintenance requests</router-link></li>
           <li><router-link to="ManageDocuments">Manage Documents</router-link></li>
@@ -40,12 +40,15 @@ export default {
         },
         {
           id: 1,
+          address: '1234 Sesame Street',
           title: 'Maintenance request comment',
           contents: 'Your maintenance request has received a new comment: <br /><i>I fixed it.</i>'
         }
       ],
       landlordPhone: '1-222-333-4444',
-      landlordEmail: 'barbara.snyder@case.edu'
+      landlordEmail: 'barbara.snyder@case.edu',
+      rentAmt: '$1000.00',
+      rentDue: 'March 31, 2018'
     }
   },
   components: {

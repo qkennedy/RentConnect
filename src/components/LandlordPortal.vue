@@ -8,9 +8,8 @@
     <div class="right">
         <h3>Options</h3>
         <ul class="optionlist">
-          <!-- TODO: fill these with appropriate URLs and fill out address and whatever as appropriate -->
-          <li class="first"><a href="#/BulkNotification">Notify tenants</a></li>
-          <li><router-link to="MyProperties">My properties</router-link><property-li-info address="1234 Sesame Street" rentamt="$960.00" rentdate="March 31" late="true"></property-li-info><router-link to="MyProperties">View All</router-link></li>
+          <li class="first"><router-link to="BulkNotification">Notify tenants</router-link></li>
+          <li><router-link to="MyProperties">My properties</router-link></li>
           <li><router-link to="Finances">View finances</router-link></li>
           <li><router-link to="AllMaintenanceRequests">Maintenance requests</router-link><br />{{ unreadMaint }} unread</li>
         </ul>

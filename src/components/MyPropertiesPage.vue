@@ -1,6 +1,9 @@
 <template>
   <div id="myPropertiesPage">
     <h2>My Properties</h2>
+    <p>
+      <router-link to="CreateListing">List New Property</router-link>
+    </p>
     <table border="0" class="standardTable">
       <tr>
         <th>

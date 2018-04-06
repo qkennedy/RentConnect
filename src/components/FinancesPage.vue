@@ -6,13 +6,12 @@
       <table border="0px" style="width: 100%">
         <tr>
           <td style="width:50%">
-            <!-- TODO: populate due date -->
-            <b>Due date: </b> March 31, 2018
+            <b>Due date: </b> {{ dueDate }}
           </td>
           <td style="width:50%">
             <!-- populate as necessary -->
-            Amount due: $1000.00<br />
-            Pay amount: $<input type="text" name="rentamt" value="1000.00" />
+            Amount due: ${{rentAmt}}<br />
+            Pay amount: $<input type="text" name="rentamt" v-bind:value="rentAmt" />
             <input type="submit" value="Pay" />
           </td>
         </tr>
@@ -90,7 +89,9 @@ export default {
       ],
       role: 'tenant',
       address: '1234 Sesame Street',
-      tenant: 'Amy Adams'
+      tenant: 'Amy Adams',
+      dueDate: 'March 31, 2018',
+      rentAmt: '1000.00'
     }
   },
   components: {

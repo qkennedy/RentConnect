@@ -1,7 +1,7 @@
 <template>
   <div class="hello" id="applicationForm">
-    <h2>Apply to rent property</h2>
-    <!-- TODO: include information about the property -->
+    <h2 v-if="$route.params.id==null">Create Listing</h2>
+    <h2 v-else>Edit Listing</h2>
     <form class="fullPageForm" id="loginForm" method="post" enctype="multipart/form-data">
       <table border="0px" id="loginTable">
         <form-input v-for="element in formElements" v-bind:type="element.type" v-bind:caption="element.caption" v-bind:name="element.name" v-bind:key="element.id" />
@@ -47,7 +47,7 @@ export default {
           name: 'latefee',
           caption: 'Rent late fee',
           value: ''
-        },
+        }
       ]
     }
   },

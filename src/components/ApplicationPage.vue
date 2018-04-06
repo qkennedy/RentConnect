@@ -1,8 +1,8 @@
 <template>
-  <div class="hello" id="applicationForm">
+  <div class="hello" id="applicationPage">
     <h2>Apply to rent property</h2>
     <!-- TODO: include information about the property -->
-    <form class="fullPageForm" id="loginForm" method="post" enctype="multipart/form-data">
+    <form class="fullPageForm" id="applicationForm" method="post" enctype="multipart/form-data">
       <table border="0px" id="loginTable">
         <form-input v-for="element in formElements" v-bind:type="element.type" v-bind:caption="element.caption" v-bind:name="element.name" v-bind:key="element.id" />
       </table>
@@ -15,7 +15,7 @@
 import Components from '@/components/UIComponents'
 
 export default {
-  name: 'Register',
+  name: 'Apply',
   data () {
     return {
       formElements: [

@@ -1,18 +1,17 @@
 <template>
-  <div class="hello" id="landlordPortal">
+  <div class="hello" id="maintenancePortal">
     <div class="left">
       <h2>Maintenance Portal</h2>
       <h3>Notifications</h3>
       <notification-entry v-for="n in notifications" v-bind:title="n.title" v-bind:contents="n.contents" v-bind:key="n.id"></notification-entry>
       <p style="text-align: center">
-        <a href="#">See more...</a>
+        <router-link to="AllMaintenanceRequests">See more...</router-link>
       </p>
     </div>
     <div class="right">
         <h3>Options</h3>
         <ul class="optionlist">
-          <!-- TODO: fill these with appropriate URLs and fill out address and whatever as appropriate -->
-          <li class="first"><router-link to="AllMaintenanceRequests">My Requests</router-link></li>
+          <li class="first"><router-link to="AllMaintenanceRequests">My Requests</router-link><br />{{ unread }} unread</li>
         </ul>
     </div>
   </div>
@@ -37,7 +36,8 @@ export default {
           title: 'Maintenance request closed',
           contents: 'Andrea submitted an application to view a property.'
         }
-      ]
+      ],
+      unread: 35
     }
   },
   components: {
