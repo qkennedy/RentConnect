@@ -15,6 +15,8 @@ import ViewMaintenanceRequestPage from '@/components/ViewMaintenanceRequestPage'
 import BulkNotificationPage from '@/components/BulkNotificationPage'
 import ManageDocumentsPage from '@/components/ManageDocumentsPage'
 import ViewDocumentPage from '@/components/ViewDocumentPage'
+import MyPropertiesPage from '@/components/MyPropertiesPage'
+import AllMaintenanceRequestsPage from '@/components/AllMaintenanceRequestsPage'
 
 Vue.use(Router)
 
@@ -56,37 +58,47 @@ export default new Router({
       component: MaintenancePortal
     },
     {
-      path: '/Apply',
+      path: '/Apply/:id',
       name: 'ApplicationPage',
       component: ApplicationPage
     },
     {
-      path: '/ProcessApplication',
+      path: '/ProcessApplication/:id',
       name: 'ProcessApplicationPage',
       component: ProcessApplicationPage
     },
     {
-      path: '/Finances',
+      path: '/Finances/',
       name: 'FinancesPage',
       component: FinancesPage
     },
     {
-      path: '/SubmitMaintenanceRequest',
+      path: '/Finances/:id',
+      name: 'FinancesPage',
+      component: FinancesPage
+    },
+    {
+      path: '/SubmitMaintenanceRequest/',
       name: 'SubmitMaintenanceRequestPage',
       component: SubmitMaintenanceRequestPage
     },
     {
-      path: '/ViewMaintenanceRequest',
+      path: '/ViewMaintenanceRequest/:id',
       name: 'ViewMaintenanceRequestPage',
       component: ViewMaintenanceRequestPage
     },
     {
-      path: '/BulkNotification',
+      path: '/AllMaintenanceRequests/',
+      name: 'AllMaintenanceRequestsPage',
+      component: AllMaintenanceRequestsPage
+    },
+    {
+      path: '/BulkNotification/',
       name: 'BulkNotificationPage',
       component: BulkNotificationPage
     },
     {
-      path: '/ManageDocuments',
+      path: '/ManageDocuments/',
       name: 'ManageDocumentsPage',
       component: ManageDocumentsPage
     },
@@ -94,6 +106,11 @@ export default new Router({
       path: '/ViewDocument/:id',
       name: 'ViewDocumentPage',
       component: ViewDocumentPage
+    },
+    {
+      path: '/MyProperties/',
+      name: 'MyPropertiesPage',
+      component: MyPropertiesPage
     }
   ]
 })

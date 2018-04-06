@@ -1,21 +1,44 @@
 <template>
   <div class="hello" id="applicationForm">
     <h2>Finances</h2>
-    <h3>Pay Rent</h3>
-    <table border="0px" style="width: 100%">
-      <tr>
-        <td style="width:50%">
-          <!-- TODO: populate due date -->
-          <b>Due date: </b> March 31, 2018
-        </td>
-        <td style="width:50%">
-          <!-- populate as necessary -->
-          Amount due: $1000.00<br />
-          Pay amount: $<input type="text" name="rentamt" value="1000.00" />
-          <input type="submit" value="Pay" />
-        </Td>
-      </tr>
-    </table>
+    <div v-if="role==='tenant'">
+      <h3>Pay Rent</h3>
+      <table border="0px" style="width: 100%">
+        <tr>
+          <td style="width:50%">
+            <!-- TODO: populate due date -->
+            <b>Due date: </b> March 31, 2018
+          </td>
+          <td style="width:50%">
+            <!-- populate as necessary -->
+            Amount due: $1000.00<br />
+            Pay amount: $<input type="text" name="rentamt" value="1000.00" />
+            <input type="submit" value="Pay" />
+          </td>
+        </tr>
+      </table>
+    </div>
+    <div v-if="role==='landlord'">
+      <h3>Property Information</h3>
+      <table class="standardTable">
+        <tr>
+          <th>
+            Address
+          </th>
+          <td>
+            {{ address }}
+          </td>
+        </tr>
+        <tr>
+          <th>
+            Tenant
+          </th>
+          <td>
+            {{ tenant }}
+          </td>
+        </tr>
+      </table>
+    </div>
     <h3>Past Receipts</h3>
     <table border="0px" style="width:100%">
       <tr>
@@ -43,6 +66,7 @@ export default {
   data () {
     return {
       // TODO: populate this with the values from the rent history
+      // If a tenant, make this just show the history for their assigned property. If a landlord and no property ID assigned, show the information for all properties. If ID asigned, show information just for that property.
       rentHistory: [
         {
           id: 0,
@@ -63,7 +87,10 @@ export default {
           receiptLink: '<a href="#/">Receipt</a>',
           late: true
         }
-      ]
+      ],
+      role: 'tenant',
+      address: '1234 Sesame Street',
+      tenant: 'Amy Adams'
     }
   },
   components: {
