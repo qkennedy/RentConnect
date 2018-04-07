@@ -43,10 +43,12 @@ module.exports = {
    });
   },
 
-  getBasicDetByIdArray: function(idArr) {
+  getBasicDetForUsers: function(idArr) {
     let users;
+    let sqlArray = database.convertArray(idArr)
+    console.log(sqlArray)
     database.open()
-    return database.query('select (username, email, cell_number)   from user where id in ?;', [idArr]).then( rows => {
+    return database.query('select (username, email, cell_number)   from user where id in ?;', [sqlArray]).then( rows => {
       users = rows;
       return database.close()
     } )
@@ -64,6 +66,10 @@ module.exports = {
       user = rows[0];
       return database.close();
     } );
+  },
+
+  deleteUser: function(userId) {
+
   },
 
   //LandLordSpecific
@@ -85,5 +91,11 @@ module.exports = {
         break;
     }
     return user
+  },
+  //Testing Functions
+
+  //This lets us mock out the database, so that we can check calls, supply responses
+  setDatabase: function(newDb) {
+    database = newDb
   }
 }

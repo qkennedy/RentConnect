@@ -21,6 +21,7 @@ module.exports = {
       return property;
      });
   },
+
   //Need to make a function to convert roles from int to string
   //TODO implement this
   createProperty: function(property) {
@@ -32,6 +33,7 @@ module.exports = {
       return database.close();
     } );
   },
+
   deleteProperty: function(id) {
 
   },
@@ -54,7 +56,7 @@ module.exports = {
     let tenants;
       database.open()
       return database.query('select (tenant_id) from tenants where property_id = ?;', [propertyId]).then( rows => {
-        return userFactory.getBasicDetByIdArray(rows)
+        return userFactory.getBasicDetForUsers(rows)
       }).then( users => {
         tenants = users;
         return database.close()
@@ -72,8 +74,15 @@ module.exports = {
       return database.close();
     } );
   },
+
   //TODO Implement
   removeTenant: function(propertyId, tenantId) {
 
+  },
+  //Testing Functions
+
+  //This lets us mock out the database, so that we can check calls, supply responses
+  setDatabase: function(newDb) {
+    database = newDb
   }
 }

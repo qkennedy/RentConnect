@@ -25,5 +25,17 @@ class Database {
             } );
         } );
     }
+    //Converts an array of
+    convertArray(array) {
+      var newStr = '('
+      for(var i = 0; i < array.length; i++) {
+        newStr = newStr.concat('' + array[i])
+        if(i-1 < array.length) {
+          newStr = newStr.concat(', ')
+        }
+      }
+      newStr = newStr.concat(')');
+      return newStr;
+    }
 }
 module.exports = Database;

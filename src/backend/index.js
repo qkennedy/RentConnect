@@ -1,5 +1,6 @@
 var restify = require('restify');
 const userFactory = require('./userFactory');
+const propertyFactory = require('./propertyFactory');
 var Database = require('./database')
 
 var database = new Database({
@@ -31,11 +32,13 @@ server.get('/rest/whoAmI',
 );
 
 //User EP
+
+
 server.get('/rest/user/:id',
   function(req, res, next) {
   //Need to have some security around endpoints like this.
   //This Works! This is the format we should do almost everything with
-  var user = userFactory.getUserById(req.params.id).then(user => {
+  userFactory.getUserById(req.params.id).then(user => {
     res.send(user)
     next()
   });
@@ -69,21 +72,15 @@ server.get('/rest/property/:id',
    });
   });
 
-  server.get('/rest/property/:id/tenant_details',
+
+  server.get('/rest/property/:propId/tenants',
   function(req, res, next) {
-  //Need to have some security around endpoints like this.
-  //This Works, but it would make testing easier if we can get it into userFactory
-  let property
-    database.open()
-    database.query('select *   from property where id = ?;', [req.params.id]).then( rows => {
-      property = rows[0];
-      return database.close()
-    } )
-    .then( () => {
-    res.send(property)
-    next()
-   });
+    var tenants = propertyFactory.getTenantDetsByPropertyId(req.params.propId).then(tenants => {
+      res.send(tenants)
+      next()
+    });
   });
+
 
 server.listen(8081, function() {
   console.log('%s listening at %s', server.name, server.url);
