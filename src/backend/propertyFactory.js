@@ -35,7 +35,13 @@ module.exports = {
   },
 
   deleteProperty: function(id) {
-
+    database.open();
+    return database.query(`DELETE FROM property WHERE id = ?;`,
+                          [userId]).then( rows => {
+      user = rows[0];
+      //Do I need to return results here?  Or does promise cover failure case
+      return database.close();
+    });
   },
 
   getPropertiesByLandlordId: function(landLordId) {
@@ -72,12 +78,18 @@ module.exports = {
                       values(null, ?,?);`,
                       [tenantId, property_id]).then( () => {
       return database.close();
-    } );
+    });
   },
 
   //TODO Implement
   removeTenant: function(propertyId, tenantId) {
-
+    database.open();
+    return database.query(`DELETE FROM property WHERE tenant_id = ? and property_id = ?;`,
+                          [tenantId, propertyId]).then( rows => {
+      user = rows[0];
+      //Do I need to return results here?  Or does promise cover failure case
+      return database.close();
+    });
   },
   //Testing Functions
 

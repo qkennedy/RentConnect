@@ -69,7 +69,13 @@ module.exports = {
   },
 
   deleteUser: function(userId) {
-
+    database.open();
+    return database.query(`DELETE FROM user WHERE id = ?;`,
+                      [userId]).then( rows => {
+      user = rows[0];
+      //Do I need to return results here?  Or does promise cover failure case
+      return database.close();
+    });
   },
 
   //LandLordSpecific

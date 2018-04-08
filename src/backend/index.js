@@ -54,6 +54,16 @@ server.post('/rest/createuser',
     });
 });
 
+server.delete('/rest/deleteuser/:id',
+  function(req, res, next) {
+  userFactory.createUser(req.params).then(() => {
+    res.send(202)
+    next()
+  });
+});
+
+
+
 //Property EP
 
 server.get('/rest/property/:id',
@@ -69,17 +79,33 @@ server.get('/rest/property/:id',
     .then( () => {
     res.send(property)
     next()
-   });
   });
+});
 
 
-  server.get('/rest/property/:propId/tenants',
+server.get('/rest/property/:propId/tenants',
   function(req, res, next) {
-    var tenants = propertyFactory.getTenantDetsByPropertyId(req.params.propId).then(tenants => {
+    propertyFactory.getTenantDetsByPropertyId(req.params.propId).then(tenants => {
       res.send(tenants)
       next()
     });
+});
+
+server.put('/rest/property/:propId/addTenant/:tenantId',
+function(req, res, next) {
+  propertyFactory.addTenant(req.params.propId, req.params.tenantId).then(() => {
+    res.send(201)
+    next()
   });
+});
+
+server.delete('/rest/property/:propId/removeTenant/:tenantId',
+function(req, res, next) {
+  propertyFactory.removeTenant(req.params.propId, req.params.tenantId).then(() => {
+    res.send(201)
+    next()
+  });
+});
 
 
 server.listen(8081, function() {
