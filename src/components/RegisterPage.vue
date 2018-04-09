@@ -1,7 +1,7 @@
 <template>
   <div class="hello" id="registerForm">
     <h2>Register</h2>
-    <form class="fullPageForm" id="loginForm" method="post" enctype="multipart/form-data">
+    <form class="fullPageForm" id="loginForm" method="post" enctype="multipart/form-data" action="/rest/createuser">
       <table border="0px" id="loginTable">
         <form-input v-for="element in formElements" v-bind:type="element.type" v-bind:caption="element.caption" v-bind:name="element.name" v-bind:key="element.id" />
         <!-- TODO make this a form-input -->

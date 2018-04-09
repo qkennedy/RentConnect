@@ -37,7 +37,7 @@ class Database {
       newStr = newStr.concat(')');
       return newStr;
     }
-    
+
     convertTimeFromDb(dbTime) {
 
     }

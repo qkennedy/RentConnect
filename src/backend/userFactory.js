@@ -30,6 +30,9 @@ module.exports = {
         return user;
      });
   },
+  getUserByUsername: function(username) {
+
+  },
 
   getBasicDetails: function(id) {
     let user;
@@ -62,7 +65,7 @@ module.exports = {
     database.open();
     return database.query(`insert into user (id, username, password, email, cell_number, role)
                       values(null, ?,?,?,?,?);`,
-                      [user.username, user.password, user.email, user.cellNumber, user.role]).then( rows => {
+                      [user.username, user.password, user.email, user.phone, this.convertRoleToInt(user.role)]).then( rows => {
       user = rows[0];
       return database.close();
     } );
@@ -94,6 +97,24 @@ module.exports = {
         break;
       default:
         return 'prospectiveUser'
+        break;
+    }
+    return user
+  },
+
+  convertRoleToInt: function(user) {
+    switch(user.role) {
+      case 'tenant':
+        return 1
+        break;
+      case 'landlord':
+        return '2'
+        break;
+      case 'maintenanceWorker':
+        return 1
+        break;
+      default:
+        return 4
         break;
     }
     return user
