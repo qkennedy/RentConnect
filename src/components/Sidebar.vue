@@ -1,16 +1,34 @@
 <template>
   <div id="sidebar">
     <p>You are not logged in.</p>
-    <ul id="sidebaroptions">
-      <li class="first"><a href="#/Login">Log In</a></li>
-      <li><a href="#/Register">Register</a></li>
+    <ul class="optionlist" id="sidebaroptions">
+      <li class="first" v-if="!loggedIn"><a href="#/Login">Log In</a></li>
+      <li v-if="!loggedIn"><a href="#/Register">Register</a></li>
+      <li class="first" v-if="loggedIn">
+        Logged in as:<br />{{ username }}
+      </li>
+      <li v-if="loggedIn">
+        <a href="#/UserProfile">Edit Profile</a>
+      </li>
+      <li v-if="loggedIn"><a href="#/Logout">Log Out</a></li>
+      <li v-if="role==='tenant'"><a href="#/TenantPortal">My Portal</a></li>
+      <li v-if="role==='landlord'"><a href="#/LandlordPortal">My Portal</a></li>
+      <li v-if="role==='maintenance'"><a href="#/MaintenancePortal">My Portal</a></li>
     </ul>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'Sidebar'
+  name: 'Sidebar',
+  data () {
+    return {
+      // TODO: get all this from the backend
+      loggedIn: true,
+      username: 'SampleUsername',
+      role: 'landlord'
+    }
+  }
 }
 </script>
 
@@ -41,16 +59,19 @@ export default {
   padding:0;
 }
 
-#sidebaroptions li.first {
-  border-bottom: none;
-}
-
-#sidebaroptions li {
+.optionlist li {
   list-style-type: none;
   padding-left:0px;
   margin-left:0px;
+  margin-right:0px;
   text-align:center;
   border: 1px solid #000;
+  display:block;
+  border-top: none;
+}
+
+.optionlist li.first {
+  border-top: 1px solid #000;
 }
 
 #container {

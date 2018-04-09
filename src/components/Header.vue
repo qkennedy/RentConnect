@@ -1,6 +1,6 @@
 <template>
-  <div class="header">
-    <h1 id="headerH1">RentConnect?</h1>
+  <div id="header">
+    <h1>RentConnect?</h1>
   </div>
 </template>
 
@@ -21,9 +21,10 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  width:100%;
 }
 
-#headerH1 {
+#header h1 {
   margin-top:0px;
 }
 

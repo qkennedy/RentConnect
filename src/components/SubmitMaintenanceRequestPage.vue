@@ -1,11 +1,11 @@
 <template>
   <div id="loginForm">
-    <h2>Log In</h2>
+    <h2>Submit Maintenance Request</h2>
     <form class="fullPageForm" id="loginForm" method="post" enctype="multipart/form-data">
       <table border="0px" id="loginTable">
         <form-input v-for="element in formElements" v-bind:type="element.type" v-bind:caption="element.caption" v-bind:name="element.name" v-bind:key="element.id" />
       </table>
-      <p><input type="submit" value="Log in!" /></p>
+      <p><input type="submit" value="Submit" /></p>
     </form>
   </div>
 </template>
@@ -13,7 +13,7 @@
 <script>
 import Components from '@/components/UIComponents'
 
-document.title = 'Log in'
+document.title = 'Submit Maintenance Request'
 
 export default {
   name: 'LoginPage',
@@ -23,14 +23,20 @@ export default {
         {
           id: 0,
           type: 'text',
-          name: 'username',
-          caption: 'Username'
+          name: 'location',
+          caption: 'Location'
         },
         {
           id: 1,
-          type: 'password',
-          name: 'password',
-          caption: 'Password'
+          type: 'textarea',
+          name: 'description',
+          caption: 'Description'
+        },
+        {
+          id: 2,
+          type: 'file',
+          name: 'image',
+          caption: 'Image to attach'
         }
       ]
     }

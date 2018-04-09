@@ -1,17 +1,20 @@
 <template>
-  <div class="hello" id="loginForm">
+  <div class="hello" id="registerForm">
     <h2>Register</h2>
-    <form id="loginForm" method="post" enctype="multipart/form-data">
+    <form class="fullPageForm" id="loginForm" method="post" enctype="multipart/form-data">
       <table border="0px" id="loginTable">
         <form-input v-for="element in formElements" v-bind:type="element.type" v-bind:caption="element.caption" v-bind:name="element.name" v-bind:key="element.id" />
         <!-- TODO make this a form-input -->
-        <tr><td style="width:40%"></td><td>Role</td><td>
-          <select name="role">
-            <option value="tenant">Tenant</option>
-            <option value="landlord">Landlord</option>
-            <option value="maint">Maintenance Worker</option>
-          </select>
-        <td style="width:40%"></td></tr>
+        <tr>
+          <td class="leftColumn">Role</td>
+          <td class="rightColumn">
+            <select name="role">
+              <option value="tenant">Tenant</option>
+              <option value="landlord">Landlord</option>
+              <option value="maint">Maintenance Worker</option>
+            </select>
+          </td>
+        </tr>
       </table>
       <p><input type="submit" value="Register" /></p>
     </form>
@@ -19,7 +22,9 @@
 </template>
 
 <script>
-import Vue from 'vue'
+import Components from '@/components/UIComponents'
+
+document.title = 'Register'
 
 export default {
   name: 'Register',
@@ -64,13 +69,11 @@ export default {
         }
       ]
     }
+  },
+  components: {
+    Components
   }
 }
-
-Vue.component('form-input', {
-  props: ['type', 'name', 'caption'],
-  template: '<tr><td style="width:40%"></td><td>{{ caption }}</td><td><input v-bind:type="type" v-bind:name="name" v-bind:placeholder="caption" /><td style="width:40%"></td></td></tr>'
-})
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
@@ -88,13 +91,5 @@ li {
 }
 a {
   color: #42b983;
-}
-
-#loginForm {
-  text-align:center;
-}
-
-#loginTable {
-  width: 100%;
 }
 </style>

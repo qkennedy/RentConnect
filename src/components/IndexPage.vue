@@ -1,23 +1,11 @@
 <template>
   <div class="hello">
     <h2>Welcome to RentConnect!</h2>
+    <p>
+      RentConnect is a tool that allows landlords and tenants to faciliate communication and business interactions. It allows for automatic collection of rent, storage of documents, and processing of maintenance requests.
+    </p>
     <ul>
-      <li>
-        <a
-          href=""
-          target="_blank"
-        >
-          Learn More
-        </a>
-      </li>
-      <li>
-        <a
-          href=""
-          target="_blank"
-        >
-          Get Started
-        </a>
-      </li>
+      <router-link to="/">Get Started</router-link>
     </ul>
   </div>
 </template>

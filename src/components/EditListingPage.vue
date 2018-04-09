@@ -1,11 +1,12 @@
 <template>
-  <div id="loginForm">
-    <h2>Log In</h2>
+  <div class="hello" id="applicationForm">
+    <h2 v-if="$route.params.id==null">Create Listing</h2>
+    <h2 v-else>Edit Listing</h2>
     <form class="fullPageForm" id="loginForm" method="post" enctype="multipart/form-data">
       <table border="0px" id="loginTable">
         <form-input v-for="element in formElements" v-bind:type="element.type" v-bind:caption="element.caption" v-bind:name="element.name" v-bind:key="element.id" />
       </table>
-      <p><input type="submit" value="Log in!" /></p>
+      <p><input type="submit" value="Register" /></p>
     </form>
   </div>
 </template>
@@ -13,24 +14,39 @@
 <script>
 import Components from '@/components/UIComponents'
 
-document.title = 'Log in'
-
 export default {
-  name: 'LoginPage',
+  name: 'Register',
   data () {
     return {
+      // TODO: if editing a listing, get these values from the backend
       formElements: [
         {
           id: 0,
           type: 'text',
-          name: 'username',
-          caption: 'Username'
+          name: 'address',
+          caption: 'Address',
+          value: ''
         },
         {
           id: 1,
-          type: 'password',
-          name: 'password',
-          caption: 'Password'
+          type: 'text',
+          name: 'rent',
+          caption: 'Rent (monthly)',
+          value: ''
+        },
+        {
+          id: 2,
+          type: 'number',
+          name: 'rentdue',
+          caption: 'Rent due date (each month)',
+          value: ''
+        },
+        {
+          id: 3,
+          type: 'number',
+          name: 'latefee',
+          caption: 'Rent late fee',
+          value: ''
         }
       ]
     }
@@ -39,6 +55,8 @@ export default {
     Components
   }
 }
+
+document.title = 'Manage Listing'
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
