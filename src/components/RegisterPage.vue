@@ -1,9 +1,10 @@
+
 <template>
   <div class="hello" id="registerForm">
     <h2>Register</h2>
-    <form class="fullPageForm" id="loginForm" method="post" enctype="multipart/form-data" action="/rest/createuser">
+    <form class="fullPageForm" id="loginForm" method="post" enctype="multipart/form-data" @submit.prevent="handleSubmit">
       <table border="0px" id="loginTable">
-        <form-input v-for="element in formElements" v-bind:type="element.type" v-bind:caption="element.caption" v-bind:name="element.name" v-bind:key="element.id" />
+        <form-input v-for="element in formElements" ref="test" v-bind:type="element.type" v-bind:caption="element.caption" v-bind:name="element.name" v-bind:key="element.name" />
         <!-- TODO make this a form-input -->
         <tr>
           <td class="leftColumn">Role</td>
@@ -22,6 +23,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 import Components from '@/components/UIComponents'
 
 document.title = 'Register'
@@ -30,6 +32,7 @@ export default {
   name: 'Register',
   data () {
     return {
+      username: '',
       formElements: [
         {
           id: 0,
@@ -72,7 +75,28 @@ export default {
   },
   components: {
     Components
+  },
+  methods: {
+    handleSubmit () {
+      axios.post('/rest/createuser',
+        collapse(this.formElements)
+      )
+        .then(response => {})
+        .catch(e => {
+          console.log(e)
+        })
+    }
   }
+}
+
+function collapse (formElements) {
+  var out = {}
+  for (var i = 0; i < formElements.length; i++) {
+    var name = formElements[i].name
+    var value = document.getElementsByName(name)[0].value
+    out[name] = value
+  }
+  return out
 }
 </script>
 
