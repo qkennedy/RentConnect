@@ -22,23 +22,22 @@ module.exports = {
      });
   },
 
-  //Need to make a function to convert roles from int to string
-  //TODO implement this
   createProperty: function(property) {
     database.open();
-    return database.query(`insert into user (id, username, password, email, cell_number, role)
-                      values(null, ?,?,?,?,?);`,
-                      [user.username, user.password, user.email, user.cellNumber, user.role]).then( rows => {
-      user = rows[0];
+    return database.query(`INSERT INTO property
+      (id, landlord_id, address, rent, late_fee)
+      VALUES(null, ?, ?, ?, ?);`
+      [null, property.landlordId, property.Address, property.rent, property.late_fee]).then( rows => {
+       property = rows[0];
       return database.close();
+      //TODO Do I need to return something here, or is resolve/error enough?  Add error handling, check this case.
     } );
   },
 
   deleteProperty: function(id) {
     database.open();
     return database.query(`DELETE FROM property WHERE id = ?;`,
-                          [userId]).then( rows => {
-      user = rows[0];
+                          [Id]).then( rows => {
       //Do I need to return results here?  Or does promise cover failure case
       return database.close();
     });
@@ -48,7 +47,7 @@ module.exports = {
     let properties;
       database.open()
       return database.query('select * from property where landlord_id = ?;', [landLordId]).then( rows => {
-        property = rows;
+        properties = rows;
         return database.close()
       } )
       .then( () => {

@@ -37,5 +37,9 @@ class Database {
       newStr = newStr.concat(')');
       return newStr;
     }
+    
+    convertTimeFromDb(dbTime) {
+
+    }
 }
 module.exports = Database;
