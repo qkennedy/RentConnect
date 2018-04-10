@@ -19,15 +19,27 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
   name: 'Sidebar',
   data () {
     return {
       // TODO: get all this from the backend
       loggedIn: true,
-      username: 'SampleUsername',
-      role: 'landlord'
+      username: '',
+      role: ''
     }
+  },
+  mounted () {
+    axios.get('/rest/whoAmI')
+      .then(response => {
+        this.loggedIn = response.data.loggedIn
+        this.username = response.data.username
+        this.role = response.data.role
+      })
+      .catch(e => {
+        console.log(e)
+      })
   }
 }
 </script>

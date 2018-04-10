@@ -28,30 +28,38 @@
 </template>
 
 <script>
+import axios from 'axios'
 import Vue from 'vue'
 import Components from '@/components/UIComponents'
 
-document.title = 'MyProperties'
+document.title = 'My Properties'
 
 export default {
   name: 'MyPropertiesPage',
   data () {
     return {
       // TODO: populate this from the database
-      properties: [
-        {
-          id: 0,
-          address: '1234 Sesame Street',
-          status: 'Rented',
-          tenant: 'John Adams',
-          rentamt: '$1000.00',
-          rentdue: 'March 31, 2018'
-        }
-      ]
+      properties: []
     }
   },
   components: {
     Components
+  },
+  mounted () {
+    axios.get('/rest/whoAmI')
+      .then(response => {
+        var userId = response.data.userId
+        axios.get('/rest/propertiesByLandlord/' + userId)
+          .then(response => {
+            this.properties = response.data.properties
+          })
+          .catch(e => {
+            console.log(e)
+          })
+      })
+      .catch(e => {
+        console.log(e)
+      })
   }
 }
 

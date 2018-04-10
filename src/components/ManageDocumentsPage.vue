@@ -50,27 +50,14 @@ export default {
         }
       ],
       documents: [
-        // TODO: replace this with a way to get these from the backend
-        {
-          id: 0,
-          title: 'Lease Agreement',
-          link: 'ViewDocument/1',
-          lastUpdated: 'January 1, 1970'
-        },
-        {
-          id: 1,
-          title: 'Stove Manual',
-          link: 'ViewDocument/2',
-          lastUpdated: 'January 1, 1970'
-        }
-      ],
-      docTitle: 'Sample Document Title',
-      lastUpdated: 'January 1, 1970'
+      ]
     }
   },
   methods: {
     handleSubmit () {
-      axios.post('/rest/property/' + 1 /* property id */ + '/createdocument/',
+      // TODO: update propId as appropriate
+      var propId = 1
+      axios.post('/rest/property/' + propId + '/createdocument/',
         Components.collapse(this.formElements, ['role'])
       )
         .then(response => {
@@ -83,6 +70,17 @@ export default {
   },
   components: {
     Components
+  },
+  mounted () {
+    var propId = 1
+    axios.get('/rest/documents/' + propId)
+      .then(response => {
+        console.log(JSON.stringify(response.data))
+        this.documents = response.data.documents
+      })
+      .catch(e => {
+        console.log(e)
+      })
   }
 }
 
