@@ -49,7 +49,8 @@ export default {
         Components.collapse(this.formElements, [''])
       )
         .then(response => {
-          // TODO: explain that the action was successful
+          // TODO: redirect to page to show this maintenance Request
+          this.$router.push('/ViewMaintenanceRequest/' + response.request.id)
         })
         .catch(e => {
           console.log(e)
