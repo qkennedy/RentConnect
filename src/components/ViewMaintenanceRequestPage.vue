@@ -105,29 +105,6 @@ export default {
       canClose: this.landlord || this.maintenanceWorker,
       workers: [
         { text: 'Alex Johnson', value: 'ajohnson' }
-      ],
-      reqLocation: 'Shower',
-      reqContent: 'My shower is broken. Fix it.',
-      attachedImage: false, // if there is an image, make this the URL of it
-      comments: [
-        {
-          id: 0,
-          image: false,
-          assignedTo: false,
-          person: 'Sam',
-          role: 'Landlord',
-          date: 'March 31, 2015',
-          comment: 'Let me find the right person to do this'
-        },
-        {
-          id: 0,
-          image: false,
-          assignedTo: 'Ron',
-          person: 'Sam',
-          role: 'Landlord',
-          date: 'April 2, 2015',
-          comment: 'Ron specializes in showers'
-        }
       ]
     }
   },
@@ -137,18 +114,7 @@ export default {
         Components.collapse(this.formElements, ['worker', 'status'])
       )
         .then(response => {
-          // TODO: log in as new user
-          switch (this.$refs.role.value) {
-            case 'tenant':
-              this.$router.push('/TenantPortal')
-              break
-            case 'landlord':
-              this.$router.push('/LandlordPortal')
-              break
-            case 'maint':
-              this.$router.push('/MaintenancePortal')
-              break
-          }
+          // TODO: parse response
         })
         .catch(e => {
           console.log(e)
@@ -157,6 +123,19 @@ export default {
   },
   components: {
     Components
+  },
+  mounted () {
+    axios.get('/rest/getMaintInfo/' + this.$route.params.id)
+      .then(response => {
+        console.log(JSON.stringify(response))
+        this.reqLocation = response.data.reqLocation
+        this.reqContent = response.data.reqContent
+        this.attachedImage = response.data.attachedImage
+        this.comments = response.data.comments
+      })
+      .catch(e => {
+        console.log(e)
+      })
   }
 }
 
