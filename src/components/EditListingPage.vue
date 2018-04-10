@@ -4,7 +4,7 @@
     <h2 v-else>Edit Listing</h2>
     <form class="fullPageForm" id="loginForm" method="post" enctype="multipart/form-data" @submit.prevent="handleSubmit">
       <table border="0px" id="loginTable">
-        <form-input v-for="element in formElements" v-bind:type="element.type" v-bind:caption="element.caption" v-bind:name="element.name" v-bind:value="value" v-bind:key="element.id" />
+        <form-input v-for="element in formElements" v-bind:type="element.type" v-bind:caption="element.caption" v-bind:name="element.name" v-bind:value="element.value" v-bind:key="element.id" />
       </table>
       <p><input type="submit" value="Register" /></p>
     </form>
@@ -67,22 +67,21 @@ export default {
         .catch(e => {
           console.log(e)
         })
-    },
-    onLoad () {
-      // TODO: make this run when the page loads and then use the data to populate the values
-      console.log('loading')
+    }
+  },
+  mounted () {
+    if (this.$route.params.id != null) {
       axios.get('/rest/property/' + this.$route.params.id)
         .then(response => {
-          console.log(JSON.stringify(response))
+          this.formElements[0].value = response.data.address
+          this.formElements[1].value = response.data.rent
+          this.formElements[2].value = response.data.rent_due
+          this.formElements[3].value = response.data.late_fee
         })
         .catch(e => {
           console.log(e)
         })
     }
-  },
-  mounted: function () {
-    alert('1')
-    console.log('hi')
   }
 }
 
