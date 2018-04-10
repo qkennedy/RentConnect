@@ -34,7 +34,7 @@
     <h3>Comments</h3>
     <maintenance-comment v-for="comment in comments" v-bind:image="comment.image" v-bind:person="comment.person" v-bind:date="comment.date" v-bind:assignedTo="comment.assignedTo" v-bind:comment="comment.comment" v-bind:role="comment.role" v-bind:key="comment.id"></maintenance-comment>
     <h3>Leave a comment</h3>
-    <form class="fullPageForm" id="loginForm" method="post" enctype="multipart/form-data">
+    <form class="fullPageForm" id="loginForm" method="post" enctype="multipart/form-data" @submit.prevent="handleSubmit">
       <table border="0px" id="loginTable">
         <form-input v-for="element in formElements" v-bind:type="element.type" v-bind:caption="element.caption" v-bind:name="element.name" v-bind:key="element.id" />
         <tr v-if="landlord">
@@ -42,7 +42,7 @@
             Assign to worker
           </td>
           <td class="rightColumn">
-            <select>
+            <select name="worker">
               <option v-for="worker in workers" v-bind:value="worker.value" v-bind:key="worker.value">{{ worker.text }}</option>
             </select>
           </td>
@@ -52,7 +52,7 @@
             Change request status
           </td>
           <td class="rightColumn">
-            <select>
+            <select name="status">
               <option value="">
                 (keep open)
               </option>
@@ -75,6 +75,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 import Vue from 'vue'
 import Components from '@/components/UIComponents'
 
@@ -128,6 +129,30 @@ export default {
           comment: 'Ron specializes in showers'
         }
       ]
+    }
+  },
+  methods: {
+    handleSubmit () {
+      axios.post('/rest/',
+        Components.collapse(this.formElements, ['worker', 'status'])
+      )
+        .then(response => {
+          // TODO: log in as new user
+          switch (this.$refs.role.value) {
+            case 'tenant':
+              this.$router.push('/TenantPortal')
+              break
+            case 'landlord':
+              this.$router.push('/LandlordPortal')
+              break
+            case 'maint':
+              this.$router.push('/MaintenancePortal')
+              break
+          }
+        })
+        .catch(e => {
+          console.log(e)
+        })
     }
   },
   components: {

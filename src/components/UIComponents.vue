@@ -3,6 +3,23 @@ import Vue from 'vue'
 export default {
   data () {
 
+  },
+  collapse (formElements, additionalStuff) {
+    var out = {}
+    var name
+    var value
+    var i
+    for (i = 0; i < formElements.length; i++) {
+      name = formElements[i].name
+      value = document.getElementsByName(name)[0].value
+      out[name] = value
+    }
+    for (i = 0; i < additionalStuff.length; i++) {
+      name = additionalStuff[i]
+      value = document.getElementsByName(name)[0].value
+      out[name] = value
+    }
+    return out
   }
 }
 Vue.component('notification-entry', {

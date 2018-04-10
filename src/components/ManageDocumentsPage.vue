@@ -13,7 +13,7 @@
       <document-table-row v-for="document in documents" v-bind:key="document.id" v-bind:title="document.title" v-bind:link="document.link" v-bind:lastUpdated="document.lastUpdated"></document-table-row>
     </table>
     <h3>Upload New Document</h3>
-    <form class="fullPageForm">
+    <form class="fullPageForm" @submit.prevent="handleSubmit">
       <table border="0px">
         <form-input v-for="element in formElements" v-bind:key="element.id" v-bind:caption="element.caption" v-bind:name="element.name" v-bind:type="element.type"></form-input>
       </table>
@@ -25,6 +25,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 import Vue from 'vue'
 import Components from '@/components/UIComponents'
 
@@ -65,6 +66,19 @@ export default {
       ],
       docTitle: 'Sample Document Title',
       lastUpdated: 'January 1, 1970'
+    }
+  },
+  methods: {
+    handleSubmit () {
+      axios.post('/rest/property/' + 1 /* property id */ + '/createdocument/',
+        Components.collapse(this.formElements, ['role'])
+      )
+        .then(response => {
+          // TODO: update the page with the new document
+        })
+        .catch(e => {
+          console.log(e)
+        })
     }
   },
   components: {

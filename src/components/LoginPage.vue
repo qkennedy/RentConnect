@@ -1,7 +1,7 @@
 <template>
   <div id="loginForm">
     <h2>Log In</h2>
-    <form class="fullPageForm" id="loginForm" method="post" enctype="multipart/form-data">
+    <form class="fullPageForm" id="loginForm" method="post" enctype="multipart/form-data" @submit.prevent="handleSubmit">
       <table border="0px" id="loginTable">
         <form-input v-for="element in formElements" v-bind:type="element.type" v-bind:caption="element.caption" v-bind:name="element.name" v-bind:key="element.id" />
       </table>
@@ -12,6 +12,7 @@
 
 <script>
 import Components from '@/components/UIComponents'
+import axios from 'axios'
 
 document.title = 'Log in'
 
@@ -33,6 +34,20 @@ export default {
           caption: 'Password'
         }
       ]
+    }
+  },
+  methods: {
+    handleSubmit () {
+      // TODO: add REST API endpoint
+      axios.post('/rest/login',
+        Components.collapse(this.formElements, [''])
+      )
+        .then(response => {
+          // TODO: forward the user to their appropriate portal
+        })
+        .catch(e => {
+          console.log(e)
+        })
     }
   },
   components: {

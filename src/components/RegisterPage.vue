@@ -9,7 +9,7 @@
         <tr>
           <td class="leftColumn">Role</td>
           <td class="rightColumn">
-            <select name="role">
+            <select name="role" ref="role">
               <option value="tenant">Tenant</option>
               <option value="landlord">Landlord</option>
               <option value="maint">Maintenance Worker</option>
@@ -79,24 +79,27 @@ export default {
   methods: {
     handleSubmit () {
       axios.post('/rest/createuser',
-        collapse(this.formElements)
+        Components.collapse(this.formElements, ['role'])
       )
-        .then(response => {})
+        .then(response => {
+          // TODO: log in as new user
+          switch (this.$refs.role.value) {
+            case 'tenant':
+              this.$router.push('/TenantPortal')
+              break
+            case 'landlord':
+              this.$router.push('/LandlordPortal')
+              break
+            case 'maint':
+              this.$router.push('/MaintenancePortal')
+              break
+          }
+        })
         .catch(e => {
           console.log(e)
         })
     }
   }
-}
-
-function collapse (formElements) {
-  var out = {}
-  for (var i = 0; i < formElements.length; i++) {
-    var name = formElements[i].name
-    var value = document.getElementsByName(name)[0].value
-    out[name] = value
-  }
-  return out
 }
 </script>
 

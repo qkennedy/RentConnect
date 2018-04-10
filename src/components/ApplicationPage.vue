@@ -2,7 +2,7 @@
   <div class="hello" id="applicationPage">
     <h2>Apply to rent property</h2>
     <!-- TODO: include information about the property -->
-    <form class="fullPageForm" id="applicationForm" method="post" enctype="multipart/form-data">
+    <form class="fullPageForm" id="applicationForm" method="post" enctype="multipart/form-data" @submit.prevent="handleSubmit">
       <table border="0px" id="loginTable">
         <form-input v-for="element in formElements" v-bind:type="element.type" v-bind:caption="element.caption" v-bind:name="element.name" v-bind:key="element.id" />
       </table>
@@ -13,6 +13,7 @@
 
 <script>
 import Components from '@/components/UIComponents'
+import axios from 'axios'
 
 export default {
   name: 'Apply',
@@ -114,6 +115,20 @@ export default {
   },
   components: {
     Components
+  },
+  methods: {
+    handleSubmit () {
+      // TODO: make this submit to the appropriate endpoint
+      axios.post('/rest/',
+        Components.collapse(this.formElements, [])
+      )
+        .then(response => {
+          alert('Application submitted!')
+        })
+        .catch(e => {
+          console.log(e)
+        })
+    }
   }
 }
 

@@ -9,8 +9,8 @@
         <a href="#">View Document</a>
       </p>
       <h4>Upload New Version</h4>
-      <form>
-        <input type="file" /><br />
+      <form @submit.prevent="handleSubmit">
+        <input type="file" ref="file" /><br />
         <input type="submit" value="Upload" />
       </form>
     </div>
@@ -18,6 +18,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 import Vue from 'vue'
 import Components from '@/components/UIComponents'
 
@@ -31,6 +32,22 @@ export default {
       docTitle: 'Sample Document Title',
       lastUpdated: 'January 1, 1970',
       fileLink: '#'
+    }
+  },
+  methods: {
+    handleSubmit () {
+      // TODO: update document
+      axios.post('/rest/',
+        {
+          file: this.$refs.file // TODO: extract the file
+        }
+      )
+        .then(response => {
+          // TODO: update the page with the new file
+        })
+        .catch(e => {
+          console.log(e)
+        })
     }
   },
   components: {

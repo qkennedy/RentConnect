@@ -2,9 +2,9 @@
   <div class="hello" id="applicationForm">
     <h2 v-if="$route.params.id==null">Create Listing</h2>
     <h2 v-else>Edit Listing</h2>
-    <form class="fullPageForm" id="loginForm" method="post" enctype="multipart/form-data">
+    <form class="fullPageForm" id="loginForm" method="post" enctype="multipart/form-data" @submit.prevent="handleSubmit">
       <table border="0px" id="loginTable">
-        <form-input v-for="element in formElements" v-bind:type="element.type" v-bind:caption="element.caption" v-bind:name="element.name" v-bind:key="element.id" />
+        <form-input v-for="element in formElements" v-bind:type="element.type" v-bind:caption="element.caption" v-bind:name="element.name" v-bind:value="value" v-bind:key="element.id" />
       </table>
       <p><input type="submit" value="Register" /></p>
     </form>
@@ -12,6 +12,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 import Components from '@/components/UIComponents'
 
 export default {
@@ -53,6 +54,35 @@ export default {
   },
   components: {
     Components
+  },
+  methods: {
+    handleSubmit () {
+      // TODO: add REST API endpoint
+      axios.post('/rest/',
+        Components.collapse(this.formElements, [''])
+      )
+        .then(response => {
+          // TODO: explain that listing was created or updated
+        })
+        .catch(e => {
+          console.log(e)
+        })
+    },
+    onLoad () {
+      // TODO: make this run when the page loads and then use the data to populate the values
+      console.log('loading')
+      axios.get('/rest/property/' + this.$route.params.id)
+        .then(response => {
+          console.log(JSON.stringify(response))
+        })
+        .catch(e => {
+          console.log(e)
+        })
+    }
+  },
+  mounted: function () {
+    alert('1')
+    console.log('hi')
   }
 }
 
