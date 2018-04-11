@@ -37,10 +37,14 @@ module.exports = {
   deleteDocument: function(id) {
     database.open();
     return database.query(`DELETE FROM property WHERE id = ?;`,
-                          [userId]).then( rows => {
-      user = rows[0];
+                          [id]).then(() => {
       //Do I need to return results here?  Or does promise cover failure case
       return database.close();
     });
+  },
+
+  //This lets us mock out the database, so that we can check calls, supply responses
+  setDatabase: function(newDb) {
+    database = newDb
   }
 }
