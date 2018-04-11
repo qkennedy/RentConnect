@@ -11,6 +11,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 import Components from '@/components/UIComponents'
 
 document.title = 'User profile'
@@ -64,6 +65,20 @@ export default {
           value: ''
         }
       ]
+    }
+  },
+  methods: {
+    handleSubmit () {
+      // TODO: update user
+      axios.post('/rest/',
+        Components.collapse(this.formElements, [''])
+      )
+        .then(response => {
+          // TODO: redirect to portal
+        })
+        .catch(e => {
+          console.log(e)
+        })
     }
   },
   components: {

@@ -1,7 +1,7 @@
 <template>
   <div id="loginForm">
     <h2>Submit Maintenance Request</h2>
-    <form class="fullPageForm" id="loginForm" method="post" enctype="multipart/form-data">
+    <form class="fullPageForm" id="loginForm" method="post" enctype="multipart/form-data" @submit.prevent="handleSubmit">
       <table border="0px" id="loginTable">
         <form-input v-for="element in formElements" v-bind:type="element.type" v-bind:caption="element.caption" v-bind:name="element.name" v-bind:key="element.id" />
       </table>
@@ -11,6 +11,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 import Components from '@/components/UIComponents'
 
 document.title = 'Submit Maintenance Request'
@@ -39,6 +40,21 @@ export default {
           caption: 'Image to attach'
         }
       ]
+    }
+  },
+  methods: {
+    handleSubmit () {
+      // TODO: submit the maintenance request
+      axios.post('/rest/',
+        Components.collapse(this.formElements, [''])
+      )
+        .then(response => {
+          // TODO: redirect to page to show this maintenance Request
+          this.$router.push('/ViewMaintenanceRequest/' + response.request.id)
+        })
+        .catch(e => {
+          console.log(e)
+        })
     }
   },
   components: {

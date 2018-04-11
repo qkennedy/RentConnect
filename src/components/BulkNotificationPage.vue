@@ -1,7 +1,7 @@
 <template>
   <div id="notificationPage">
     <h2>Send Bulk Notification</h2>
-    <form class="fullPageForm" id="notificationForm" method="post" enctype="multipart/form-data">
+    <form class="fullPageForm" id="notificationForm" method="post" enctype="multipart/form-data" @submit.prevent="handleSubmit">
       <table border="0px" id="loginTable">
         <form-input v-for="element in formElements" v-bind:type="element.type" v-bind:caption="element.caption" v-bind:name="element.name" v-bind:key="element.id" />
         <tenant-checkbox-row v-for="tenant in tenants" v-bind:key="tenant.id" v-bind:name="tenant.name"></tenant-checkbox-row>
@@ -14,6 +14,7 @@
 <script>
 import Vue from 'vue'
 import Components from '@/components/UIComponents'
+import axios from 'axios'
 
 document.title = 'Send Bulk Notification'
 
@@ -35,6 +36,7 @@ export default {
           caption: 'Body'
         }
       ],
+      // TODO: populate tenants from REST
       tenants: [
         {
           id: 0,
@@ -53,6 +55,20 @@ export default {
   },
   components: {
     Components
+  },
+  methods: {
+    handleSubmit () {
+      // TODO: include the tenants in this
+      axios.post('/rest/',
+        Components.collapse(this.formElements, [''])
+      )
+        .then(response => {
+          // TODO: show a popup saying message was sent successfully
+        })
+        .catch(e => {
+          console.log(e)
+        })
+    }
   }
 }
 

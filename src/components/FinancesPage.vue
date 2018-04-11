@@ -57,6 +57,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 import Vue from 'vue'
 import Components from '@/components/UIComponents'
 
@@ -64,29 +65,10 @@ export default {
   name: 'Register',
   data () {
     return {
-      // TODO: populate this with the values from the rent history
-      // If a tenant, make this just show the history for their assigned property. If a landlord and no property ID assigned, show the information for all properties. If ID asigned, show information just for that property.
       rentHistory: [
-        {
-          id: 0,
-          date: 'July 4, 1776',
-          amount: '$1000.00',
-          receiptLink: '<a href="#/">Receipt</a>'
-        },
-        {
-          id: 1,
-          date: 'December 7, 1941',
-          amount: '$1000.00',
-          receiptLink: '<a href="#/">Receipt</a>'
-        },
-        {
-          id: 2,
-          date: 'April 1, 2017',
-          amount: '$1000.00',
-          receiptLink: '<a href="#/">Receipt</a>',
-          late: true
-        }
+
       ],
+      // TODO: populate property information from the database
       role: 'tenant',
       address: '1234 Sesame Street',
       tenant: 'Amy Adams',
@@ -96,6 +78,29 @@ export default {
   },
   components: {
     Components
+  },
+  mounted () {
+    var propId
+    if (this.$route.params.id == null) {
+      // TODO: get the user's property ID
+      propId = 1
+    } else {
+      propId = this.$route.params.id
+    }
+    axios.get('/rest/whoAmI')
+      .then(response => {
+        this.role = response.data.role
+      })
+      .catch(e => {
+        console.log(e)
+      })
+    axios.get('/rest/rentHistory/' + propId)
+      .then(response => {
+        this.rentHistory = response.data.rentHistory
+      })
+      .catch(e => {
+        console.log(e)
+      })
   }
 }
 

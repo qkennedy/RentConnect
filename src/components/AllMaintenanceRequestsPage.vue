@@ -22,6 +22,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 import Vue from 'vue'
 import Components from '@/components/UIComponents'
 
@@ -29,34 +30,24 @@ export default {
   name: 'AllMaintenanceRequests',
   data () {
     return {
-      // TODO: populate this with the values from the maintenance request
       maintRequests: [
-        {
-          id: 0,
-          property: '1234 Sesame Street',
-          status: 'unassigned',
-          lastUpdated: 'March 1, 2017'
-        },
-        {
-          id: 1,
-          property: '1234 Sesame Street',
-          status: 'assigned',
-          lastUpdated: 'April 1, 2018'
-        },
-        {
-          id: 2,
-          property: '1234 Sesame Street',
-          status: 'closed',
-          lastUpdated: 'July 4, 1776'
-        }
-      ],
-      role: 'tenant',
-      address: '1234 Sesame Street',
-      tenant: 'Amy Adams'
+      ]
     }
   },
   components: {
     Components
+  },
+  mounted () {
+    // TODO: get user ID from API
+    var userId = 1
+    axios.get('/rest/allMaintRequests/' + userId)
+      .then(response => {
+        console.log(JSON.stringify(response))
+        this.maintRequests = response.data.maintRequests
+      })
+      .catch(e => {
+        console.log(e)
+      })
   }
 }
 

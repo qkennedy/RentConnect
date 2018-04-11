@@ -34,7 +34,7 @@
     <h3>Comments</h3>
     <maintenance-comment v-for="comment in comments" v-bind:image="comment.image" v-bind:person="comment.person" v-bind:date="comment.date" v-bind:assignedTo="comment.assignedTo" v-bind:comment="comment.comment" v-bind:role="comment.role" v-bind:key="comment.id"></maintenance-comment>
     <h3>Leave a comment</h3>
-    <form class="fullPageForm" id="loginForm" method="post" enctype="multipart/form-data">
+    <form class="fullPageForm" id="loginForm" method="post" enctype="multipart/form-data" @submit.prevent="handleSubmit">
       <table border="0px" id="loginTable">
         <form-input v-for="element in formElements" v-bind:type="element.type" v-bind:caption="element.caption" v-bind:name="element.name" v-bind:key="element.id" />
         <tr v-if="landlord">
@@ -42,7 +42,7 @@
             Assign to worker
           </td>
           <td class="rightColumn">
-            <select>
+            <select name="worker">
               <option v-for="worker in workers" v-bind:value="worker.value" v-bind:key="worker.value">{{ worker.text }}</option>
             </select>
           </td>
@@ -52,7 +52,7 @@
             Change request status
           </td>
           <td class="rightColumn">
-            <select>
+            <select name="status">
               <option value="">
                 (keep open)
               </option>
@@ -75,6 +75,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 import Vue from 'vue'
 import Components from '@/components/UIComponents'
 
@@ -87,7 +88,7 @@ export default {
       formElements: [
         {
           id: 0,
-          type: 'text',
+          type: 'textarea',
           name: 'comment',
           caption: 'Comment'
         },
@@ -98,40 +99,61 @@ export default {
           caption: 'Attach image'
         }
       ],
-      // TODO: populate these fields
+      comments: [],
       landlord: true,
       maintenanceWorker: false,
+      reqLocation: '',
+      reqContent: '',
+      attachedImage: false,
       canClose: this.landlord || this.maintenanceWorker,
       workers: [
         { text: 'Alex Johnson', value: 'ajohnson' }
-      ],
-      reqLocation: 'Shower',
-      reqContent: 'My shower is broken. Fix it.',
-      attachedImage: false, // if there is an image, make this the URL of it
-      comments: [
-        {
-          id: 0,
-          image: false,
-          assignedTo: false,
-          person: 'Sam',
-          role: 'Landlord',
-          date: 'March 31, 2015',
-          comment: 'Let me find the right person to do this'
-        },
-        {
-          id: 0,
-          image: false,
-          assignedTo: 'Ron',
-          person: 'Sam',
-          role: 'Landlord',
-          date: 'April 2, 2015',
-          comment: 'Ron specializes in showers'
-        }
       ]
+    }
+  },
+  methods: {
+    handleSubmit () {
+      var extraComponents = []
+      if (this.landlord) {
+        extraComponents.add('worker')
+      }
+      if (this.canClose) {
+        extraComponents.add('status')
+      }
+      axios.post('/rest/',
+        Components.collapse(this.formElements, [extraComponents])
+      )
+        .then(response => {
+          // TODO: parse response
+        })
+        .catch(e => {
+          console.log(e)
+        })
     }
   },
   components: {
     Components
+  },
+  mounted () {
+    axios.get('/rest/whoAmI')
+      .then(response => {
+        this.tenant = response.data.role === 'tenant'
+        this.landlord = response.data.role === 'landlord'
+        this.maintenanceWorker = response.data.role === 'maint'
+      })
+      .catch(e => {
+        console.log(e)
+      })
+    axios.get('/rest/getMaintInfo/' + this.$route.params.id)
+      .then(response => {
+        this.reqLocation = response.data.reqLocation
+        this.reqContent = response.data.reqContent
+        this.attachedImage = response.data.attachedImage
+        this.comments = response.data.comments
+      })
+      .catch(e => {
+        console.log(e)
+      })
   }
 }
 

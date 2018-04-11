@@ -13,7 +13,7 @@
       <document-table-row v-for="document in documents" v-bind:key="document.id" v-bind:title="document.title" v-bind:link="document.link" v-bind:lastUpdated="document.lastUpdated"></document-table-row>
     </table>
     <h3>Upload New Document</h3>
-    <form class="fullPageForm">
+    <form class="fullPageForm" @submit.prevent="handleSubmit">
       <table border="0px">
         <form-input v-for="element in formElements" v-bind:key="element.id" v-bind:caption="element.caption" v-bind:name="element.name" v-bind:type="element.type"></form-input>
       </table>
@@ -25,6 +25,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 import Vue from 'vue'
 import Components from '@/components/UIComponents'
 
@@ -49,26 +50,37 @@ export default {
         }
       ],
       documents: [
-        // TODO: replace this with a way to get these from the backend
-        {
-          id: 0,
-          title: 'Lease Agreement',
-          link: 'ViewDocument/1',
-          lastUpdated: 'January 1, 1970'
-        },
-        {
-          id: 1,
-          title: 'Stove Manual',
-          link: 'ViewDocument/2',
-          lastUpdated: 'January 1, 1970'
-        }
-      ],
-      docTitle: 'Sample Document Title',
-      lastUpdated: 'January 1, 1970'
+      ]
+    }
+  },
+  methods: {
+    handleSubmit () {
+      // TODO: update propId as appropriate
+      var propId = 1
+      axios.post('/rest/property/' + propId + '/createdocument/',
+        Components.collapse(this.formElements, ['role'])
+      )
+        .then(response => {
+          // TODO: update the page with the new document
+        })
+        .catch(e => {
+          console.log(e)
+        })
     }
   },
   components: {
     Components
+  },
+  mounted () {
+    var propId = 1
+    axios.get('/rest/documents/' + propId)
+      .then(response => {
+        console.log(JSON.stringify(response.data))
+        this.documents = response.data.documents
+      })
+      .catch(e => {
+        console.log(e)
+      })
   }
 }
 

@@ -2,7 +2,7 @@
   <div class="hello" id="applicationForm">
     <h2>Process application</h2>
     <!-- TODO: include information about the property -->
-    <form class="fullPageForm" id="loginForm" method="post" enctype="multipart/form-data">
+    <form class="fullPageForm" id="loginForm" method="post" enctype="multipart/form-data" @submit.prevent="handleSubmit">
       <table border="0px" id="loginTable">
         <leftright-static-display v-for="element in pageElements" v-bind:type="element.type" v-bind:caption="element.caption" v-bind:name="element.name" v-bind:key="element.id" />
       </table>
@@ -12,6 +12,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 import Components from '@/components/UIComponents'
 
 export default {
@@ -126,6 +127,25 @@ export default {
           value: false
         }
       ]
+    }
+  },
+  methods: {
+    handleSubmit () {
+      var dummy = false
+      if (dummy) {
+        // TODO: make it so that if accepted, it adds the tenant to the property
+        axios.post('/rest/property/' + 1 /* property ID */ + '/addTenant/' + 1 /* tenant ID */,
+          Components.collapse(this.formElements, [''])
+        )
+          .then(response => {
+            // TODO: explain that the action was successful
+          })
+          .catch(e => {
+            console.log(e)
+          })
+      } else {
+        // TODO: reject application
+      }
     }
   },
   components: {
