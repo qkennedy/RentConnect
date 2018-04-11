@@ -87,6 +87,13 @@ export default {
     } else {
       propId = this.$route.params.id
     }
+    axios.get('/rest/whoAmI')
+      .then(response => {
+        this.role = response.data.role
+      })
+      .catch(e => {
+        console.log(e)
+      })
     axios.get('/rest/rentHistory/' + propId)
       .then(response => {
         this.rentHistory = response.data.rentHistory

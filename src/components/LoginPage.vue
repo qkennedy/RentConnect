@@ -2,6 +2,9 @@
   <div id="loginForm">
     <h2>Log In</h2>
     <form class="fullPageForm" id="loginForm" method="post" enctype="multipart/form-data" @submit.prevent="handleSubmit">
+      <div class="formWarning" ref="warning">
+
+      </div>
       <table border="0px" id="loginTable">
         <form-input v-for="element in formElements" v-bind:type="element.type" v-bind:caption="element.caption" v-bind:name="element.name" v-bind:key="element.id" />
       </table>
@@ -38,12 +41,17 @@ export default {
   },
   methods: {
     handleSubmit () {
-      // TODO: add REST API endpoint
       axios.post('/rest/login',
-        Components.collapse(this.formElements, [''])
+        Components.collapse(this.formElements, [])
       )
         .then(response => {
-          // TODO: forward the user to their appropriate portal
+          // TODO: make this refresh the sidebar on a successful login
+          if (response.data.status === 'loggedin') {
+            this.$router.push(response.data.next)
+          } else {
+            this.$refs.warning.innerHTML = 'Login failed. Please try again.'
+            this.$refs.warning.style.display = 'block'
+          }
         })
         .catch(e => {
           console.log(e)

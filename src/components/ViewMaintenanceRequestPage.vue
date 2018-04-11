@@ -88,7 +88,7 @@ export default {
       formElements: [
         {
           id: 0,
-          type: 'text',
+          type: 'textarea',
           name: 'comment',
           caption: 'Comment'
         },
@@ -99,9 +99,12 @@ export default {
           caption: 'Attach image'
         }
       ],
-      // TODO: populate these fields
+      comments: [],
       landlord: true,
       maintenanceWorker: false,
+      reqLocation: '',
+      reqContent: '',
+      attachedImage: false,
       canClose: this.landlord || this.maintenanceWorker,
       workers: [
         { text: 'Alex Johnson', value: 'ajohnson' }
@@ -110,8 +113,15 @@ export default {
   },
   methods: {
     handleSubmit () {
+      var extraComponents = []
+      if (this.landlord) {
+        extraComponents.add('worker')
+      }
+      if (this.canClose) {
+        extraComponents.add('status')
+      }
       axios.post('/rest/',
-        Components.collapse(this.formElements, ['worker', 'status'])
+        Components.collapse(this.formElements, [extraComponents])
       )
         .then(response => {
           // TODO: parse response
@@ -125,9 +135,17 @@ export default {
     Components
   },
   mounted () {
+    axios.get('/rest/whoAmI')
+      .then(response => {
+        this.tenant = response.data.role === 'tenant'
+        this.landlord = response.data.role === 'landlord'
+        this.maintenanceWorker = response.data.role === 'maint'
+      })
+      .catch(e => {
+        console.log(e)
+      })
     axios.get('/rest/getMaintInfo/' + this.$route.params.id)
       .then(response => {
-        console.log(JSON.stringify(response))
         this.reqLocation = response.data.reqLocation
         this.reqContent = response.data.reqContent
         this.attachedImage = response.data.attachedImage

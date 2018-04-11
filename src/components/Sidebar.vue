@@ -1,6 +1,6 @@
 <template>
-  <div id="sidebar">
-    <p>You are not logged in.</p>
+  <div id="sidebar" ref="sidebar">
+    <p v-if="!loggedIn">You are not logged in.</p>
     <ul class="optionlist" id="sidebaroptions">
       <li class="first" v-if="!loggedIn"><a href="#/Login">Log In</a></li>
       <li v-if="!loggedIn"><a href="#/Register">Register</a></li>
@@ -31,6 +31,7 @@ export default {
     }
   },
   mounted () {
+    // TODO: make this be able to reload from other components (i.e. when logging in/out, they can tell this to reload)
     axios.get('/rest/whoAmI')
       .then(response => {
         this.loggedIn = response.data.loggedIn
