@@ -37,7 +37,7 @@ module.exports = {
   deleteProperty: function(id) {
     database.open();
     return database.query(`DELETE FROM property WHERE id = ?;`,
-                          [Id]).then( rows => {
+                          [id]).then( rows => {
       //Do I need to return results here?  Or does promise cover failure case
       return database.close();
     });
