@@ -31,7 +31,16 @@ module.exports = {
      });
   },
   getUserByUsername: function(username) {
-
+    let user;
+      database.open()
+      return database.query('select * from user where username = ?;', [username]).then( rows => {
+        user = rows[0];
+        return database.close()
+      } )
+      .then( () => {
+        user.role = this.convertRole(user)
+        return user;
+     });
   },
 
   getBasicDetails: function(id) {
@@ -75,6 +84,18 @@ module.exports = {
     return database.query(`DELETE FROM user WHERE id = ?;`,
                       [userId]).then(() => {
       return database.close();
+    });
+  },
+
+  verifyUser: function(username, password) {
+    return this.getUserByUsername(username).then(user => {
+      if(user.password === password) {
+        return user.id;
+      } else {
+        //This should be changed to throw an error, caught by a error resolve here
+        //TODO fix this.
+        return -1;
+      }
     });
   },
 

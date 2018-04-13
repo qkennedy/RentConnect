@@ -7,7 +7,7 @@ function respond(req, res, next) {
   res.send('you got' + req.params.resp);
   next();
 }
-
+var activeId = -1;
 var server = restify.createServer();
 
 server.use(restify.plugins.bodyParser());
@@ -16,12 +16,27 @@ server.use(restify.plugins.bodyParser());
 server.post('/rest/login',
   function(req, res, next) {
     //Here is where we can process the login info
+    //For now assume that password is being passed in directly
+    console.log(req.body.username, req.body.password)
+    userFactory.verifyUser(req.body.username, req.body.password).then( userId => {
+      if(userId === -1) {
+        res.send(401, 'Invalid Login, Please try again')
+      } else {
+        res.send(200, 'This can be replaced with a 303 to send the user to their portal')
+        activeId = userId
+      }
+      next()
+      });
   }
 );
 //Get User Details
 server.get('/rest/whoAmI',
   function(req, res, next) {
     //Here is where we can process the login info
+    userFactory.getUserById(activeId).then(user => {
+      res.send(user)
+      next()
+    });
   }
 );
 
