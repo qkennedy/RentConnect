@@ -6,7 +6,7 @@
   "private": true,
   "scripts": {
     "dev": "npm run backend | webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
-    "frontend" : "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
+    "frontend": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
     "start": "npm run dev",
     "lint": "eslint --ext .js,.vue src",
     "build": "node build/build.js",
@@ -15,6 +15,7 @@
     "test": "jest --config test/unit/jest.conf.js --coverage"
   },
   "dependencies": {
+    "axios": "^0.18.0 ",
     "mysql": "^2.15.0",
     "restify": "^7.0.0",
     "uppy": "^0.23.2",
