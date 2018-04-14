@@ -57,9 +57,6 @@ export default {
     axios.get('/rest/document/' + this.$route.params.id)
       .then(response => {
         console.log(JSON.stringify(response))
-        this.docTitle = response.data.docTitle
-        this.lastUpdated = response.data.lastUpdated
-        this.fileLink = response.data.fileLink
       })
       .catch(e => {
         console.log(e)

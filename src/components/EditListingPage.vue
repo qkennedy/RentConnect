@@ -73,12 +73,13 @@ export default {
     if (this.$route.params.id != null) {
       axios.get('/rest/property/' + this.$route.params.id)
         .then(response => {
+          console.log(JSON.stringify(response))
           this.formElements[0].value = response.data.address
           this.formElements[1].value = response.data.rent
-          this.formElements[2].value = response.data.rent_due
           this.formElements[3].value = response.data.late_fee
         })
         .catch(e => {
+          // TODO: if 404, then show error
           console.log(e)
         })
     }
