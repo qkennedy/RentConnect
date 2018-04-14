@@ -61,7 +61,7 @@ export default {
       .then(response => {
         console.log(JSON.stringify(response.data))
         if (response.data.id > 0) {
-          if (this.role !== 'tenant') {
+          if (response.data.role !== 'tenant') {
             // we're not a tenant, get out of here
             this.$router.push('/')
           }

@@ -49,7 +49,7 @@ export default {
       .then(response => {
         console.log(JSON.stringify(response.data))
         if (response.data.id > 0) {
-          if (this.role !== 'landlord') {
+          if (response.data.role !== 'landlord') {
             // we're not a landlord, get out of here
             this.$router.push('/')
           }
