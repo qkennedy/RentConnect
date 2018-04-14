@@ -1,9 +1,12 @@
 <template>
   <div class="hello" id="loginForm">
     <h2>User Profile</h2>
-    <form id="profileForm" method="post" enctype="multipart/form-data">
+    <div class="formWarning" ref="warning">
+
+    </div>
+    <form id="profileForm" method="post" enctype="multipart/form-data" @submit.prevent="handleSubmit">
       <table border="0px" id="loginTable">
-        <form-input v-for="element in formElements" v-bind:type="element.type" v-bind:caption="element.caption" v-bind:name="element.name" v-bind:value="element.value" v-bind:key="element.id" />
+        <form-input v-for="element in formElements" v-bind:type="element.type" v-bind:caption="element.caption" v-bind:name="element.name" v-bind:value="element.value" v-bind:key="element.id" v-bind:optional="element.optional" />
       </table>
       <p><input type="submit" value="Update" /></p>
     </form>
@@ -21,13 +24,12 @@ export default {
   data () {
     return {
       formElements: [
-        // TODO: populate the values with the current values from the database
         {
           id: 0,
           type: 'text',
           name: 'email',
           caption: 'Email address',
-          value: '...current email...'
+          value: ''
         },
         {
           id: 1,
@@ -39,39 +41,47 @@ export default {
         {
           id: 2,
           type: 'password',
-          name: 'password1',
+          name: 'password',
           caption: 'Set new password',
-          value: ''
+          value: '',
+          optional: true
         },
         {
           id: 3,
           type: 'password',
-          name: 'password2',
+          name: 'cpassword',
           caption: 'Confirm new password',
-          value: ''
+          value: '',
+          optional: true
         },
         {
           id: 4,
           type: 'text',
-          name: 'phone',
+          name: 'cell_number',
           caption: 'Phone number',
-          value: '...current phone number...'
+          value: ''
         },
         {
           id: 5,
           type: 'yesno',
           name: 'publicphone',
           caption: 'Public phone number',
-          value: ''
+          value: 1
         }
       ]
     }
   },
   methods: {
     handleSubmit () {
-      // TODO: update user
+      var formFields = Components.collapse(this.formElements, [])
+      if (formFields.password !== formFields.cpassword) {
+        this.$refs.warning.innerHTML = 'Passwords do not match!'
+        this.$refs.warning.style.display = 'block'
+        return
+      }
+      // TODO: submit this to the appropriate endpoint
       axios.post('/rest/',
-        Components.collapse(this.formElements, [''])
+        formFields
       )
         .then(response => {
           // TODO: redirect to portal
@@ -83,6 +93,17 @@ export default {
   },
   components: {
     Components
+  },
+  mounted () {
+    axios.get('/rest/whoAmI')
+      .then(response => {
+        this.formElements[0].value = response.data.email
+        this.formElements[4].value = response.data.cell_number
+        // TODO: populate value for public phone/email
+      })
+      .catch(e => {
+        console.log(e)
+      })
   }
 }
 </script>

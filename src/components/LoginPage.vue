@@ -65,7 +65,7 @@ export default {
                     break
                 }
               })
-              .error(e => {
+              .catch(e => {
                 console.log(e)
               })
           }
