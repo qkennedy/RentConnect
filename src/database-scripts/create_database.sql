@@ -58,3 +58,38 @@ CREATE TABLE `rentconnect`.`document` (
   `file` VARCHAR(45) NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC));
+
+-- Create Maintenance Request table
+  CREATE TABLE `rentconnect`.`maint_request` (
+    `id` INT NOT NULL AUTO_INCREMENT,
+    `property_id` INT NULL,
+    `creator_id` INT NULL,
+    `created_date` DATE NULL,
+    `title` VARCHAR(128) NULL,
+    `description` VARCHAR(256) NULL,
+    `attached_files` VARCHAR(256) NULL,
+    `worker_id` INT NULL,
+    `status` INT NULL,
+    PRIMARY KEY (`id`),
+    UNIQUE INDEX `id_UNIQUE` (`id` ASC));
+-- Create comment table
+    CREATE TABLE `rentconnect`.`comment` (
+      `id` INT NOT NULL AUTO_INCREMENT,
+      `request_id` INT NOT NULL,
+      `creator_id` INT NOT NULL,
+      `created_date` DATE NOT NULL,
+      `comment_text` VARCHAR(512) NULL,
+      `attached_files` VARCHAR(256) NULL,
+      PRIMARY KEY (`id`),
+      UNIQUE INDEX `id_UNIQUE` (`id` ASC));
+
+--Create Rent History table
+CREATE TABLE `rentconnect`.`rent_history` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `payer_id` INT NOT NULL,
+  `property_id` INT NOT NULL,
+  `payment_date` DATE NOT NULL,
+  `payment_amount` FLOAT NULL,
+  `on_time` TINYINT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC));
