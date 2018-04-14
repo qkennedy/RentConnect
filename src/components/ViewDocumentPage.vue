@@ -26,12 +26,11 @@ document.title = 'View Document'
 
 export default {
   name: 'ViewDocumentPage',
-  // TODO: get this from the backend
   data () {
     return {
-      docTitle: 'Sample Document Title',
-      lastUpdated: 'January 1, 1970',
-      fileLink: '#'
+      docTitle: '',
+      lastUpdated: '',
+      fileLink: ''
     }
   },
   methods: {
@@ -56,9 +55,12 @@ export default {
   mounted () {
     axios.get('/rest/document/' + this.$route.params.id)
       .then(response => {
-        console.log(JSON.stringify(response))
+        this.docTitle = response.data.title
+        this.lastUpdated = new Date(response.data.created_date).toLocaleString()
+        this.fileLink = response.data.fileLink
       })
       .catch(e => {
+        // TODO: if document does not exist, show a 404 or whatever
         console.log(e)
       })
   }
