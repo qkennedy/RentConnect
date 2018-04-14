@@ -45,16 +45,41 @@ export default {
         Components.collapse(this.formElements, [])
       )
         .then(response => {
-          // TODO: make this refresh the sidebar on a successful login
-          if (response.data.status === 'loggedin') {
-            this.$router.push(response.data.next)
-          } else {
-            this.$refs.warning.innerHTML = 'Login failed. Please try again.'
-            this.$refs.warning.style.display = 'block'
+          // TODO: log the user in
+          if (response.status === 200) {
+            // TODO: update the sidebar
+            axios.get('/rest/whoAmI')
+              .then(response => {
+                var role = response.data.role
+                switch (role) {
+                  case 'tenant':
+                    this.$router.push('/TenantPortal')
+                    break
+                  case 'landlord':
+                    this.$router.push('/LandlordPortal')
+                    break
+                  case 'maintenanceWorker':
+                    this.$router.push('/MaintenancePortal')
+                    break
+                  case 'prospectiveUser':
+                    this.$router.push('/')
+                    break
+                }
+              })
+              .error(e => {
+                console.log(e)
+              })
           }
         })
         .catch(e => {
-          console.log(e)
+          if (typeof e.response === 'undefined') {
+            console.log(e)
+          } else if (e.response.status === 401) {
+            this.$refs.warning.innerHTML = 'Login failed. Please try again.'
+            this.$refs.warning.style.display = 'block'
+          } else {
+            console.log(e)
+          }
         })
     }
   },
