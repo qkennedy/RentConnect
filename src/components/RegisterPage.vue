@@ -3,16 +3,18 @@
   <div class="hello" id="registerForm">
     <h2>Register</h2>
     <form class="fullPageForm" id="loginForm" method="post" enctype="multipart/form-data" @submit.prevent="handleSubmit">
+      <div class="formWarning" ref="warning">
+
+      </div>
       <table border="0px" id="loginTable">
         <form-input v-for="element in formElements" ref="test" v-bind:type="element.type" v-bind:caption="element.caption" v-bind:name="element.name" v-bind:key="element.name" />
-        <!-- TODO make this a form-input -->
         <tr>
           <td class="leftColumn">Role</td>
           <td class="rightColumn">
             <select name="role" ref="role">
               <option value="tenant">Tenant</option>
               <option value="landlord">Landlord</option>
-              <option value="maint">Maintenance Worker</option>
+              <option value="maintenanceWorker">Maintenance Worker</option>
             </select>
           </td>
         </tr>
@@ -78,22 +80,51 @@ export default {
   },
   methods: {
     handleSubmit () {
+      var formFields = Components.collapse(this.formElements, ['role'])
+      if (formFields.password !== formFields.cpassword) {
+        this.$refs.warning.innerHTML = 'Passwords do not match!'
+        this.$refs.warning.style.display = 'block'
+        return
+      }
       axios.post('/rest/createuser',
-        Components.collapse(this.formElements, ['role'])
+        formFields
       )
         .then(response => {
-          // TODO: log in as new user
-          switch (this.$refs.role.value) {
-            case 'tenant':
-              this.$router.push('/TenantPortal')
-              break
-            case 'landlord':
-              this.$router.push('/LandlordPortal')
-              break
-            case 'maint':
-              this.$router.push('/MaintenancePortal')
-              break
-          }
+          axios.post('/rest/login',
+            {
+              username: formFields.username,
+              password: formFields.password
+            }
+          )
+            .then(response => {
+              if (response.status === 200) {
+                // TODO: update the sidebar
+                axios.get('/rest/whoAmI')
+                  .then(response => {
+                    var role = response.data.role
+                    switch (role) {
+                      case 'tenant':
+                        this.$router.push('/TenantPortal')
+                        break
+                      case 'landlord':
+                        this.$router.push('/LandlordPortal')
+                        break
+                      case 'maintenanceWorker':
+                        this.$router.push('/MaintenancePortal')
+                        break
+                      case 'prospectiveUser':
+                        this.$router.push('/')
+                        break
+                    }
+                  })
+                  .error(e => {
+                    console.log(e)
+                  })
+              }
+            })
+            .catch(e => {
+              console.log(e)
+            })
         })
         .catch(e => {
           console.log(e)

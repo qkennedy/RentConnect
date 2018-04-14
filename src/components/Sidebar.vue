@@ -11,9 +11,9 @@
         <a href="#/UserProfile">Edit Profile</a>
       </li>
       <li v-if="loggedIn"><a href="#/Logout">Log Out</a></li>
-      <li v-if="role==='tenant'"><a href="#/TenantPortal">My Portal</a></li>
-      <li v-if="role==='landlord'"><a href="#/LandlordPortal">My Portal</a></li>
-      <li v-if="role==='maintenance'"><a href="#/MaintenancePortal">My Portal</a></li>
+      <li v-if="loggedIn && role==='tenant'"><a href="#/TenantPortal">My Portal</a></li>
+      <li v-if="loggedIn && role==='landlord'"><a href="#/LandlordPortal">My Portal</a></li>
+      <li v-if="loggedIn && role==='maintenance'"><a href="#/MaintenancePortal">My Portal</a></li>
     </ul>
   </div>
 </template>
@@ -25,7 +25,7 @@ export default {
   data () {
     return {
       // TODO: get all this from the backend
-      loggedIn: true,
+      loggedIn: false,
       username: '',
       role: ''
     }
@@ -34,9 +34,15 @@ export default {
     // TODO: make this be able to reload from other components (i.e. when logging in/out, they can tell this to reload)
     axios.get('/rest/whoAmI')
       .then(response => {
-        this.loggedIn = response.data.loggedIn
-        this.username = response.data.username
-        this.role = response.data.role
+        console.log(JSON.stringify(response.data))
+        if (response.data.id > 0) {
+          console.log('Logged in')
+          this.loggedIn = true
+          this.username = response.data.username
+          this.role = response.data.role
+        } else {
+          this.loggedIn = false
+        }
       })
       .catch(e => {
         console.log(e)

@@ -67,19 +67,26 @@ li {
 
 .fullPageForm table .leftColumn {
   text-align: right;
-  width:50%;
+  width: 50%;
 }
 
 .fullPageForm table .rightColumn {
   text-align: left;
-  width:50%;
+  width: 50%;
 }
 
 .standardTable th, .standardTable td {
-  text-align:left;
+  text-align: left;
 }
 
 .standardTable td, .standardTable th {
   padding-left: 5px;
+}
+
+.formWarning {
+  display: none;
+  background-color: #9c2b2e;
+  color: #e84e4f;
+  border: 1px solid #e84e4f;
 }
 </style>

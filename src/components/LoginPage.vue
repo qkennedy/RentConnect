@@ -45,7 +45,6 @@ export default {
         Components.collapse(this.formElements, [])
       )
         .then(response => {
-          // TODO: log the user in
           if (response.status === 200) {
             // TODO: update the sidebar
             axios.get('/rest/whoAmI')
