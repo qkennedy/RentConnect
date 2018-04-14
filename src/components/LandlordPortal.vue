@@ -18,6 +18,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 import Components from '@/components/UIComponents'
 
 export default {
@@ -42,6 +43,25 @@ export default {
   },
   components: {
     Components
+  },
+  mounted () {
+    axios.get('/rest/whoAmI')
+      .then(response => {
+        console.log(JSON.stringify(response.data))
+        if (response.data.id > 0) {
+          if (this.role !== 'landlord') {
+            // we're not a landlord, get out of here
+            this.$router.push('/')
+          }
+          // TODO: get information about the landlord and put it in the form
+        } else {
+          // not logged in, get out of here
+          this.$router.push('/')
+        }
+      })
+      .catch(e => {
+        console.log(e)
+      })
   }
 }
 </script>
