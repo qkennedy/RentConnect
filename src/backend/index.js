@@ -50,6 +50,9 @@ server.get('/rest/user/:id',
   userFactory.getUserById(req.params.id).then(user => {
     res.send(user)
     next()
+  }).catch(err => {
+    res.send(400, err)
+    next
   });
 });
 

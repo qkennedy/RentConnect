@@ -24,8 +24,21 @@ module.exports = {
       return database.query('select *   from user where id = ?;', [id]).then( rows => {
         user = rows[0];
         return database.close()
-      } )
-      .then( () => {
+      }, err => {
+        console.log(err)
+        //If the error is fatal, don't close the database.
+        if(err.fatal) {
+          throw err;
+        } else {
+          //Here I need to come up with the reasons why an error could occur,
+          //Then change them to a user readable error
+          //Get returned 0 rows to: UserId not found
+          return database.close().then(() => {
+            console.log(err)
+            throw err;
+          })
+        }
+      }).then( () => {
         user.role = this.convertRole(user)
         return user;
      });
