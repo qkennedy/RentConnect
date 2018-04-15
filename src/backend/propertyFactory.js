@@ -8,7 +8,7 @@ module.exports = {
   getPropertyById: function(id) {
     let property;
       database.open()
-      return database.query('select *   from property where id = ?;', [id]).then( rows => {
+      return database.query('select * from property where id = ?;', [id]).then( rows => {
         property = rows[0];
         return database.close()
       } )
