@@ -136,7 +136,7 @@ module.exports = {
         return '2'
         break;
       case 'maintenanceWorker':
-        return 1
+        return 3
         break;
       default:
         return 4
