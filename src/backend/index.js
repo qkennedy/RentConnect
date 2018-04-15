@@ -198,6 +198,26 @@ server.get('/rest/renthistory/entry/:id',
   });
 });
 
+server.get('/rest/user/:userId/entries',
+  function(req, res, next) {
+  //Need to have some security around endpoints like this.
+  //This Works! This is the format we should do almost everything with
+  rentHistoryFactory.getEntriesForUser(req.params.userId).then(entries => {
+    res.send(entries)
+    next()
+  });
+});
+
+server.get('/rest/property/:propId/entries',
+  function(req, res, next) {
+  //Need to have some security around endpoints like this.
+  //This Works! This is the format we should do almost everything with
+  rentHistoryFactory.getEntriesForProperty(req.params.userId).then(entries => {
+    res.send(entries)
+    next()
+  });
+});
+
 //TODO need to add error handling on these -- Also, make sure if we are passing the pw across here that it is encrypted
 server.post('/rest/renthistory/createentry/',
   function(req, res, next) {
@@ -210,7 +230,7 @@ server.post('/rest/renthistory/createentry/',
 
 server.put('/rest/renthistory/entry/delete/:entryId',
   function(req, res, next) {
-  maintRequestFactory.deleteRequest(req.params.entryId).then(() => {
+  rentHistoryFactory.deleteEntry(req.params.entryId).then(() => {
     res.send(202)
     next()
   });
