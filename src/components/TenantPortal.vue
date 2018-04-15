@@ -66,7 +66,9 @@ export default {
           }
           axios.get('/rest/property/' + response.data.property_id)
             .then(response => {
-              console.log(JSON.stringify(response))
+              this.address = response.data.address
+              this.rentAmt = response.data.rent
+              // TODO: populate landlord info
             })
             .catch(e => {
               console.log(e)

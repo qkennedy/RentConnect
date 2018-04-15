@@ -13,7 +13,7 @@
       <li v-if="loggedIn"><a href="#/Logout">Log Out</a></li>
       <li v-if="loggedIn && role==='tenant'"><a href="#/TenantPortal">My Portal</a></li>
       <li v-if="loggedIn && role==='landlord'"><a href="#/LandlordPortal">My Portal</a></li>
-      <li v-if="loggedIn && role==='maintenance'"><a href="#/MaintenancePortal">My Portal</a></li>
+      <li v-if="loggedIn && role==='maintenanceWorker'"><a href="#/MaintenancePortal">My Portal</a></li>
     </ul>
   </div>
 </template>

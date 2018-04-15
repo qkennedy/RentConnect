@@ -3,7 +3,7 @@ const userFactory = require('./userFactory');
 const propertyFactory = require('./propertyFactory');
 const documentFactory = require('./documentFactory');
 const maintRequestFactory = require('./MaintRequestFactory')
-const rentHistoryFactory = require('./rentHistoryFactory')
+// const rentHistoryFactory = require('./rentHistoryFactory')
 
 function respond(req, res, next) {
   res.send('you got' + req.params.resp);
