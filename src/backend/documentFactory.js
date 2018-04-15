@@ -3,12 +3,7 @@ var Database = require('./database')
 const userFactory = require('./userFactory');
 const propertyFactory = require('./propertyFactory')
 
-var database = new Database({
-  host     : 'localhost',
-  user     : 'root',
-  password : 'postgres',
-  database : 'rentconnect'
-});
+var database = new Database();
 module.exports = {
 
   getDocumentById: function(id) {
