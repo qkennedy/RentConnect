@@ -21,7 +21,13 @@ module.exports = {
         return database.close()
       } )
       .then( () => {
-        user.role = this.convertRole(user)
+        if (typeof user === 'undefined') {
+          user = {
+            id: -1
+          }
+        } else {
+          user.role = this.convertRole(user)
+        }
         return user;
      });
   },
