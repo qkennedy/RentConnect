@@ -80,8 +80,6 @@ import axios from 'axios'
 import Vue from 'vue'
 import Components from '@/components/UIComponents'
 
-document.title = 'View Maintenance Request'
-
 export default {
   name: 'LoginPage',
   data () {
@@ -150,6 +148,7 @@ export default {
     Components
   },
   mounted () {
+    document.title = 'View Maintenance Request'
     axios.get('/rest/whoAmI')
       .then(response => {
         this.tenant = response.data.role === 'tenant'

@@ -14,8 +14,6 @@
 import axios from 'axios'
 import Components from '@/components/UIComponents'
 
-document.title = 'Submit Maintenance Request'
-
 export default {
   name: 'LoginPage',
   data () {
@@ -67,6 +65,7 @@ export default {
     Components
   },
   mounted () {
+    document.title = 'Submit Maintenance Request'
     axios.get('/rest/whoAmI')
       .then(response => {
         if (response.data.id === -1) {

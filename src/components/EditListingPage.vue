@@ -70,6 +70,8 @@ export default {
     }
   },
   mounted () {
+    document.title = 'Manage Listing'
+
     if (this.$route.params.id != null) {
       axios.get('/rest/property/' + this.$route.params.id)
         .then(response => {
@@ -88,8 +90,6 @@ export default {
     }
   }
 }
-
-document.title = 'Manage Listing'
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

@@ -45,6 +45,7 @@ export default {
     Components
   },
   mounted () {
+    document.title = 'Landlord Portal'
     axios.get('/rest/whoAmI')
       .then(response => {
         console.log(JSON.stringify(response.data))

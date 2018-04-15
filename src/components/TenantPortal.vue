@@ -26,8 +26,6 @@
 import axios from 'axios'
 import Components from '@/components/UIComponents'
 
-document.title = 'Tenant portal'
-
 export default {
   name: 'TenantPortal',
   data () {
@@ -57,6 +55,7 @@ export default {
     Components
   },
   mounted () {
+    document.title = 'Tenant Portal'
     axios.get('/rest/whoAmI')
       .then(response => {
         if (response.data.id > 0) {

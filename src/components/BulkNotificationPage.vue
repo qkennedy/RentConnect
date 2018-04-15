@@ -16,8 +16,6 @@ import Vue from 'vue'
 import Components from '@/components/UIComponents'
 import axios from 'axios'
 
-document.title = 'Send Bulk Notification'
-
 export default {
   name: 'BulkNotificationPage',
   data () {
@@ -69,6 +67,9 @@ export default {
           console.log(e)
         })
     }
+  },
+  mounted () {
+    document.title = 'Send Bulk Notification'
   }
 }
 

@@ -17,12 +17,11 @@
 import Components from '@/components/UIComponents'
 import axios from 'axios'
 
-document.title = 'Log in'
-
 export default {
   name: 'LoginPage',
   data () {
     return {
+      pageTitle: 'Log in - RentConnect',
       formElements: [
         {
           id: 0,
@@ -85,6 +84,9 @@ export default {
   },
   components: {
     Components
+  },
+  mounted () {
+    document.title = 'Log in'
   }
 }
 </script>

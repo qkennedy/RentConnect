@@ -129,6 +129,9 @@ export default {
           console.log(e)
         })
     }
+  },
+  mounted () {
+    document.title = 'Apply to Rent Property'
   }
 }
 

@@ -22,8 +22,6 @@ import axios from 'axios'
 import Vue from 'vue'
 import Components from '@/components/UIComponents'
 
-document.title = 'View Document'
-
 export default {
   name: 'ViewDocumentPage',
   data () {
@@ -53,6 +51,7 @@ export default {
     Components
   },
   mounted () {
+    document.title = 'View Document'
     axios.get('/rest/document/' + this.$route.params.id)
       .then(response => {
         this.docTitle = response.data.title

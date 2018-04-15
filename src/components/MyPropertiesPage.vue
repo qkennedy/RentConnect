@@ -32,8 +32,6 @@ import axios from 'axios'
 import Vue from 'vue'
 import Components from '@/components/UIComponents'
 
-document.title = 'My Properties'
-
 export default {
   name: 'MyPropertiesPage',
   data () {
@@ -46,6 +44,7 @@ export default {
     Components
   },
   mounted () {
+    document.title = 'My Properties'
     axios.get('/rest/whoAmI')
       .then(response => {
         var userId = response.data.userId

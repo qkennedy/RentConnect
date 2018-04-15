@@ -39,6 +39,8 @@ export default {
     Components
   },
   mounted () {
+    document.title = 'Maintenance Requests'
+
     axios.get('/rest/whoAmI')
       .then(response => {
         if (response.data.role !== 'landlord') {
@@ -65,8 +67,6 @@ Vue.component('maint-row', {
   props: ['property', 'status', 'lastUpdated', 'id'],
   template: '<tr><td>{{ property }}</td><td v-if="status===\'open\'" style="font-weight:bold; color:#900">Unassigned</td><td v-if="status===\'assigned\'" style="color:#060">Assigned</td><td v-if="status===\'closed\'">Closed</td><td>{{ lastUpdated }}</td><td><router-link v-bind:to="\'/ViewMaintenanceRequest/\' + id">View</router-link></td></tr>'
 })
-
-document.title = 'Maintenance Requests'
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

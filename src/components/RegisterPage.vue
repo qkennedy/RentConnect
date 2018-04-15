@@ -28,8 +28,6 @@
 import axios from 'axios'
 import Components from '@/components/UIComponents'
 
-document.title = 'Register'
-
 export default {
   name: 'Register',
   data () {
@@ -130,6 +128,9 @@ export default {
           console.log(e)
         })
     }
+  },
+  mounted () {
+    document.title = 'Register'
   }
 }
 </script>

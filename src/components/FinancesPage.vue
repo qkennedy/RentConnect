@@ -80,6 +80,7 @@ export default {
     Components
   },
   mounted () {
+    document.title = 'Finances'
     var propId
     if (this.$route.params.id == null) {
       // TODO: get the user's property ID
@@ -108,8 +109,6 @@ Vue.component('rent-row', {
   props: ['date', 'amount', 'receiptLink', 'late'],
   template: '<tr><td>{{ date }} <span v-if="late" style="color:#F00; font-weight:bold">LATE</span></td><td>{{ amount }}</td><td v-html="receiptLink"></td></tr>'
 })
-
-document.title = 'Finances'
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

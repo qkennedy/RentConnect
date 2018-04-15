@@ -150,10 +150,12 @@ export default {
   },
   components: {
     Components
+  },
+  mounted () {
+    document.title = 'Process Property Application'
+    // TODO: get everything from the backend
   }
 }
-
-document.title = 'Process property application'
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

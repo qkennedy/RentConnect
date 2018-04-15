@@ -29,8 +29,6 @@ import axios from 'axios'
 import Vue from 'vue'
 import Components from '@/components/UIComponents'
 
-document.title = 'Manage Documents'
-
 export default {
   name: 'ManageDocumentsPage',
   data () {
@@ -73,6 +71,7 @@ export default {
     Components
   },
   mounted () {
+    document.title = 'Manage Documents'
     axios.get('/rest/whoAmI')
       .then(response => {
         if (response.data.role !== 'landlord' && response.data.role !== 'tenant') {
