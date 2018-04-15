@@ -22,9 +22,9 @@ module.exports = {
     database.open();
     const created = Date.now()
     request.status = module.exports.convertStatusToInt(request)
-    return database.query(`INSERT INTO maint_request
+    return database.query(INSERT INTO maint_request
       (id, property_id, creator_id, created_date, title, description, attached_files, worker_id, status)
-      VALUES(null,?,?,?,?,?,?,null,?);`,
+      VALUES(null,?,?,?,?,?,?,null,?);,
       [propertyId, creatorId, created, request.title, request.description, request.attachedFiles, request.worker_id, 1]).then( () => {
       return database.close();
     });
@@ -32,7 +32,7 @@ module.exports = {
 
   deleteRequest: function(id) {
     database.open();
-    return database.query(`DELETE FROM maint_request WHERE id = ?;`,
+    return database.query(DELETE FROM maint_request WHERE id = ?;,
                           [id]).then(() => {
       //Do I need to return results here?  Or does promise cover failure case
       return database.close();
@@ -41,13 +41,36 @@ module.exports = {
 
   editMaintRequest: function(request) {
     database.open();
-    return database.query(`UPDATE maint_request SET
+    return database.query(UPDATE maint_request SET
       title = ?, description = ?, attached_files = ?, worker_id = ?, status = ?
-      WHERE id = ?;`,
+      WHERE id = ?;,
       [request.title, request.description, request.attachedFiles, 1, ]).then( () => {
       return database.close();
     });
   },
+
+  getCommentsByRequestId: function(requestId) {
+    let comments;
+      database.open()
+      return database.query('select * from comment where request_id = ?;', [requestId]).then( rows => {
+        comments = rows;
+        return database.close()
+      } )
+      .then( () => {
+      return comments;
+     });
+  },
+
+  addCommentForRequest: function(requestId, creatorId, comment) {
+    database.open();
+    const created = Date.now()
+    return database.query(`
+INSERT INTO rentconnect.comment (id, request_id, creator_id, created_date, comment_text, attached_files)
+VALUES (null, ?, ?, ?, ?, ?);`,
+      [requestId, creatorId, created, comment.text, comment.attachedFiles]).then( () => {
+      return database.close();
+    });
+  }
 
 
   convertIntToStatus(request) {
