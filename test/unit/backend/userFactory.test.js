@@ -11,7 +11,7 @@ beforeEach(() => {
   const mockClose = jest.fn()
 
   let connectRefusedCode = 'ECONNREFUSED'
-  let invalidIdCode = ''
+  let invalidIdCode = 'User does not exist'
 
 function mockResolve(retValue) {
   const mockRows = [retValue]
@@ -81,18 +81,17 @@ test('get User by Id', () => {
 
 test('get User by Invalid Id throws error', () => {
   const mockError = {
-    code: "ECONNREFUSED",
-    errno: "ECONNREFUSED",
-    "fatal": true
+    "code": "User does not exist",
+    "fatal": false
   }
 
   mockQueryErr(mockError)
   return userFactory.getUserById(10000).then(user => {
     //Fail if we get here
   }).catch( err => {
-    expect(err.code).toEqual(connectRefusedCode)
-    expect(err.fatal).toEqual(true)
-    expect(mockClose.mock.calls.length).toEqual(0)
+    expect(err.code).toEqual(invalidIdCode)
+    expect(err.fatal).toEqual(false)
+    expect(mockClose.mock.calls.length).toEqual(1)
   });
 
 });

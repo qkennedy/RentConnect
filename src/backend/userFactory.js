@@ -22,7 +22,15 @@ module.exports = {
     let user;
       database.open()
       return database.query('select *   from user where id = ?;', [id]).then( rows => {
+        console.log(rows)
         user = rows[0];
+        if(!user) {
+          let err = {
+            code: 'User does not exist',
+            fatal: false
+          }
+          throw err;
+        }
         return database.close()
       }, err => {
         console.log(err)
