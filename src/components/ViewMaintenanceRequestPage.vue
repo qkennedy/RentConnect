@@ -5,10 +5,10 @@
     <table border="0" class="standardTable">
       <tr>
         <th>
-          Location
+          Title
         </th>
         <td>
-          {{ reqLocation }}
+          {{ reqTitle }}
         </td>
       </tr>
       <tr>
@@ -144,10 +144,10 @@ export default {
       .catch(e => {
         console.log(e)
       })
-    axios.get('/rest/getMaintInfo/' + this.$route.params.id)
+    axios.get('/rest/request/' + this.$route.params.id)
       .then(response => {
-        this.reqLocation = response.data.reqLocation
-        this.reqContent = response.data.reqContent
+        this.reqTitle = response.data.title
+        this.reqContent = response.data.description
         this.attachedImage = response.data.attachedImage
         this.comments = response.data.comments
       })

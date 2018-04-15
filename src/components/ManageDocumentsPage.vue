@@ -57,8 +57,9 @@ export default {
     handleSubmit () {
       // TODO: update propId as appropriate
       var propId = 1
+      console.log(JSON.stringify(Components.collapse(this.formElements, [])))
       axios.post('/rest/property/' + propId + '/createdocument/',
-        Components.collapse(this.formElements, ['role'])
+        Components.collapse(this.formElements, [])
       )
         .then(response => {
           // TODO: update the page with the new document
@@ -72,11 +73,24 @@ export default {
     Components
   },
   mounted () {
-    var propId = 1
-    axios.get('/rest/documents/' + propId)
+    axios.get('/rest/whoAmI')
       .then(response => {
-        console.log(JSON.stringify(response.data))
-        this.documents = response.data.documents
+        if (response.data.role !== 'landlord' && response.data.role !== 'tenant') {
+          // not a landlord or tenant, shouldn't be looking at documents
+          this.$router.push('/')
+        }
+        // TODO: do something with the response to get the property
+        /*
+        var propId = 1
+        axios.get('/rest/documents/' + propId)
+          .then(response => {
+            console.log(JSON.stringify(response.data))
+            this.documents = response.data.documents
+          })
+          .catch(e => {
+            console.log(e)
+          })
+          */
       })
       .catch(e => {
         console.log(e)

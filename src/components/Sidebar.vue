@@ -34,7 +34,6 @@ export default {
     // TODO: make this be able to reload from other components (i.e. when logging in/out, they can tell this to reload)
     axios.get('/rest/whoAmI')
       .then(response => {
-        console.log(JSON.stringify(response.data))
         if (response.data.id > 0) {
           console.log('Logged in')
           this.loggedIn = true

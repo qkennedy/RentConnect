@@ -3,7 +3,7 @@
     <h2>Submit Maintenance Request</h2>
     <form class="fullPageForm" id="loginForm" method="post" enctype="multipart/form-data" @submit.prevent="handleSubmit">
       <table border="0px" id="loginTable">
-        <form-input v-for="element in formElements" v-bind:type="element.type" v-bind:caption="element.caption" v-bind:name="element.name" v-bind:key="element.id" />
+        <form-input v-for="element in formElements" v-bind:type="element.type" v-bind:caption="element.caption" v-bind:name="element.name" v-bind:key="element.id" v-bind:optional="element.optional" />
       </table>
       <p><input type="submit" value="Submit" /></p>
     </form>
@@ -24,8 +24,8 @@ export default {
         {
           id: 0,
           type: 'text',
-          name: 'location',
-          caption: 'Location'
+          name: 'title',
+          caption: 'Title'
         },
         {
           id: 1,
@@ -37,16 +37,19 @@ export default {
           id: 2,
           type: 'file',
           name: 'image',
-          caption: 'Image to attach'
+          caption: 'Image to attach',
+          optional: true
         }
-      ]
+      ],
+      propertyId: 1,
+      myId: 0
     }
   },
   methods: {
     handleSubmit () {
       // TODO: submit the maintenance request
-      axios.post('/rest/',
-        Components.collapse(this.formElements, [''])
+      axios.post('/rest/request/createrequest',
+        Components.collapse(this.formElements, [])
       )
         .then(response => {
           // TODO: redirect to page to show this maintenance Request
@@ -59,6 +62,15 @@ export default {
   },
   components: {
     Components
+  },
+  mounted () {
+    axios.get('/rest/whoAmI')
+      .then(response => {
+        this.myId = response.data.id
+      })
+      .catch(e => {
+        console.log(e)
+      })
   }
 }
 </script>

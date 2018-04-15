@@ -79,8 +79,11 @@ export default {
           this.formElements[3].value = response.data.late_fee
         })
         .catch(e => {
-          // TODO: if 404, then show error
-          console.log(e)
+          if (typeof e.status !== 'undefined' && e.status === 404) {
+            this.$router.push('/404')
+          } else {
+            console.log(e)
+          }
         })
     }
   }

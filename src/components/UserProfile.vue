@@ -66,7 +66,7 @@ export default {
           type: 'yesno',
           name: 'publicphone',
           caption: 'Public phone number',
-          value: 1
+          value: ''
         }
       ]
     }

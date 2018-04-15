@@ -59,7 +59,6 @@ export default {
   mounted () {
     axios.get('/rest/whoAmI')
       .then(response => {
-        console.log(JSON.stringify(response.data))
         if (response.data.id > 0) {
           if (response.data.role !== 'tenant') {
             // we're not a tenant, get out of here

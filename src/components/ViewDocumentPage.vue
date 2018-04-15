@@ -60,8 +60,11 @@ export default {
         this.fileLink = response.data.fileLink
       })
       .catch(e => {
-        // TODO: if document does not exist, show a 404 or whatever
-        console.log(e)
+        if (typeof e.status !== 'undefined' && e.status === 404) {
+          this.$router.push('/404')
+        } else {
+          console.log(e)
+        }
       })
   }
 }
