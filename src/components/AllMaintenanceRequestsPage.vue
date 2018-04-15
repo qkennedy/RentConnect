@@ -16,7 +16,7 @@
           Actions
         </th>
       </tr>
-      <maint-row v-for="req in maintRequests" v-bind:key="req.id" v-bind:property="req.property" v-bind:status="req.status" v-bind:lastUpdated="req.lastUpdated" v-bind:id="req.id"></maint-row>
+      <maint-row v-for="req in maintRequests" v-bind:key="req.id" v-bind:property="req.address" v-bind:status="req.status" v-bind:lastUpdated="req.lastUpdated" v-bind:id="req.id"></maint-row>
     </table>
   </div>
 </template>
@@ -31,19 +31,28 @@ export default {
   data () {
     return {
       maintRequests: [
-      ]
+      ],
+      myId: 0
     }
   },
   components: {
     Components
   },
   mounted () {
-    // TODO: get user ID from API
-    var userId = 1
-    axios.get('/rest/allMaintRequests/' + userId)
+    axios.get('/rest/whoAmI')
       .then(response => {
-        console.log(JSON.stringify(response))
-        this.maintRequests = response.data.maintRequests
+        if (response.data.role !== 'landlord') {
+          this.$router.push('/')
+        }
+        this.myId = response.data.id
+        axios.get('/rest/request/byLandlordId/' + this.myId)
+          .then(response => {
+            console.log(JSON.stringify(response))
+            this.maintRequests = response.data
+          })
+          .catch(e => {
+            console.log(e)
+          })
       })
       .catch(e => {
         console.log(e)
@@ -52,9 +61,9 @@ export default {
 }
 
 Vue.component('maint-row', {
-  // TODO: make "view" link to the specific page based on the id
+  // TODO: synchronize the statuses with the backend
   props: ['property', 'status', 'lastUpdated', 'id'],
-  template: '<tr><td>{{ property }}</td><td v-if="status===\'unassigned\'" style="font-weight:bold; color:#900">Unassigned</td><td v-if="status===\'assigned\'" style="color:#060">Assigned</td><td v-if="status===\'closed\'">Closed</td><td>{{ lastUpdated }}</td><td><router-link v-bind:to="\'/ViewMaintenanceRequest/\' + id">View</router-link></td></tr>'
+  template: '<tr><td>{{ property }}</td><td v-if="status===\'open\'" style="font-weight:bold; color:#900">Unassigned</td><td v-if="status===\'assigned\'" style="color:#060">Assigned</td><td v-if="status===\'closed\'">Closed</td><td>{{ lastUpdated }}</td><td><router-link v-bind:to="\'/ViewMaintenanceRequest/\' + id">View</router-link></td></tr>'
 })
 
 document.title = 'Maintenance Requests'

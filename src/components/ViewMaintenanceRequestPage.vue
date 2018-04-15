@@ -52,6 +52,7 @@
             Change request status
           </td>
           <td class="rightColumn">
+            <!-- TODO: synchronize the statuses with the backend -->
             <select name="status">
               <option value="">
                 (keep open)
@@ -138,7 +139,6 @@ export default {
     updateComments () {
       axios.get('/rest/request/' + this.$route.params.id + '/comments')
         .then(response => {
-          console.log(JSON.stringify(response.data))
           this.comments = response.data
         })
         .catch(e => {

@@ -69,6 +69,22 @@ module.exports = {
     });
   },
 
+  getRequestsByUser: function(landlordId) {
+    let requests;
+    database.open()
+    return database.query('SELECT p.address,m.status,m.created_date,m.id FROM maint_request AS m LEFT JOIN property AS p ON p.id=m.property_id WHERE p.landlord_id=?',
+      [landlordId]).then(rows => {
+      requests = rows
+      var i
+      for (i = 0; i < requests.length; i++) {
+        requests[i].status = this.convertIntToStatus(requests[i])
+      }
+    })
+    .then( () => {
+      return requests
+    })
+  },
+
 
   convertIntToStatus(request) {
     switch(request.status) {

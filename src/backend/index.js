@@ -175,6 +175,16 @@ server.get('/rest/request/:id/comments',
   });
 });
 
+server.get('/rest/request/byLandlordId/:id',
+  function(req, res, next) {
+  //Need to have some security around endpoints like this.
+  //This Works! This is the format we should do almost everything with
+  maintRequestFactory.getRequestsByUser(req.params.id).then(reqs => {
+    res.send(reqs)
+    next()
+  });
+});
+
 //TODO need to add error handling on these -- Also, make sure if we are passing the pw across here that it is encrypted
 server.post('/rest/request/createrequest/',
   function(req, res, next) {
