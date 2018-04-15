@@ -69,7 +69,7 @@ module.exports = {
     database.open();
     return database.query(`insert into user (id, username, password, email, cell_number, role)
                       values(null, ?,?,?,?,?);`,
-                      [user.username, user.password, user.email, user.phone, this.convertRoleToInt(user.role)]).then(() => {
+                      [user.username, user.password, user.email, user.phone, this.convertRoleToInt(user)]).then(() => {
       return database.close();
     } );
   },
