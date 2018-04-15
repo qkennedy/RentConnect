@@ -3,6 +3,7 @@ const userFactory = require('./userFactory');
 const propertyFactory = require('./propertyFactory');
 const documentFactory = require('./documentFactory');
 const maintRequestFactory = require('./MaintRequestFactory')
+const rentHistoryFactory = require('./rentHistoryFactory')
 
 function respond(req, res, next) {
   res.send('you got' + req.params.resp);
@@ -215,6 +216,36 @@ server.post('/rest/request/:id/addComment',
 server.put('/rest/request/delete/:reqId',
   function(req, res, next) {
   maintRequestFactory.deleteRequest(req.params.reqId).then(() => {
+    res.send(202)
+    next()
+  });
+});
+
+//Rent History EP
+
+server.get('/rest/renthistory/entry/:id',
+  function(req, res, next) {
+  //Need to have some security around endpoints like this.
+  //This Works! This is the format we should do almost everything with
+  rentHistoryFactory.getEntryById(req.params.id).then(entry => {
+    res.send(entry)
+    next()
+  });
+});
+
+//TODO need to add error handling on these -- Also, make sure if we are passing the pw across here that it is encrypted
+server.post('/rest/renthistory/createentry/',
+  function(req, res, next) {
+    //I need to make sure Jacob is passing stuff in right, or change the refs to match
+  rentHistoryFactory.createEntry(req.body).then(request => {
+    res.send(201)
+    next()
+  });
+});
+
+server.put('/rest/renthistory/entry/delete/:entryId',
+  function(req, res, next) {
+  maintRequestFactory.deleteRequest(req.params.entryId).then(() => {
     res.send(202)
     next()
   });
