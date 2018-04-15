@@ -49,6 +49,7 @@ export default {
             // TODO: update the sidebar
             axios.get('/rest/whoAmI')
               .then(response => {
+                this.$eventHub.$emit('update-sidebar')
                 var role = response.data.role
                 switch (role) {
                   case 'tenant':

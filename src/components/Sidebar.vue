@@ -20,6 +20,7 @@
 
 <script>
 import axios from 'axios'
+
 export default {
   name: 'Sidebar',
   data () {
@@ -30,22 +31,27 @@ export default {
       role: ''
     }
   },
+  methods: {
+    updateSidebar () {
+      axios.get('/rest/whoAmI')
+        .then(response => {
+          if (response.data.id > 0) {
+            console.log('Logged in')
+            this.loggedIn = true
+            this.username = response.data.username
+            this.role = response.data.role
+          } else {
+            this.loggedIn = false
+          }
+        })
+        .catch(e => {
+          console.log(e)
+        })
+    }
+  },
   mounted () {
-    // TODO: make this be able to reload from other components (i.e. when logging in/out, they can tell this to reload)
-    axios.get('/rest/whoAmI')
-      .then(response => {
-        if (response.data.id > 0) {
-          console.log('Logged in')
-          this.loggedIn = true
-          this.username = response.data.username
-          this.role = response.data.role
-        } else {
-          this.loggedIn = false
-        }
-      })
-      .catch(e => {
-        console.log(e)
-      })
+    this.$eventHub.$on('update-sidebar', this.updateSidebar)
+    this.updateSidebar()
   }
 }
 </script>
