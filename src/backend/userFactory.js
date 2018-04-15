@@ -87,6 +87,23 @@ module.exports = {
     } );
   },
 
+  updateUser: function(user) {
+    console.log(JSON.stringify(user))
+    database.open();
+    var passwordStr = '';
+    var formFields = [user.email, user.cell_number]
+    if (user.password != '') {
+      passwordStr = ',password=?'
+      formFields.push(user.password)
+    }
+    formFields.push(user.id)
+    console.log(JSON.stringify(formFields))
+    return database.query('UPDATE user SET email=?,cell_number=?' + passwordStr + ' WHERE id=?', formFields)
+    .then( () => {
+
+    })
+  },
+
   deleteUser: function(userId) {
     database.open();
     return database.query(`DELETE FROM user WHERE id = ?;`,

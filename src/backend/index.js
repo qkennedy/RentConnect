@@ -57,11 +57,15 @@ server.get('/rest/user/:id',
 //TODO need to add error handling on these -- Also, make sure if we are passing the pw across here that it is encrypted
 server.post('/rest/createuser',
   function(req, res, next) {
-    console.log("body is " + req.body)
-    console.log("params are: " + req.params)
-
-    //TODO need to talk to Jacob, figure out how to get the form data
     userFactory.createUser(req.body).then(() => {
+      res.send(201)
+      next()
+    });
+});
+
+server.post('/rest/updateuser',
+  function(req, res, next) {
+    userFactory.updateUser(req.body).then(() => {
       res.send(201)
       next()
     });

@@ -68,23 +68,39 @@ export default {
           caption: 'Public phone number',
           value: ''
         }
-      ]
+      ],
+      myId: 0,
+      role: ''
     }
   },
   methods: {
     handleSubmit () {
       var formFields = Components.collapse(this.formElements, [])
+      formFields.id = this.myId
       if (formFields.password !== formFields.cpassword) {
         this.$refs.warning.innerHTML = 'Passwords do not match!'
         this.$refs.warning.style.display = 'block'
         return
       }
       // TODO: submit this to the appropriate endpoint
-      axios.post('/rest/',
+      axios.post('/rest/updateuser',
         formFields
       )
         .then(response => {
-          // TODO: redirect to portal
+          switch (this.role) {
+            case 'tenant':
+              this.$router.push('/TenantPortal')
+              break
+            case 'landlord':
+              this.$router.push('/LandlordPortal')
+              break
+            case 'maintenanceWorker':
+              this.$router.push('/MaintenancePortal')
+              break
+            default:
+              this.$router.push('/')
+              break
+          }
         })
         .catch(e => {
           console.log(e)
@@ -97,8 +113,13 @@ export default {
   mounted () {
     axios.get('/rest/whoAmI')
       .then(response => {
+        if (response.data.id === -1) {
+          this.$router.push('/')
+        }
         this.formElements[0].value = response.data.email
         this.formElements[4].value = response.data.cell_number
+        this.myId = response.data.id
+        this.role = response.data.role
         // TODO: populate value for public phone/email
       })
       .catch(e => {
