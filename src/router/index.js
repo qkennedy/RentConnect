@@ -18,6 +18,7 @@ import ViewDocumentPage from '@/components/ViewDocumentPage'
 import MyPropertiesPage from '@/components/MyPropertiesPage'
 import AllMaintenanceRequestsPage from '@/components/AllMaintenanceRequestsPage'
 import EditListingPage from '@/components/EditListingPage'
+import Error404Page from '@/components/404Page'
 
 Vue.use(Router)
 
@@ -27,6 +28,11 @@ export default new Router({
       path: '/',
       name: 'IndexPage',
       component: IndexPage
+    },
+    {
+      path: '/404',
+      name: '404Page',
+      component: Error404Page
     },
     {
       path: '/Login/',
@@ -75,7 +81,7 @@ export default new Router({
     },
     {
       path: '/Finances/:id',
-      name: 'FinancesPage',
+      name: 'FinancesPageWithID',
       component: FinancesPage
     },
     {
@@ -105,7 +111,7 @@ export default new Router({
     },
     {
       path: '/ManageDocuments/:id',
-      name: 'ManageDocumentsPage',
+      name: 'ManageDocumentsPageWithID',
       component: ManageDocumentsPage
     },
     {
@@ -125,7 +131,7 @@ export default new Router({
     },
     {
       path: '/CreateListing/',
-      name: 'EditListingPage',
+      name: 'CreateListingPage',
       component: EditListingPage
     }
   ]

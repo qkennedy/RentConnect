@@ -36,7 +36,7 @@
     <h3>Leave a comment</h3>
     <form class="fullPageForm" id="loginForm" method="post" enctype="multipart/form-data" @submit.prevent="handleSubmit">
       <table border="0px" id="loginTable">
-        <form-input v-for="element in formElements" v-bind:type="element.type" v-bind:caption="element.caption" v-bind:name="element.name" v-bind:key="element.id" />
+        <form-input v-for="element in formElements" v-bind:type="element.type" v-bind:caption="element.caption" v-bind:name="element.name" v-bind:key="element.id" v-bind:optional="element.optional" />
         <tr v-if="landlord">
           <td class="leftColumn">
             Assign to worker
@@ -47,7 +47,7 @@
             </select>
           </td>
         </tr>
-        <tr v-if="landlord || maintenanceWorker">
+        <tr v-if="canClose">
           <td class="leftColumn">
             Change request status
           </td>
@@ -96,7 +96,8 @@ export default {
           id: 1,
           type: 'file',
           name: 'image',
-          caption: 'Attach image'
+          caption: 'Attach image',
+          optional: true
         }
       ],
       comments: [],
@@ -105,6 +106,7 @@ export default {
       reqTitle: '',
       reqContent: '',
       attachedImage: false,
+      myId: 0,
       canClose: this.landlord || this.maintenanceWorker,
       workers: [
         { text: 'Alex Johnson', value: 'ajohnson' }
@@ -120,11 +122,24 @@ export default {
       if (this.canClose) {
         extraComponents.add('status')
       }
-      axios.post('/rest/',
-        Components.collapse(this.formElements, [extraComponents])
+      console.log(JSON.stringify(extraComponents))
+      var formFields = Components.collapse(this.formElements, extraComponents)
+      formFields.creatorId = this.myId
+      axios.post('/rest/request/' + this.$route.params.id + '/addComment',
+        formFields
       )
         .then(response => {
-          // TODO: parse response
+          this.updateComments()
+        })
+        .catch(e => {
+          console.log(e)
+        })
+    },
+    updateComments () {
+      axios.get('/rest/request/' + this.$route.params.id + '/comments')
+        .then(response => {
+          console.log(JSON.stringify(response.data))
+          this.comments = response.data
         })
         .catch(e => {
           console.log(e)
@@ -140,6 +155,7 @@ export default {
         this.tenant = response.data.role === 'tenant'
         this.landlord = response.data.role === 'landlord'
         this.maintenanceWorker = response.data.role === 'maint'
+        this.myId = response.data.id
       })
       .catch(e => {
         console.log(e)
@@ -153,14 +169,7 @@ export default {
       .catch(e => {
         console.log(e)
       })
-    axios.get('/rest/request/' + this.$route.params.id + '/comments')
-      .then(response => {
-        console.log(JSON.stringify(response.data))
-        this.comments = response.data
-      })
-      .catch(e => {
-        console.log(e)
-      })
+    this.updateComments()
   }
 }
 

@@ -187,6 +187,17 @@ server.post('/rest/request/createrequest/',
     });
 });
 
+server.post('/rest/request/:id/addComment',
+  function(req, res, next) {
+    maintRequestFactory.addCommentForRequest(req.params.id, req.body).then(
+      request => {
+        res.send(201)
+        next()
+      }
+    )
+  }
+);
+
 server.put('/rest/request/delete/:reqId',
   function(req, res, next) {
   maintRequestFactory.deleteRequest(req.params.reqId).then(() => {

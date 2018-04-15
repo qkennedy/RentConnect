@@ -60,12 +60,11 @@ module.exports = {
      });
   },
 
-  addCommentForRequest: function(requestId, creatorId, comment) {
+  addCommentForRequest: function(requestId, comment) {
     database.open();
-    const created = Date.now()
     return database.query(`insert into rentconnect.comment (id, request_id, creator_id, created_date, comment_text, attached_files)
       VALUES (null, ?, ?, ?, ?, ?);`,
-      [requestId, creatorId, created, comment.text, comment.attachedFiles]).then( () => {
+      [requestId, comment.creatorId, (new Date()).toISOString().substring(0,10), comment.comment, comment.attachedFiles]).then( () => {
       //return database.close();
     });
   },
