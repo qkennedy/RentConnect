@@ -71,6 +71,7 @@ module.exports = {
       return entries;
      });
   },
+  
   //This lets us mock out the database, so that we can check calls, supply responses
   setDatabase: function(newDb) {
     database = newDb
