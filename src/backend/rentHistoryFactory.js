@@ -22,9 +22,9 @@ module.exports = {
     database.open();
     const created = Date.now()
     request.status = module.exports.convertStatusToInt(request)
-    return database.query(INSERT INTO maint_request
+    return database.query(`INSERT INTO maint_request
       (id, property_id, creator_id, created_date, title, description, attached_files, worker_id, status)
-      VALUES(null,?,?,?,?,?,?,null,?);,
+      VALUES(null,?,?,?,?,?,?,null,?);`,
       [propertyId, creatorId, created, request.title, request.description, request.attachedFiles, request.worker_id, 1]).then( () => {
       return database.close();
     });
@@ -32,7 +32,7 @@ module.exports = {
 
   deleteRequest: function(id) {
     database.open();
-    return database.query(DELETE FROM maint_request WHERE id = ?;,
+    return database.query(`DELETE FROM maint_request WHERE id = ?;`,
                           [id]).then(() => {
       //Do I need to return results here?  Or does promise cover failure case
       return database.close();
@@ -41,9 +41,8 @@ module.exports = {
 
   editMaintRequest: function(request) {
     database.open();
-    return database.query(UPDATE maint_request SET
-      title = ?, description = ?, attached_files = ?, worker_id = ?, status = ?
-      WHERE id = ?;,
+    return database.query(`UPDATE maint_request SET
+      title = ?, description = ?, attached_files = ?, worker_id = ?, status = ? WHERE id = ?;`,
       [request.title, request.description, request.attachedFiles, 1, ]).then( () => {
       return database.close();
     });
@@ -64,53 +63,13 @@ module.exports = {
   addCommentForRequest: function(requestId, creatorId, comment) {
     database.open();
     const created = Date.now()
-    return database.query(`insert into rentconnect.comment (id, request_id, creator_id, created_date, comment_text, attached_files)
+    return database.query(`insert into comment (id, request_id, creator_id, created_date, comment_text, attached_files)
       VALUES (null, ?, ?, ?, ?, ?);`,
       [requestId, creatorId, created, comment.text, comment.attachedFiles]).then( () => {
       return database.close();
     });
   },
 
-
-  convertIntToStatus(request) {
-    switch(request.status) {
-      case 1:
-        return 'open'
-        break;
-      case 2:
-        return 'pending'
-        break;
-      case 3:
-        return 'closed'
-        break;
-      case 4:
-        return 'confirmed'
-        break;
-      default:
-        return 'open'
-        break;
-    }
-  },
-
-  convertStatusToInt(request) {
-    switch(request.status) {
-      case 'open':
-        return 1
-        break;
-      case 'pending':
-        return 2
-        break;
-      case 'closed':
-        return 3
-        break;
-      case 'confirmed':
-        return 4
-        break;
-      default:
-        return 'open'
-        break;
-    }
-  },
   //This lets us mock out the database, so that we can check calls, supply responses
   setDatabase: function(newDb) {
     database = newDb
