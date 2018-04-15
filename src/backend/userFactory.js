@@ -14,11 +14,12 @@ var database = new Database();
 module.exports = {
 
   getUserById: function(id) {
+    console.log('id: ' + id)
     let user;
-      database.open()
-      return database.query('select *   from user where id = ?;', [id]).then( rows => {
+      database.open();
+      return database.query('select * from user where id = ?;', [id]).then( rows => {
         user = rows[0];
-        return database.close()
+        //return database.close()
       } )
       .then( () => {
         if (typeof user === 'undefined') {
@@ -82,7 +83,7 @@ module.exports = {
     return database.query(`insert into user (id, username, password, email, cell_number, role)
                       values(null, ?,?,?,?,?);`,
                       [user.username, user.password, user.email, user.phone, this.convertRoleToInt(user)]).then(() => {
-      return database.close();
+      //return database.close();
     } );
   },
 
@@ -90,7 +91,7 @@ module.exports = {
     database.open();
     return database.query(`DELETE FROM user WHERE id = ?;`,
                       [userId]).then(() => {
-      return database.close();
+      //return database.close();
     });
   },
 

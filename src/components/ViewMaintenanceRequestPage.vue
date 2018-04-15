@@ -32,7 +32,7 @@
       </tr>
     </table>
     <h3>Comments</h3>
-    <maintenance-comment v-for="comment in comments" v-bind:image="comment.image" v-bind:person="comment.person" v-bind:date="comment.date" v-bind:assignedTo="comment.assignedTo" v-bind:comment="comment.comment" v-bind:role="comment.role" v-bind:key="comment.id"></maintenance-comment>
+    <maintenance-comment v-for="comment in comments" v-bind:image="comment.image" v-bind:person="comment.username" v-bind:date="comment.created_date" v-bind:assignedTo="comment.assignedTo" v-bind:comment="comment.comment_text" v-bind:role="comment.role" v-bind:key="comment.id"></maintenance-comment>
     <h3>Leave a comment</h3>
     <form class="fullPageForm" id="loginForm" method="post" enctype="multipart/form-data" @submit.prevent="handleSubmit">
       <table border="0px" id="loginTable">
@@ -102,7 +102,7 @@ export default {
       comments: [],
       landlord: true,
       maintenanceWorker: false,
-      reqLocation: '',
+      reqTitle: '',
       reqContent: '',
       attachedImage: false,
       canClose: this.landlord || this.maintenanceWorker,
@@ -149,7 +149,14 @@ export default {
         this.reqTitle = response.data.title
         this.reqContent = response.data.description
         this.attachedImage = response.data.attachedImage
-        this.comments = response.data.comments
+      })
+      .catch(e => {
+        console.log(e)
+      })
+    axios.get('/rest/request/' + this.$route.params.id + '/comments')
+      .then(response => {
+        console.log(JSON.stringify(response.data))
+        this.comments = response.data
       })
       .catch(e => {
         console.log(e)
