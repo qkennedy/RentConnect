@@ -13,7 +13,7 @@
             Phone: <i v-if="landlordPhone===''">(not given)</i><span v-else>{{ landlordPhone }}</span><br />
             Email: {{ landlordEmail }}
           </li>
-          <li><b>My apartment:</b><br />Address: {{ address }}<br />Rent due: {{ rentAmt }}, {{ rentDue }}</li>
+          <li><b>My apartment:</b><br />Address: {{ address }}<br />Rent due: ${{ rentAmt }}, {{ rentDue }}</li>
           <li><router-link to="Finances">View Finances</router-link></li>
           <li><router-link to="SubmitMaintenanceRequest">Submit Maintenance Request</router-link></li>
           <li><router-link to="ManageDocuments">Manage Documents</router-link></li>
@@ -46,9 +46,9 @@ export default {
       ],
       landlordPhone: '1-222-333-4444',
       landlordEmail: 'barbara.snyder@case.edu',
-      rentAmt: '$1000.00',
+      rentAmt: '',
       rentDue: 'March 31, 2018',
-      address: '123 Sesame Street'
+      address: ''
     }
   },
   components: {

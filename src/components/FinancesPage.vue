@@ -3,19 +3,21 @@
     <h2>Finances</h2>
     <div v-if="role==='tenant'">
       <h3>Pay Rent</h3>
-      <table border="0px" style="width: 100%">
-        <tr>
-          <td style="width:50%">
-            <b>Due date: </b> {{ dueDate }}
-          </td>
-          <td style="width:50%">
-            <!-- populate as necessary -->
-            Amount due: ${{rentAmt}}<br />
-            Pay amount: $<input type="text" name="rentamt" v-bind:value="rentAmt" />
-            <input type="submit" value="Pay" />
-          </td>
-        </tr>
-      </table>
+      <form @submit.prevent="handleSubmit">
+        <table border="0px" style="width: 100%">
+          <tr>
+            <td style="width:50%">
+              <b>Due date: </b> {{ dueDate }}
+            </td>
+            <td style="width:50%">
+              <!-- populate as necessary -->
+              Amount due: ${{rentAmt}}<br />
+              Pay amount: $<input type="text" ref="rentamt" v-bind:value="rentAmt" />
+              <input type="submit" value="Pay" />
+            </td>
+          </tr>
+        </table>
+      </form>
     </div>
     <div v-if="role==='landlord'">
       <h3>Property Information</h3>
@@ -51,7 +53,7 @@
           File
         </th>
       </tr>
-      <rent-row v-for="rentEvent in rentHistory" v-bind:date="rentEvent.date" v-bind:amount="rentEvent.amount" v-bind:receiptLink="rentEvent.receiptLink" v-bind:late="rentEvent.late" v-bind:key="rentEvent.id"></rent-row>
+      <rent-row v-for="rentEvent in rentHistory" v-bind:date="rentEvent.payment_date" v-bind:amount="rentEvent.payment_amount" v-bind:receiptLink="rentEvent.receiptLink" v-bind:late="!rentEvent.on_time" v-bind:key="rentEvent.id"></rent-row>
     </table>
   </div>
 </template>
@@ -70,10 +72,40 @@ export default {
       ],
       // TODO: populate property information from the database
       role: 'tenant',
-      address: '1234 Sesame Street',
-      tenant: 'Amy Adams',
+      address: '',
+      tenant: '',
       dueDate: 'March 31, 2018',
-      rentAmt: '1000.00'
+      rentAmt: 'TODO',
+      propId: 0,
+      myId: 0
+    }
+  },
+  methods: {
+    handleSubmit () {
+      var rentToPay = this.$refs.rentamt.value
+      axios.post('/rest/renthistory/createentry/',
+        {
+          payerId: this.myId,
+          propertyId: this.propId,
+          paymentAmount: rentToPay,
+          onTime: true // TODO: make this dependent on the due date
+        }
+      )
+        .then(response => {
+          this.updateEntries()
+        })
+        .catch(e => {
+          console.log(e)
+        })
+    },
+    updateEntries () {
+      axios.get('/rest/property/' + this.propId + '/entries')
+        .then(response => {
+          this.rentHistory = response.data
+        })
+        .catch(e => {
+          console.log(e)
+        })
     }
   },
   components: {
@@ -81,23 +113,28 @@ export default {
   },
   mounted () {
     document.title = 'Finances'
-    var propId
-    if (this.$route.params.id == null) {
-      // TODO: get the user's property ID
-      propId = 1
-    } else {
-      propId = this.$route.params.id
-    }
     axios.get('/rest/whoAmI')
       .then(response => {
         this.role = response.data.role
-      })
-      .catch(e => {
-        console.log(e)
-      })
-    axios.get('/rest/rentHistory/' + propId)
-      .then(response => {
-        this.rentHistory = response.data.rentHistory
+        this.myId = response.data.id
+        if (this.role === 'tenant') {
+          this.propId = response.data.property_id
+        } else if (this.role === 'landlord') {
+          if (typeof this.$route.params.id === 'undefined') {
+            // we're a landlord but didn't specify which property
+            this.$router.push('/')
+          }
+          this.propId = this.$route.params.id
+        }
+        axios.get('/rest/property/' + this.propId)
+          .then(response => {
+            this.address = response.data.address
+            this.rentAmt = response.data.rent
+            this.updateEntries()
+          })
+          .catch(e => {
+            console.log(e)
+          })
       })
       .catch(e => {
         console.log(e)

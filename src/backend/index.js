@@ -3,7 +3,7 @@ const userFactory = require('./userFactory');
 const propertyFactory = require('./propertyFactory');
 const documentFactory = require('./documentFactory');
 const maintRequestFactory = require('./MaintRequestFactory')
-// const rentHistoryFactory = require('./rentHistoryFactory')
+const rentHistoryFactory = require('./rentHistoryFactory')
 
 function respond(req, res, next) {
   res.send('you got' + req.params.resp);
@@ -83,22 +83,14 @@ server.put('/rest/deleteuser/:id',
 
 
 //Property EP
-
 server.get('/rest/property/:id',
   function(req, res, next) {
-  //Need to have some security around endpoints like this.
-  //This Works, but it would make testing easier if we can get it into userFactory
-  let property
-    database.open()
-    database.query('select *   from property where id = ?;', [req.params.id]).then( rows => {
-      property = rows[0];
-      return database.close()
-    } )
-    .then( () => {
-    res.send(property)
-    next()
-  });
+    propertyFactory.getPropertyById(req.params.id).then(property => {
+      res.send(property)
+      next()
+    });
 });
+
 
 //Tenant EPs
 
@@ -247,7 +239,7 @@ server.get('/rest/property/:propId/entries',
   function(req, res, next) {
   //Need to have some security around endpoints like this.
   //This Works! This is the format we should do almost everything with
-  rentHistoryFactory.getEntriesForProperty(req.params.userId).then(entries => {
+  rentHistoryFactory.getEntriesForProperty(req.params.propId).then(entries => {
     res.send(entries)
     next()
   });
