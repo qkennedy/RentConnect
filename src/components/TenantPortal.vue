@@ -64,7 +64,13 @@ export default {
             // we're not a tenant, get out of here
             this.$router.push('/')
           }
-          // TODO: get information about the property and put it in the form
+          axios.get('/rest/property/' + response.data.property_id)
+            .then(response => {
+              console.log(JSON.stringify(response))
+            })
+            .catch(e => {
+              console.log(e)
+            })
         } else {
           // not logged in, get out of here
           this.$router.push('/')

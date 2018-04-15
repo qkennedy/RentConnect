@@ -21,27 +21,15 @@ module.exports = {
   createRequest: function(request) {
     database.open();
     request.status = module.exports.convertStatusToInt(request)
-<<<<<<< HEAD
     return database.query('INSERT INTO maint_request (id, property_id, creator_id, created_date, title, description, attached_files, worker_id, status) VALUES(null,?,?,?,?,?,?,null,?);',
       [request.propertyId, request.creatorId, (new Date()).toISOString().substring(0,10), request.title, request.description, request.attachedFiles, request.worker_id, 1]).then( () => {
       //return database.close();
-=======
-    return database.query(`INSERT INTO maint_request
-      (id, property_id, creator_id, created_date, title, description, attached_files, worker_id, status)
-      VALUES(null,?,?,?,?,?,?,null,?);`,
-      [propertyId, creatorId, created, request.title, request.description, request.attachedFiles, request.worker_id, 1]).then( () => {
-      return database.close();
->>>>>>> 6d608067a435b4b9a1dfcc6c7bc077539affbec9
     });
   },
 
   deleteRequest: function(id) {
     database.open();
-<<<<<<< HEAD
     return database.query('DELETE FROM maint_request WHERE id = ?;',
-=======
-    return database.query(`DELETE FROM maint_request WHERE id = ?;`,
->>>>>>> 6d608067a435b4b9a1dfcc6c7bc077539affbec9
                           [id]).then(() => {
       //Do I need to return results here?  Or does promise cover failure case
       //return database.close();
@@ -50,13 +38,7 @@ module.exports = {
 
   editMaintRequest: function(request) {
     database.open();
-<<<<<<< HEAD
     return database.query('UPDATE maint_request SET title = ?, description = ?, attached_files = ?, worker_id = ?, status = ?  WHERE id = ?;',
-=======
-    return database.query(`UPDATE maint_request SET
-      title = ?, description = ?, attached_files = ?, worker_id = ?, status = ?
-      WHERE id = ?;`,
->>>>>>> 6d608067a435b4b9a1dfcc6c7bc077539affbec9
       [request.title, request.description, request.attachedFiles, 1, ]).then( () => {
       //return database.close();
     });
@@ -65,11 +47,7 @@ module.exports = {
   getCommentsByRequestId: function(requestId) {
     let comments;
       database.open()
-<<<<<<< HEAD
       return database.query('select c.*,u.username,u.role from comment as c left join user as u on u.id=c.creator_id where request_id = ?;', [requestId]).then( rows => {
-=======
-      return database.query(`select * from comment where request_id = ?;`, [requestId]).then( rows => {
->>>>>>> 6d608067a435b4b9a1dfcc6c7bc077539affbec9
         comments = rows;
         var i;
         for (i = 0; i < comments.length; i++) {
