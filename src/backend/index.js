@@ -1,7 +1,8 @@
 var restify = require('restify');
 const userFactory = require('./userFactory');
 const propertyFactory = require('./propertyFactory');
-const documentFactory = require('./documentFactory')
+const documentFactory = require('./documentFactory');
+const maintRequestFactory = require('./MaintRequestFactory')
 
 function respond(req, res, next) {
   res.send('you got' + req.params.resp);
@@ -147,6 +148,38 @@ server.post('/rest/property/:propertyId/createdocument/',
 server.put('/rest/document/delete/:docId',
   function(req, res, next) {
   documentFactory.deleteDocument(req.params.docId).then(() => {
+    res.send(202)
+    next()
+  });
+});
+
+//Maint Request EP
+
+server.get('/rest/request/:id',
+  function(req, res, next) {
+  //Need to have some security around endpoints like this.
+  //This Works! This is the format we should do almost everything with
+  maintRequestFactory.getRequestById(req.params.id).then(request => {
+    res.send(request)
+    next()
+  });
+});
+
+//TODO need to add error handling on these -- Also, make sure if we are passing the pw across here that it is encrypted
+server.post('/rest/request/createrequest/',
+  function(req, res, next) {
+    //TODO need to talk to Jacob, figure out how to get the form data
+    //TODO get the document, and provide it
+    //TODO get user from session
+    maintRequestFactory.createRequest(req.body).then(request => {
+      res.send(201)
+      next()
+    });
+});
+
+server.put('/rest/request/delete/:reqId',
+  function(req, res, next) {
+  maintRequestFactory.deleteRequest(req.params.reqId).then(() => {
     res.send(202)
     next()
   });
