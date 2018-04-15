@@ -1,8 +1,13 @@
 const mysql = require( 'mysql' );
 
 class Database {
-    constructor( conf ) {
-      this.conf = conf
+    constructor() {
+      this.conf = {
+        host     : 'localhost',
+        user     : 'root',
+        password : 'postgres',
+        database : 'rentconnect'
+      }
     }
     open() {
       this.connection = mysql.createConnection( this.conf )

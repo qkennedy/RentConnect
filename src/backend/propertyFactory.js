@@ -2,12 +2,7 @@ var mysql = require('mysql');
 var Database = require('./database')
 const userFactory = require('./userFactory');
 
-var database = new Database({
-  host     : 'localhost',
-  user     : 'root',
-  password : 'postgres',
-  database : 'rentconnect'
-});
+var database = new Database();
 module.exports = {
 
   getPropertyById: function(id) {

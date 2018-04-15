@@ -29,12 +29,7 @@ function setUpMockDatabase(retValue) {
         };
   });
 
-  var database = new Database({
-    host     : 'localhost',
-    user     : 'root',
-    password : 'postgres',
-    database : 'rentconnect'
-  });
+  var database = new Database();
   userFactory.setDatabase(database)
 }
 

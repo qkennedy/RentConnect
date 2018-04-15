@@ -10,12 +10,7 @@
 var mysql = require('mysql');
 var Database = require('./database')
 
-var database = new Database({
-  host     : 'localhost',
-  user     : 'root',
-  password : 'postgres',
-  database : 'rentconnect'
-});
+var database = new Database();
 module.exports = {
 
   getUserById: function(id) {
