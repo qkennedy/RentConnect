@@ -47,13 +47,16 @@ export default {
   },
   methods: {
     handleSubmit () {
-      // TODO: submit the maintenance request
-      axios.post('/rest/request/createrequest',
-        Components.collapse(this.formElements, [])
+      var formFields = Components.collapse(this.formElements, [])
+      formFields.propertyId = this.propertyId
+      formFields.creatorId = this.creatorId
+      axios.post('/rest/request/createrequest/',
+        formFields
       )
         .then(response => {
           // TODO: redirect to page to show this maintenance Request
-          this.$router.push('/ViewMaintenanceRequest/' + response.request.id)
+          var respId = 1
+          this.$router.push('/ViewMaintenanceRequest/' + respId)
         })
         .catch(e => {
           console.log(e)
@@ -66,7 +69,16 @@ export default {
   mounted () {
     axios.get('/rest/whoAmI')
       .then(response => {
+        if (response.data.id === -1) {
+          // we aren't logged in
+          this.$router.push('/')
+        }
         this.myId = response.data.id
+        if (response.data.property_id === null) {
+          // we haven't been assigned a property
+          this.$router.push('/')
+        }
+        this.propertyId = response.data.property_id
       })
       .catch(e => {
         console.log(e)

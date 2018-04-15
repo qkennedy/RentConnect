@@ -17,7 +17,7 @@ module.exports = {
     console.log('id: ' + id)
     let user;
       database.open();
-      return database.query('select * from user where id = ?;', [id]).then( rows => {
+      return database.query('select u.*,t.property_id from user as u left join tenants as t on t.tenant_id=u.id where u.id = ?;', [id]).then( rows => {
         user = rows[0];
         //return database.close()
       } )
