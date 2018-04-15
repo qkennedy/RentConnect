@@ -25,7 +25,7 @@ module.exports = {
     return database.query(`INSERT INTO maint_request
       (id, property_id, creator_id, created_date, title, description, attached_files, worker_id, status)
       VALUES(null,?,?,?,?,?,?,null,?);`,
-      [propertyId, creatorId, created, request.title, request.description, request.attachedFiles, 1]).then( () => {
+      [propertyId, creatorId, created, request.title, request.description, request.attachedFiles, request.worker_id, 1]).then( () => {
       return database.close();
     });
   },
@@ -35,6 +35,16 @@ module.exports = {
     return database.query(`DELETE FROM maint_request WHERE id = ?;`,
                           [id]).then(() => {
       //Do I need to return results here?  Or does promise cover failure case
+      return database.close();
+    });
+  },
+
+  editMaintRequest: function(request) {
+    database.open();
+    return database.query(`UPDATE maint_request SET
+      title = ?, description = ?, attached_files = ?, worker_id = ?, status = ?
+      WHERE id = ?;`,
+      [request.title, request.description, request.attachedFiles, 1, ]).then( () => {
       return database.close();
     });
   },
@@ -58,7 +68,8 @@ module.exports = {
         return 'open'
         break;
     }
-  }
+  },
+
   convertStatusToInt(request) {
     switch(request.status) {
       case 'open':
@@ -77,7 +88,7 @@ module.exports = {
         return 'open'
         break;
     }
-  }
+  },
   //This lets us mock out the database, so that we can check calls, supply responses
   setDatabase: function(newDb) {
     database = newDb
