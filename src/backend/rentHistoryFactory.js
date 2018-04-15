@@ -18,14 +18,13 @@ module.exports = {
      });
   },
 
-  createEntry: function(propertyId, creatorId, request) {
+  createEntry: function(entry) {
     database.open();
     const created = Date.now()
-    request.status = module.exports.convertStatusToInt(request)
     return database.query(`INSERT INTO rent_history
       (id, payer_id, property_id, payment_date, payment_amount, on_time)
       VALUES (null, ?, ?, ?, ?, ?);`,
-      [propertyId, creatorId, created, request.title, request.description, request.attachedFiles, request.worker_id, 1]).then( () => {
+      [entry.payerId, entry.propertyId created, entry.paymentAmount, entry.onTime]).then( () => {
       return database.close();
     });
   },
@@ -33,7 +32,7 @@ module.exports = {
   deleteEntry: function(id) {
     database.open();
     return database.query(`DELETE FROM rent_history WHERE id = ?;`,
-                          [id]).then(() => {
+      [id]).then(() => {
       //Do I need to return results here?  Or does promise cover failure case
       return database.close();
     });
