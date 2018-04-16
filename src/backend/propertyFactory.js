@@ -8,7 +8,7 @@ module.exports = {
   getPropertyById: function(id) {
     let property;
       database.open()
-      return database.query('select * from property where id = ?;', [id]).then( rows => {
+      return database.query('select p.*,u.email,u.cell_number from property as p left join user as u on u.id=p.landlord_id where p.id = ?;', [id]).then( rows => {
         property = rows[0];
         return database.close()
       } )

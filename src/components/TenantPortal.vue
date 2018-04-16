@@ -44,8 +44,8 @@ export default {
           contents: 'Your maintenance request has received a new comment: <br /><i>I fixed it.</i>'
         }
       ],
-      landlordPhone: '1-222-333-4444',
-      landlordEmail: 'barbara.snyder@case.edu',
+      landlordPhone: '',
+      landlordEmail: '',
       rentAmt: '',
       rentDue: 'March 31, 2018',
       address: ''
@@ -67,6 +67,8 @@ export default {
             .then(response => {
               this.address = response.data.address
               this.rentAmt = response.data.rent
+              this.landlordPhone = response.data.cell_number
+              this.landlordEmail = response.data.email
               // TODO: populate landlord info
             })
             .catch(e => {

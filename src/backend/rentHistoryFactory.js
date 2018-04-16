@@ -24,7 +24,7 @@ module.exports = {
     return database.query(`INSERT INTO rent_history
       (id, payer_id, property_id, payment_date, payment_amount, on_time)
       VALUES (null, ?, ?, ?, ?, ?);`,
-      [entry.payerId, entry.propertyId created, entry.paymentAmount, entry.onTime]).then( () => {
+      [entry.payerId, entry.propertyId, (new Date()).toISOString().substring(0,10), entry.paymentAmount, entry.onTime]).then( () => {
       return database.close();
     });
   },
@@ -71,7 +71,7 @@ module.exports = {
       return entries;
      });
   },
-  
+
   //This lets us mock out the database, so that we can check calls, supply responses
   setDatabase: function(newDb) {
     database = newDb
