@@ -29,17 +29,8 @@ function mockResolve(retValue) {
           close: mockClose
         };
   });
-<<<<<<< HEAD
-  var database = new Database({
-    host     : 'localhost',
-    user     : 'root',
-    password : 'postgres',
-    database : 'rentconnect'
-  });
-=======
 
   var database = new Database();
->>>>>>> master
   userFactory.setDatabase(database)
 }
 
