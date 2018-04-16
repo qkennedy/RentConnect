@@ -9,7 +9,7 @@ function respond(req, res, next) {
   res.send('you got' + req.params.resp);
   next();
 }
-var activeId = -1;
+var activeId = 2;
 var server = restify.createServer();
 
 server.use(restify.plugins.bodyParser());
@@ -87,6 +87,22 @@ server.get('/rest/property/:id',
   function(req, res, next) {
     propertyFactory.getPropertyById(req.params.id).then(property => {
       res.send(property)
+      next()
+    });
+});
+
+server.post('/rest/property/create',
+  function(req, res, next) {
+    propertyFactory.createProperty(req.body).then(property => {
+      res.send(201)
+      next()
+    });
+});
+
+server.get('/rest/propertiesByLandlord/:id',
+  function(req, res, next) {
+    propertyFactory.getPropertiesByLandlordId(req.params.id).then(properties => {
+      res.send(properties)
       next()
     });
 });

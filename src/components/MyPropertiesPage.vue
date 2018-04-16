@@ -22,7 +22,7 @@
           Actions
         </th>
       </tr>
-      <property-entry v-for="prop in properties" v-bind:key="prop.id" v-bind:address="prop.address" v-bind:status="prop.status" v-bind:tenant="prop.tenant" v-bind:rentamt="prop.rentamt" v-bind:rentdue="prop.rentdue" v-bind:id="prop.id"></property-entry>
+      <property-entry v-for="prop in properties" v-bind:key="prop.id" v-bind:address="prop.address" v-bind:status="prop.status" v-bind:tenant="prop.tenant" v-bind:rentamt="prop.rent" v-bind:rentdue="prop.rentdue" v-bind:id="prop.id"></property-entry>
     </table>
   </div>
 </template>
@@ -47,10 +47,14 @@ export default {
     document.title = 'My Properties'
     axios.get('/rest/whoAmI')
       .then(response => {
-        var userId = response.data.userId
+        var userId = response.data.id
+        if (response.data.role !== 'landlord') {
+          this.$router.push('/')
+        }
         axios.get('/rest/propertiesByLandlord/' + userId)
           .then(response => {
-            this.properties = response.data.properties
+            console.log(response.data)
+            this.properties = response.data
           })
           .catch(e => {
             console.log(e)
@@ -65,7 +69,7 @@ export default {
 Vue.component('property-entry', {
   // TODO: make the finances, documents, edit listing link go to the right place (i.e. include the ID)
   props: ['id', 'address', 'status', 'tenant', 'rentamt', 'rentdue'],
-  template: '<tr><td>{{ address }}</td><td>{{ status }}</td><td>{{ tenant }}</td><td>{{ rentamt }}, due {{ rentdue }}</td><td><router-link v-bind:to="\'/Finances/\' + id">Finances</router-link><br /><router-link v-bind:to="\'/ManageDocuments/\' + id">Documents</router-link><br /><router-link v-bind:to="\'/EditListing/\' + id">Edit Listing</router-link></td></tr>'
+  template: '<tr><td>{{ address }}</td><td v-if="tenant === null">Unoccupied</td><td v-if="tenant !== null">Occupied</td><td v-if="tenant !== null">{{ tenant }}</td><td v-if="tenant === null"><i>No tenant</i></td><td>$ {{ rentamt }}, due {{ rentdue }}</td><td><router-link v-bind:to="\'/Finances/\' + id">Finances</router-link><br /><router-link v-bind:to="\'/ManageDocuments/\' + id">Documents</router-link><br /><router-link v-bind:to="\'/EditListing/\' + id">Edit Listing</router-link></td></tr>'
 })
 </script>
 

@@ -6,7 +6,7 @@
       <table border="0px" id="loginTable">
         <form-input v-for="element in formElements" v-bind:type="element.type" v-bind:caption="element.caption" v-bind:name="element.name" v-bind:value="element.value" v-bind:key="element.id" />
       </table>
-      <p><input type="submit" value="Register" /></p>
+      <p><input type="submit" value="List" /></p>
     </form>
   </div>
 </template>
@@ -16,10 +16,9 @@ import axios from 'axios'
 import Components from '@/components/UIComponents'
 
 export default {
-  name: 'Register',
+  name: 'CreateEditListing',
   data () {
     return {
-      // TODO: if editing a listing, get these values from the backend
       formElements: [
         {
           id: 0,
@@ -45,11 +44,12 @@ export default {
         {
           id: 3,
           type: 'number',
-          name: 'latefee',
+          name: 'late_fee',
           caption: 'Rent late fee',
           value: ''
         }
-      ]
+      ],
+      myId: 0
     }
   },
   components: {
@@ -57,12 +57,15 @@ export default {
   },
   methods: {
     handleSubmit () {
-      // TODO: add REST API endpoint
-      axios.post('/rest/',
-        Components.collapse(this.formElements, [''])
+      // TODO: if updating a property, then go to a different endpoint
+      var formFields = Components.collapse(this.formElements, [])
+      formFields.landlordId = this.myId
+      console.log(JSON.stringify(formFields))
+      axios.post('/rest/property/create',
+        formFields
       )
         .then(response => {
-          // TODO: explain that listing was created or updated
+          this.$router.push('/LandlordPortal')
         })
         .catch(e => {
           console.log(e)
@@ -72,22 +75,32 @@ export default {
   mounted () {
     document.title = 'Manage Listing'
 
-    if (this.$route.params.id != null) {
-      axios.get('/rest/property/' + this.$route.params.id)
-        .then(response => {
-          console.log(JSON.stringify(response))
-          this.formElements[0].value = response.data.address
-          this.formElements[1].value = response.data.rent
-          this.formElements[3].value = response.data.late_fee
-        })
-        .catch(e => {
-          if (typeof e.status !== 'undefined' && e.status === 404) {
-            this.$router.push('/404')
-          } else {
-            console.log(e)
-          }
-        })
-    }
+    axios.get('/rest/whoAmI')
+      .then(response => {
+        if (response.data.role !== 'landlord') {
+          this.$router.push('/')
+        }
+        this.myId = response.data.id
+        if (this.$route.params.id != null) {
+          axios.get('/rest/property/' + this.$route.params.id)
+            .then(response => {
+              console.log(JSON.stringify(response))
+              this.formElements[0].value = response.data.address
+              this.formElements[1].value = response.data.rent
+              this.formElements[3].value = response.data.late_fee
+            })
+            .catch(e => {
+              if (typeof e.status !== 'undefined' && e.status === 404) {
+                this.$router.push('/404')
+              } else {
+                console.log(e)
+              }
+            })
+        }
+      })
+      .catch(e => {
+        console.log(e)
+      })
   }
 }
 </script>
