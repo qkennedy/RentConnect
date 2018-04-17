@@ -107,6 +107,7 @@ export default {
       attachedImage: false,
       myId: 0,
       canClose: this.landlord || this.maintenanceWorker,
+      // TODO: get this from the backend
       workers: [
         { text: 'Alex Johnson', value: 'ajohnson' }
       ]

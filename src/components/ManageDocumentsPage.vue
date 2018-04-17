@@ -1,6 +1,18 @@
 <template>
   <div class="hello" id="manageDocumentsPage">
     <h2>Manage Documents</h2>
+    <h3>Property Information</h3>
+    <table border="0">
+      <tr>
+        <th>
+          Address
+        </th>
+        <td>
+          {{ address }}
+        </td>
+      </tr>
+    </table>
+    <h3>Documents</h3>
     <table border="0" class="standardTable">
       <tr>
         <th>
@@ -48,7 +60,8 @@ export default {
         }
       ],
       documents: [
-      ]
+      ],
+      address: ''
     }
   },
   methods: {
@@ -78,18 +91,25 @@ export default {
           // not a landlord or tenant, shouldn't be looking at documents
           this.$router.push('/')
         }
-        // TODO: do something with the response to get the property
-        /*
-        var propId = 1
-        axios.get('/rest/documents/' + propId)
+        axios.get('/rest/property/' + this.$route.params.id)
           .then(response => {
-            console.log(JSON.stringify(response.data))
-            this.documents = response.data.documents
+            this.address = response.data.address
+            // TODO: get the documents
+            /*
+            var propId = 1
+            axios.get('/rest/documents/' + propId)
+              .then(response => {
+                console.log(JSON.stringify(response.data))
+                this.documents = response.data.documents
+              })
+              .catch(e => {
+                console.log(e)
+              })
+              */
           })
           .catch(e => {
-            console.log(e)
+
           })
-          */
       })
       .catch(e => {
         console.log(e)
