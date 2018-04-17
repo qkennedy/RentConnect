@@ -18,71 +18,57 @@ module.exports = {
      });
   },
 
-  createRequest: function(request) {
+  createRequest: function(propertyId, creatorId, request) {
     database.open();
+    const created = (new Date()).toISOString().substring(0,10)
     request.status = module.exports.convertStatusToInt(request)
-    return database.query('INSERT INTO maint_request (id, property_id, creator_id, created_date, title, description, attached_files, worker_id, status) VALUES(null,?,?,?,?,?,?,null,?);',
-      [request.propertyId, request.creatorId, (new Date()).toISOString().substring(0,10), request.title, request.description, request.attachedFiles, request.worker_id, 1]).then( () => {
-      //return database.close();
+    return database.query(`INSERT INTO maint_request
+      (id, property_id, creator_id, created_date, title, description, attached_files, worker_id, status)
+      VALUES(null,?,?,?,?,?,?,null,?);`,
+      [propertyId, creatorId, created, request.title, request.description, request.attachedFiles, request.worker_id, 1]).then( () => {
+      return database.close();
     });
   },
 
   deleteRequest: function(id) {
     database.open();
-    return database.query('DELETE FROM maint_request WHERE id = ?;',
+    return database.query(`DELETE FROM maint_request WHERE id = ?;`,
                           [id]).then(() => {
       //Do I need to return results here?  Or does promise cover failure case
-      //return database.close();
+      return database.close();
     });
   },
 
   editMaintRequest: function(request) {
     database.open();
-    return database.query('UPDATE maint_request SET title = ?, description = ?, attached_files = ?, worker_id = ?, status = ?  WHERE id = ?;',
+    return database.query(`UPDATE maint_request SET
+      title = ?, description = ?, attached_files = ?, worker_id = ?, status = ?
+      WHERE id = ?;`,
       [request.title, request.description, request.attachedFiles, 1, ]).then( () => {
-      //return database.close();
+      return database.close();
     });
   },
 
   getCommentsByRequestId: function(requestId) {
     let comments;
       database.open()
-      return database.query('select c.*,u.username,u.role from comment as c left join user as u on u.id=c.creator_id where request_id = ?;', [requestId]).then( rows => {
+      return database.query(`select * from comment where request_id = ?;`, [requestId]).then( rows => {
         comments = rows;
-        var i;
-        for (i = 0; i < comments.length; i++) {
-          comments[i].role = userFactory.convertRole(comments[i])
-        }
-        //return database.close()
+        return database.close()
       } )
       .then( () => {
       return comments;
      });
   },
 
-  addCommentForRequest: function(requestId, comment) {
+  addCommentForRequest: function(requestId, creatorId, comment) {
     database.open();
+    const created = (new Date()).toISOString().substring(0,10)
     return database.query(`insert into rentconnect.comment (id, request_id, creator_id, created_date, comment_text, attached_files)
       VALUES (null, ?, ?, ?, ?, ?);`,
-      [requestId, comment.creatorId, (new Date()).toISOString().substring(0,10), comment.comment, comment.attachedFiles]).then( () => {
-      //return database.close();
+      [requestId, creatorId, created, comment.text, comment.attachedFiles]).then( () => {
+      return database.close();
     });
-  },
-
-  getRequestsByUser: function(landlordId) {
-    let requests;
-    database.open()
-    return database.query('SELECT p.address,m.status,m.created_date,m.id FROM maint_request AS m LEFT JOIN property AS p ON p.id=m.property_id WHERE p.landlord_id=?',
-      [landlordId]).then(rows => {
-      requests = rows
-      var i
-      for (i = 0; i < requests.length; i++) {
-        requests[i].status = this.convertIntToStatus(requests[i])
-      }
-    })
-    .then( () => {
-      return requests
-    })
   },
 
 

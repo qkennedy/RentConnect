@@ -20,7 +20,7 @@ module.exports = {
 
   createDocument: function(propertyId, creatorId, document) {
     database.open();
-    const created = Date.now()
+    const created = (new Date()).toISOString().substring(0,10)
     return database.query(`INSERT INTO document
       (id,property_id,created_date,creator_id,title,file)
       VALUES(null,?,?,?,?,?,?)`,

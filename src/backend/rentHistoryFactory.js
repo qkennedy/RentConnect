@@ -20,7 +20,7 @@ module.exports = {
 
   createEntry: function(entry) {
     database.open();
-    const created = Date.now()
+    const created = (new Date()).toISOString().substring(0,10)
     return database.query(`INSERT INTO rent_history
       (id, payer_id, property_id, payment_date, payment_amount, on_time)
       VALUES (null, ?, ?, ?, ?, ?);`,
