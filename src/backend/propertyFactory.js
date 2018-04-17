@@ -21,9 +21,9 @@ module.exports = {
     database.open();
     console.log(JSON.stringify(property))
     return database.query(`INSERT INTO property
-      (id, landlord_id, address, rent, late_fee)
-      VALUES(null, ?, ?, ?, ?);`,
-      [property.landlordId, property.address, property.rent, property.late_fee]).then( rows => {
+      (id, landlord_id, address, rent, late_fee, rent_due)
+      VALUES(null, ?, ?, ?, ?, ?);`,
+      [property.landlordId, property.address, property.rent, property.lateFee, property.dueDate]).then( rows => {
        property = rows[0];
       return database.close();
       //TODO Do I need to return something here, or is resolve/error enough?  Add error handling, check this case.

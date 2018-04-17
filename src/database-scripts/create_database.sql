@@ -24,6 +24,10 @@ CREATE TABLE `rentconnect`.`user` (
     PRIMARY KEY (`id`),
     UNIQUE INDEX `id_UNIQUE` (`id` ASC));
 
+
+    ALTER TABLE `rentconnect`.`property`
+    ADD COLUMN `due_date` INT(11) NULL AFTER `late_fee`;
+
 -- Create tenants table, it maps properties to tenants
 --I should reorder this, but I'm not gonna.
 CREATE TABLE `rentconnect`.`tenants` (
