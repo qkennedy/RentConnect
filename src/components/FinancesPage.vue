@@ -75,6 +75,7 @@ export default {
       address: '',
       tenant: '',
       dueDate: 'March 31, 2018',
+      rentMonthDay: 0,
       rentAmt: 'TODO',
       propId: 0,
       myId: 0
@@ -101,7 +102,20 @@ export default {
     updateEntries () {
       axios.get('/rest/property/' + this.propId + '/entries')
         .then(response => {
-          this.rentHistory = response.data
+          // TODO: based on the rent due date and these receipts, determine if the rent has been paid yet
+          // turn the rent due date into a usable string
+          var rentDueDate = new Date()
+          rentDueDate.setDate(this.rentMonthDay)
+          if (rentDueDate < new Date()) {
+            rentDueDate.setMonth(rentDueDate.getMonth() + 1)
+          }
+          this.dueDate = rentDueDate.toLocaleDateString()
+          var i
+          var rentHistory = response.data
+          for (i = 0; i < response.data.length; i++) {
+            rentHistory[i].payment_date = new Date(rentHistory[i].payment_date).toLocaleDateString()
+          }
+          this.rentHistory = rentHistory
         })
         .catch(e => {
           console.log(e)
@@ -130,6 +144,7 @@ export default {
           .then(response => {
             this.address = response.data.address
             this.rentAmt = response.data.rent
+            this.rentMonthDay = response.data.due_date
             this.updateEntries()
           })
           .catch(e => {
