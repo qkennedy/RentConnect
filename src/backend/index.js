@@ -198,13 +198,11 @@ server.get('/rest/request/byLandlordId/:id',
   });
 });
 
-//TODO need to add error handling on these -- Also, make sure if we are passing the pw across here that it is encrypted
 server.post('/rest/request/createrequest/',
   function(req, res, next) {
-    //TODO need to talk to Jacob, figure out how to get the form data
-    //TODO get the document, and provide it
-    //TODO get user from session
-    maintRequestFactory.createRequest(req.body).then(request => {
+    //TODO When we implement getCurrentUser to read the cookie, figure out user
+    //Make this not hard coded
+    maintRequestFactory.createRequest(req.body, 1).then(request => {
       res.send(201)
       next()
     });
