@@ -25,7 +25,6 @@ export default {
   name: 'Sidebar',
   data () {
     return {
-      // TODO: get all this from the backend
       loggedIn: false,
       username: '',
       role: ''

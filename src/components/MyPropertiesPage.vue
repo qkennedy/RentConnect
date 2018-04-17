@@ -36,7 +36,6 @@ export default {
   name: 'MyPropertiesPage',
   data () {
     return {
-      // TODO: populate this from the database
       properties: []
     }
   },
@@ -67,7 +66,6 @@ export default {
 }
 
 Vue.component('property-entry', {
-  // TODO: make the finances, documents, edit listing link go to the right place (i.e. include the ID)
   props: ['id', 'address', 'status', 'tenant', 'rentamt', 'rentdue'],
   template: '<tr><td>{{ address }}</td><td v-if="tenant === null">Unoccupied</td><td v-if="tenant !== null">Occupied</td><td v-if="tenant !== null">{{ tenant }}</td><td v-if="tenant === null"><i>No tenant</i></td><td>$ {{ rentamt }}, due {{ rentdue }}</td><td><router-link v-bind:to="\'/Finances/\' + id">Finances</router-link><br /><router-link v-bind:to="\'/ManageDocuments/\' + id">Documents</router-link><br /><router-link v-bind:to="\'/EditListing/\' + id">Edit Listing</router-link></td></tr>'
 })

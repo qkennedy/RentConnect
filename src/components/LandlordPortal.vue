@@ -54,7 +54,6 @@ export default {
             // we're not a landlord, get out of here
             this.$router.push('/')
           }
-          // TODO: get information about the landlord and put it in the form
         } else {
           // not logged in, get out of here
           this.$router.push('/')

@@ -45,7 +45,6 @@ export default {
       )
         .then(response => {
           if (response.status === 200) {
-            // TODO: update the sidebar
             axios.get('/rest/whoAmI')
               .then(response => {
                 this.$eventHub.$emit('update-sidebar')

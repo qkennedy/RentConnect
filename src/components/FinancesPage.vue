@@ -70,13 +70,12 @@ export default {
       rentHistory: [
 
       ],
-      // TODO: populate property information from the database
       role: 'tenant',
       address: '',
       tenant: '',
-      dueDate: 'March 31, 2018',
+      dueDate: '',
       rentMonthDay: 0,
-      rentAmt: 'TODO',
+      rentAmt: '',
       propId: 0,
       myId: 0
     }

@@ -66,18 +66,31 @@ export default {
   },
   methods: {
     handleSubmit () {
-      // TODO: update propId as appropriate
-      var propId = 1
+      var propId = this.$route.params.id
       console.log(JSON.stringify(Components.collapse(this.formElements, [])))
       axios.post('/rest/property/' + propId + '/createdocument/',
         Components.collapse(this.formElements, [])
       )
         .then(response => {
-          // TODO: update the page with the new document
+          this.updateDocs()
         })
         .catch(e => {
           console.log(e)
         })
+    },
+    updateDocs () {
+      // TODO: get the documents
+      /*
+      var propId = 1
+      axios.get('/rest/documents/' + propId)
+        .then(response => {
+          console.log(JSON.stringify(response.data))
+          this.documents = response.data.documents
+        })
+        .catch(e => {
+          console.log(e)
+        })
+        */
     }
   },
   components: {
@@ -94,21 +107,10 @@ export default {
         axios.get('/rest/property/' + this.$route.params.id)
           .then(response => {
             this.address = response.data.address
-            // TODO: get the documents
-            /*
-            var propId = 1
-            axios.get('/rest/documents/' + propId)
-              .then(response => {
-                console.log(JSON.stringify(response.data))
-                this.documents = response.data.documents
-              })
-              .catch(e => {
-                console.log(e)
-              })
-              */
+            this.updateDocs()
           })
           .catch(e => {
-
+            console.log(e)
           })
       })
       .catch(e => {

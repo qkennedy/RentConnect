@@ -66,7 +66,6 @@ export default {
         this.$refs.warning.style.display = 'block'
         return
       }
-      // TODO: submit this to the appropriate endpoint
       axios.post('/rest/updateuser',
         formFields
       )
@@ -105,7 +104,6 @@ export default {
         this.formElements[4].value = response.data.cell_number
         this.myId = response.data.id
         this.role = response.data.role
-        // TODO: populate value for public phone/email
       })
       .catch(e => {
         console.log(e)

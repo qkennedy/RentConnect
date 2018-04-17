@@ -8,7 +8,6 @@
     <div class="right">
         <h3>Options</h3>
         <ul class="optionlist">
-          <!-- TODO: fill these with appropriate URLs and fill out address and whatever as appropriate -->
           <li class="first"><b>Contact landlord:</b><br />
             Phone: <i v-if="landlordPhone===''">(not given)</i><span v-else>{{ landlordPhone }}</span><br />
             Email: {{ landlordEmail }}

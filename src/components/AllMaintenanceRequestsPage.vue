@@ -43,9 +43,7 @@ export default {
 
     axios.get('/rest/whoAmI')
       .then(response => {
-        if (response.data.role !== 'landlord') {
-          this.$router.push('/')
-        }
+        // TODO: make this pull all requests associated with a user (such as all requests for the tenant's property, all requests assigned to a maintenance worker, and all requests for properties a landlord owns)
         this.myId = response.data.id
         axios.get('/rest/request/byLandlordId/' + this.myId)
           .then(response => {
