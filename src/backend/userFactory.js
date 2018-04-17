@@ -21,42 +21,47 @@ module.exports = {
         user = rows[0];
         if(!user) {
           let err = {
-            code: 'User does not exist',
+            code: `User does not exist with id: ${id}`,
             fatal: false
           }
           throw err;
         }
         return database.close()
-      }).catch( err => {
-        console.log(err)
-        //If the error is fatal, don't close the database.
-        if(err.fatal) {
-          throw err;
-        } else {
-          //Here I need to come up with the reasons why an error could occur,
-          //Then change them to a user readable error
-          //Get returned 0 rows to: UserId not found
-          return database.close().then(() => {
-            console.log(err)
-            throw err;
-          })
-        }
-      }).then( () => {
-        user.role = this.convertRole(user)
-        return user;
-     });
+      })
   },
+
   getUserByUsername: function(username) {
     let user;
       database.open()
       return database.query('select * from user where username = ?;', [username]).then( rows => {
         user = rows[0];
+        if(!user) {
+          let err = {
+            code: `User does not exist with username: ${username}`,
+            fatal: false
+          }
+          throw err;
+        }
         return database.close()
       } )
       .then( () => {
         user.role = this.convertRole(user)
         return user;
-     });
+     }).catch( err => {
+       console.log(err)
+       //If the error is fatal, don't close the database.
+       if(err.fatal) {
+         throw err;
+       } else {
+         return database.close().then(() => {
+           console.log(err)
+           throw err;
+         })
+       }
+     }).then( () => {
+       user.role = this.convertRole(user)
+       return user;
+    });
   },
 
   getBasicDetails: function(id) {
@@ -64,6 +69,7 @@ module.exports = {
     database.open()
     return database.query('select (username, email, cell_number)   from user where id = ?;', [id]).then( rows => {
       user = rows[0];
+
       return database.close()
     } )
     .then( () => {
