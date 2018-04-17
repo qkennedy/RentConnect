@@ -31,13 +31,6 @@ export default {
         },
         {
           id: 1,
-          type: 'yesno',
-          name: 'publicemail',
-          caption: 'Public email address',
-          value: ''
-        },
-        {
-          id: 2,
           type: 'password',
           name: 'password',
           caption: 'Set new password',
@@ -45,7 +38,7 @@ export default {
           optional: true
         },
         {
-          id: 3,
+          id: 2,
           type: 'password',
           name: 'cpassword',
           caption: 'Confirm new password',
@@ -53,17 +46,10 @@ export default {
           optional: true
         },
         {
-          id: 4,
+          id: 3,
           type: 'text',
           name: 'cell_number',
           caption: 'Phone number',
-          value: ''
-        },
-        {
-          id: 5,
-          type: 'yesno',
-          name: 'publicphone',
-          caption: 'Public phone number',
           value: ''
         }
       ],
