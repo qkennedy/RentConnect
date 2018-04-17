@@ -1,34 +1,19 @@
+import mysql from 'mysql'
 import Database from '@/backend/database'
-const mysql = require( 'mysql' );
 jest.mock('mysql')
 
 const database = new Database()
 
-const mockCreateConnection = jest.fn()
-const mockQuery = jest.fn()
-const mockEnd = jest.fn()
+beforeEach(() => {
+  return jest.clearAllMocks();
+  mysql.__resetMockedData();
+});
 
-function mockMySQL(rows, err, closeErr, mockConnection) {
-  const mockRows = [retValue]
-
-  mockCreateConnection.mockImplementation((sql, args, func) => {
-    return func(rows, err);
-  });
-  mockQuery.mockImplementation((sql, args, func) => {
-    return func(rows, err);
-  });
-   mockEnd.mockImplementation((func) => {
-    return func(closeErr)
-  });
-
-    mysql.mockImplementation( () => {
-        return {
-          createConnection: mockCreateConnection,
-          query: mockQuery,
-          end: mockEnds
-        };
-  });
+const mockErr = {
+  "code": "User does not exist",
+  "fatal": false
 }
+
 
 test('converting Arrays to be SQL Friendly', () => {
   var testArray = [1, 2, 3]
@@ -38,27 +23,37 @@ test('converting Arrays to be SQL Friendly', () => {
 });
 
 test('Test Promise Correct For successful query', () => {
-  const mockRows = [1, 2, 3]
-  const err = {}
-  const closeErr = {}
+  const mockRows = [1]
   const mockQuery = 'This is a mock Query'
-  const mockArg = 1
-  mockMySQL(rows, err, closeErr)
+  const mockArg = [1]
+  mysql.__setMockRows(mockRows);
   database.open()
-  database.query(mockQuery, mockArg).then( (rows) => {
-    expect(rows).toEqual(mockRows);
-  } );
+  expect.assertions(1);
+  return expect(database.query(mockQuery, mockArg)).resolves.toBe(mockRows)
+});
+
+
+test('Test Promise Rejects on Query Error', () => {
+  const mockQuery = 'This is a mock Query'
+  const mockArg = [1]
+  expect.assertions(1);
+  mysql.__setMockErr(mockErr)
+  database.open()
+  expect.assertions(1);
+  return expect(database.query(mockQuery, mockArg)).rejects.toBe(mockErr)
 });
 
 test('Test Promise Correct For successful close', () => {
-  const mockRows = [1, 2, 3]
-  const err = {}
-  const closeErr = {}
-  const mockQuery = 'This is a mock Query'
-  const mockArg = 1
-  mockMySQL(rows, err, closeErr)
   database.open()
-  database.close().then( () => {
-    expect(mockEnd.mock.calls.length).toEqual(1)
-  } );
+  expect.assertions(1);
+  return database.close().then( () => {
+    expect(mysql.__getMockEnd().mock.calls.length).toEqual(1)
+  });
+});
+
+test('Test Promise Rejects on close error', () => {
+  mysql.__setMockCloseErr(mockErr)
+  database.open()
+  expect.assertions(1);
+  return expect(database.close()).rejects.toBe(mockErr)
 });

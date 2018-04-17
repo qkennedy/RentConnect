@@ -53,7 +53,7 @@ server.get('/rest/user/:id',
     next()
   }).catch(err => {
     res.send(400, err)
-    next
+    next()
   });
 });
 

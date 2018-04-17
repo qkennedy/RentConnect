@@ -12,7 +12,8 @@
     "build": "node build/build.js",
     "backend": "node src/backend/index.js",
     "unit": "jest --config test/unit/jest.conf.js",
-    "test": "jest --config test/unit/jest.conf.js --coverage"
+    "test": "jest --config test/unit/jest.conf.js --coverage",
+    "dbtest": "jest --config test/unit/jest.conf.js test/unit/backend/database.test.js"
   },
   "dependencies": {
     "axios": "^0.18.0 ",

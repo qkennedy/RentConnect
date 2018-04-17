@@ -27,7 +27,7 @@ module.exports = {
           throw err;
         }
         return database.close()
-      }, err => {
+      }).catch( err => {
         console.log(err)
         //If the error is fatal, don't close the database.
         if(err.fatal) {

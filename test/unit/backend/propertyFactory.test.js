@@ -1,5 +1,6 @@
 import propertyFactory from '@/backend/propertyFactory'
 import Database from '@/backend/database'
+jest.unmock('mysql')
 jest.mock('@/backend/database')
 
 beforeEach(() => {

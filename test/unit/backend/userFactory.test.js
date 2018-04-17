@@ -1,6 +1,7 @@
 import userFactory from '@/backend/userFactory'
 import Database from '@/backend/database'
 jest.mock('@/backend/database')
+jest.unmock('mysql')
 
 beforeEach(() => {
   return jest.clearAllMocks();
