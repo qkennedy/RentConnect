@@ -19,6 +19,7 @@ import MyPropertiesPage from '@/components/MyPropertiesPage'
 import AllMaintenanceRequestsPage from '@/components/AllMaintenanceRequestsPage'
 import EditListingPage from '@/components/EditListingPage'
 import Error404Page from '@/components/404Page'
+import LogoutPage from '@/components/LogoutPage'
 
 Vue.use(Router)
 
@@ -38,6 +39,11 @@ export default new Router({
       path: '/Login/',
       name: 'LoginPage',
       component: LoginPage
+    },
+    {
+      path: '/Logout/',
+      name: 'LogoutPage',
+      component: LogoutPage
     },
     {
       path: '/Register/',
