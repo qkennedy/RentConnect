@@ -10,7 +10,6 @@
               <b>Due date: </b> {{ dueDate }}
             </td>
             <td style="width:50%">
-              <!-- populate as necessary -->
               Amount due: ${{rentAmt}}<br />
               Pay amount: $<input type="text" ref="rentamt" v-bind:value="rentAmt" />
               <input type="submit" value="Pay" />

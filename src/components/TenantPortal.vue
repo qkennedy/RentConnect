@@ -69,7 +69,7 @@ export default {
             // we're not a tenant, get out of here
             this.$router.push('/')
           }
-          if (typeof response.data.property === 'undefined') {
+          if (typeof response.data.property_id === 'undefined') {
             // we're not assigned to any property
             this.assigned = false
           } else {
