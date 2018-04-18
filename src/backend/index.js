@@ -21,14 +21,12 @@ server.post('/rest/login',
     //For now assume that password is being passed in directly
     console.log(req.body.username, req.body.password)
     userFactory.verifyUser(req.body.username, req.body.password).then( userId => {
-      if(userId === -1) {
-        res.send(401, 'Invalid Login, Please try again')
-      } else {
         res.send(200, 'This can be replaced with a 303 to send the user to their portal')
         activeId = userId
-      }
-      next()
+      }).catch( err => {
+        res.send(401, err)
       });
+      next()
   }
 );
 //Get User Details

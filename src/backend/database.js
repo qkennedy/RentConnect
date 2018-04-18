@@ -6,8 +6,7 @@ class Database {
         host     : 'localhost',
         user     : 'root',
         password : 'postgres',
-        database : 'rentconnect',
-        socketPath: '/var/run/mysqld/mysqld.sock'
+        database : 'rentconnect'
       }
     }
     open() {
