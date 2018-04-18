@@ -67,13 +67,13 @@ module.exports = {
      });
   },
 
-  addCommentForRequest: function(requestId, creatorId, comment) {
+  addCommentForRequest: function(requestId, comment) {
     database.open();
     const created = (new Date()).toISOString().substring(0,10)
-    return database.query(`
-      select c.*,u.username,u.role
-      from comment as c left join user as u on u.id=c.creator_id
-      where request_id = ?;`,
+    return database.query(`INSERT INTO comment
+      (id, request_id, creator_id, created_date, comment_text, attached_files)
+      VALUES
+      (null, ?, ?, ?, ?, ?);`,
       [requestId, creatorId, created, comment.text, comment.attachedFiles]).then( () => {
       return database.close();
     });
