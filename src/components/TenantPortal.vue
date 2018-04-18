@@ -2,20 +2,26 @@
   <div class="hello" id="tenantPortal">
     <div class="left">
       <h2>Tenant Portal</h2>
-      <h3>Notifications</h3>
-      <notification-entry v-for="n in notifications" v-bind:title="n.title" v-bind:contents="n.contents" v-bind:key="n.id"></notification-entry>
+      <h3 v-if="assigned">Notifications</h3>
+      <notification-entry v-if="assigned" v-for="n in notifications" v-bind:title="n.title" v-bind:contents="n.contents" v-bind:key="n.id"></notification-entry>
+      <div v-if="!assigned">
+        You are not currently assigned to any apartment.
+      </div>
     </div>
     <div class="right">
         <h3>Options</h3>
         <ul class="optionlist">
-          <li class="first"><b>Contact landlord:</b><br />
+          <li class="first" v-if="assigned"><b>Contact landlord:</b><br />
             Phone: <i v-if="landlordPhone===''">(not given)</i><span v-else>{{ landlordPhone }}</span><br />
             Email: {{ landlordEmail }}
           </li>
-          <li><b>My apartment:</b><br />Address: {{ address }}<br />Rent due: ${{ rentAmt }}, {{ rentDue }}</li>
-          <li><router-link to="Finances">View Finances</router-link></li>
-          <li><router-link to="SubmitMaintenanceRequest">Submit Maintenance Request</router-link></li>
-          <li><router-link to="ManageDocuments">Manage Documents</router-link></li>
+          <li v-if="assigned"><b>My apartment:</b><br />Address: {{ address }}<br />Rent due: ${{ rentAmt }}, {{ rentDue }}</li>
+          <li v-if="assigned"><router-link to="Finances">View Finances</router-link></li>
+          <li v-if="assigned"><router-link to="SubmitMaintenanceRequest">Submit Maintenance Request</router-link></li>
+          <li v-if="assigned"><router-link to="ManageDocuments">Manage Documents</router-link></li>
+          <li v-if="!assigned" class="first">
+            No options at this time.
+          </li>
         </ul>
     </div>
   </div>
@@ -47,7 +53,8 @@ export default {
       landlordEmail: '',
       rentAmt: '',
       rentDue: 'March 31, 2018',
-      address: ''
+      address: '',
+      assigned: false
     }
   },
   components: {
@@ -62,17 +69,23 @@ export default {
             // we're not a tenant, get out of here
             this.$router.push('/')
           }
-          axios.get('/rest/property/' + response.data.property_id)
-            .then(response => {
-              this.address = response.data.address
-              this.rentAmt = response.data.rent
-              this.landlordPhone = response.data.cell_number
-              this.landlordEmail = response.data.email
-              // TODO: populate landlord info
-            })
-            .catch(e => {
-              console.log(e)
-            })
+          if (typeof response.data.property === 'undefined') {
+            // we're not assigned to any property
+            assigned = false
+          } else {
+            // we are assigned to a property, populate fields appropriately
+            assigned = true
+            axios.get('/rest/property/' + response.data.property_id)
+              .then(response => {
+                this.address = response.data.address
+                this.rentAmt = response.data.rent
+                this.landlordPhone = response.data.cell_number
+                this.landlordEmail = response.data.email
+              })
+              .catch(e => {
+                console.log(e)
+              })
+            }
         } else {
           // not logged in, get out of here
           this.$router.push('/')
