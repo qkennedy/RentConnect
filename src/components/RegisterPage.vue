@@ -96,7 +96,7 @@ export default {
           )
             .then(response => {
               if (response.status === 200) {
-                // TODO: log the user in and update the sidebar
+                this.$eventHub.$emit('update-sidebar')
                 axios.get('/rest/whoAmI')
                   .then(response => {
                     var role = response.data.role
