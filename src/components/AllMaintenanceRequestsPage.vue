@@ -61,9 +61,8 @@ export default {
 }
 
 Vue.component('maint-row', {
-  // TODO: synchronize the statuses with the backend
   props: ['property', 'status', 'lastUpdated', 'id'],
-  template: '<tr><td>{{ property }}</td><td v-if="status===\'open\'" style="font-weight:bold; color:#900">Unassigned</td><td v-if="status===\'assigned\'" style="color:#060">Assigned</td><td v-if="status===\'closed\'">Closed</td><td>{{ lastUpdated }}</td><td><router-link v-bind:to="\'/ViewMaintenanceRequest/\' + id">View</router-link></td></tr>'
+  template: '<tr><td>{{ property }}</td><td v-if="status===\'open\'" style="font-weight:bold;">Open</td><td v-if="status===\'confirmed\'" style="font-weight: bold; color:#060">Confirmed</td><td v-if="status===\'closed\'">Closed</td><td v-if="status===\'pending\'" style="font-weight: bold; color:#900">Pending</td><td>{{ lastUpdated }}</td><td><router-link v-bind:to="\'/ViewMaintenanceRequest/\' + id">View</router-link></td></tr>'
 })
 </script>
 

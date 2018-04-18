@@ -55,16 +55,19 @@
             <!-- TODO: synchronize the statuses with the backend -->
             <select name="status">
               <option value="">
-                (keep open)
+                (don't change)
               </option>
-              <option value="fixed">
-                Fixed
+              <option value="open">
+                Open
               </option>
-              <option value="unfixable">
-                Unfixable
+              <option value="pending">
+                Pending
               </option>
-              <option value="invalid">
-                Invalid
+              <option value="closed">
+                Closed
+              </option>
+              <option value="confirmed">
+                Confirmed
               </option>
             </select>
           </td>
