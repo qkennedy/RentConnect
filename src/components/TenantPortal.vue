@@ -52,7 +52,7 @@ export default {
       landlordPhone: '',
       landlordEmail: '',
       rentAmt: '',
-      rentDue: 'March 31, 2018',
+      rentDue: '',
       address: '',
       assigned: false
     }
@@ -81,6 +81,12 @@ export default {
                 this.rentAmt = response.data.rent
                 this.landlordPhone = response.data.cell_number
                 this.landlordEmail = response.data.email
+                var rentDueDate = new Date()
+                rentDueDate.setDate(response.data.due_date)
+                if (rentDueDate < new Date()) {
+                  rentDueDate.setMonth(rentDueDate.getMonth() + 1)
+                }
+                this.rentDue = rentDueDate.toLocaleDateString()
               })
               .catch(e => {
                 console.log(e)
