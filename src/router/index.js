@@ -20,6 +20,7 @@ import AllMaintenanceRequestsPage from '@/components/AllMaintenanceRequestsPage'
 import EditListingPage from '@/components/EditListingPage'
 import Error404Page from '@/components/404Page'
 import LogoutPage from '@/components/LogoutPage'
+import ManageRosterPage from '@/components/ManageRosterPage'
 
 Vue.use(Router)
 
@@ -139,6 +140,11 @@ export default new Router({
       path: '/CreateListing/',
       name: 'CreateListingPage',
       component: EditListingPage
+    },
+    {
+      path: '/ManageRoster/',
+      name: 'ManageRosterPage',
+      component: ManageRosterPage
     }
   ]
 })

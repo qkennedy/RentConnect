@@ -71,10 +71,10 @@ export default {
           }
           if (typeof response.data.property === 'undefined') {
             // we're not assigned to any property
-            assigned = false
+            this.assigned = false
           } else {
             // we are assigned to a property, populate fields appropriately
-            assigned = true
+            this.assigned = true
             axios.get('/rest/property/' + response.data.property_id)
               .then(response => {
                 this.address = response.data.address
@@ -85,7 +85,7 @@ export default {
               .catch(e => {
                 console.log(e)
               })
-            }
+          }
         } else {
           // not logged in, get out of here
           this.$router.push('/')
