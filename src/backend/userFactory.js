@@ -110,13 +110,20 @@ module.exports = {
   },
 
   verifyUser: function(username, password) {
+    let currUser = {}
     return module.exports.getUserByUsername(username).then(user => {
+      currUser.id = user.id
+      console.log(user)
+      currUser.role = user.role
       return bcrypt.compare(password, user.password).then( res => {
         if(!res) {
           let err = {
             description: "Invalid Password"
           }
           throw err
+        } else {
+          console.log(currUser)
+          return currUser
         }
       });
     });

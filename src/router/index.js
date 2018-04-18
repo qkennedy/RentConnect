@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import VueSession from 'vue-session'
 import IndexPage from '@/components/IndexPage'
 import LoginPage from '@/components/LoginPage'
 import RegisterPage from '@/components/RegisterPage'
@@ -21,6 +22,7 @@ import EditListingPage from '@/components/EditListingPage'
 import Error404Page from '@/components/404Page'
 
 Vue.use(Router)
+Vue.use(VueSession)
 
 export default new Router({
   routes: [

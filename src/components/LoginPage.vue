@@ -44,30 +44,28 @@ export default {
         Components.collapse(this.formElements, [])
       )
         .then(response => {
-          if (response.status === 200) {
+          if (response.status === 200 && 'id' in response.data) {
             // TODO: update the sidebar
-            axios.get('/rest/whoAmI')
-              .then(response => {
-                this.$eventHub.$emit('update-sidebar')
-                var role = response.data.role
-                switch (role) {
-                  case 'tenant':
-                    this.$router.push('/TenantPortal')
-                    break
-                  case 'landlord':
-                    this.$router.push('/LandlordPortal')
-                    break
-                  case 'maintenanceWorker':
-                    this.$router.push('/MaintenancePortal')
-                    break
-                  case 'prospectiveUser':
-                    this.$router.push('/')
-                    break
-                }
-              })
-              .catch(e => {
-                console.log(e)
-              })
+            // TODO: Eventually update this to use JWT tokens
+            var role = response.data.role
+            this.$session.start()
+            this.$session.set('userId', response.data.id)
+            this.$session.set('userRole', role)
+            this.$eventHub.$emit('update-sidebar')
+            switch (role) {
+              case 'tenant':
+                this.$router.push('/TenantPortal')
+                break
+              case 'landlord':
+                this.$router.push('/LandlordPortal')
+                break
+              case 'maintenanceWorker':
+                this.$router.push('/MaintenancePortal')
+                break
+              case 'prospectiveUser':
+                this.$router.push('/')
+                break
+            }
           }
         })
         .catch(e => {

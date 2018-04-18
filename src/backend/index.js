@@ -20,10 +20,11 @@ server.post('/rest/login',
     //Here is where we can process the login info
     //For now assume that password is being passed in directly
     console.log(req.body.username, req.body.password)
-    userFactory.verifyUser(req.body.username, req.body.password).then( userId => {
-        res.send(200, 'This can be replaced with a 303 to send the user to their portal')
-        activeId = userId
+    userFactory.verifyUser(req.body.username, req.body.password).then( user => {
+      console.log("Sending 200")
+        res.send(200, user)
       }).catch( err => {
+        console.log(`Sending 401: ${err}`)
         res.send(401, err)
       });
       next()
