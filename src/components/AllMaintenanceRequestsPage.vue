@@ -1,6 +1,9 @@
 <template>
   <div class="hello" id="maintRequests">
     <h2>Maintenance Requests</h2>
+    <p v-if="landlord" style="text-align:center">
+      <router-link to="/ManageRoster">Manage Workers</router-link>
+    </p>
     <table border="0px" style="width:100%">
       <tr>
         <th style="width:25%">
@@ -32,7 +35,8 @@ export default {
     return {
       maintRequests: [
       ],
-      myId: 0
+      myId: 0,
+      landlord: false
     }
   },
   components: {
@@ -45,6 +49,9 @@ export default {
       .then(response => {
         // TODO: make this pull all requests associated with a user (such as all requests for the tenant's property, all requests assigned to a maintenance worker, and all requests for properties a landlord owns)
         this.myId = response.data.id
+        if (response.data.role === 'landlord') {
+          this.landlord = true
+        }
         axios.get('/rest/request/byLandlordId/' + this.myId)
           .then(response => {
             console.log(JSON.stringify(response))

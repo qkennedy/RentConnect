@@ -39,7 +39,7 @@
         <form-input v-for="element in formElements" v-bind:type="element.type" v-bind:caption="element.caption" v-bind:name="element.name" v-bind:key="element.id" v-bind:optional="element.optional" />
         <tr v-if="landlord">
           <td class="leftColumn">
-            Assign to worker
+            Assign to worker<br v-if="landlord" /><router-link v-if="landlord" to="/ManageRoster">Manage Workers</router-link>
           </td>
           <td class="rightColumn">
             <select name="worker">
