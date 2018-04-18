@@ -52,7 +52,6 @@
             Change request status
           </td>
           <td class="rightColumn">
-            <!-- TODO: synchronize the statuses with the backend -->
             <select name="status">
               <option value="">
                 (don't change)

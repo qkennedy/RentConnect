@@ -1,7 +1,18 @@
 <template>
   <div class="hello" id="applicationPage">
     <h2>Apply to rent property</h2>
-    <!-- TODO: include information about the property -->
+    <h3>Property Information</h3>
+    <table border="0">
+      <tr>
+        <th>
+          Address
+        </th>
+        <td>
+          {{ address }}
+        </td>
+      </tr>
+    </table>
+    <h3>Submit Application</h3>
     <form class="fullPageForm" id="applicationForm" method="post" enctype="multipart/form-data" @submit.prevent="handleSubmit">
       <table border="0px" id="loginTable">
         <form-input v-for="element in formElements" v-bind:type="element.type" v-bind:caption="element.caption" v-bind:name="element.name" v-bind:key="element.id" />
@@ -110,7 +121,8 @@ export default {
           name: 'felony',
           caption: 'Have you ever been convicted of a felony?'
         }
-      ]
+      ],
+      address: ''
     }
   },
   components: {
@@ -132,10 +144,29 @@ export default {
   },
   mounted () {
     document.title = 'Apply to Rent Property'
+
+    // TODO: if property already rented or does not exist, "evict" user from this page
+
+    axios.get('/rest/whoAmI')
+      .then(response => {
+        if (response.data.role !== 'tenant' || typeof response.data.property !== 'undefined') {
+          console.log(response.data.property)
+          // not a tenant, shouldn't be submitting an application
+          this.$router.push('/')
+        }
+        axios.get('/rest/property/' + this.$route.params.id)
+          .then(response => {
+            this.address = response.data.address
+          })
+          .catch(e => {
+            console.log(e)
+          })
+      })
+      .catch(e => {
+        console.log(e)
+      })
   }
 }
-
-document.title = 'Apply to rent property'
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
