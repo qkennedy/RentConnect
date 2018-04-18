@@ -18,7 +18,7 @@ module.exports = {
      });
   },
 
-  createRequest: function(request, creatorId) {
+  createRequest: function(request, creatorId, propertyId) {
     database.open();
     const created = (new Date()).toISOString().substring(0,10)
     request.status = module.exports.convertStatusToInt(request)

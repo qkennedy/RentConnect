@@ -92,14 +92,37 @@ module.exports = {
     });
   },
 
-  updateUser: function(user) {
+  updateUser: function(user, userId) {
     database.open();
-    var formFields = [user.email, user.cell_number]
+    var formFields = [user.email, user.cell_number, userId]
     return database.query('UPDATE user SET email=?,cell_number=? WHERE id=?', formFields)
     .then( () => {
       return database.close();
     })
   },
+
+  changePassword: function(userId, oldPass, NewPass) {
+    return module.exports.getUserByUserId(userId).then(user => {
+      return bcrypt.compare(oldPass, user.password).then( res => {
+        if(res) {
+          // Encrypt the new password, and update the database
+          return bcrypt.hash(user.password, saltRounds).then(function(hash) {
+            database.open();
+            return database.query(`UPDATE user SET password=?`, [hash]).then(() => {
+              return database.close()
+            });
+          });
+
+        } else {
+          //The old password was not correct
+          let err = {
+            description: "Invalid Password"
+          }
+          throw err
+        }
+      });
+    });
+  }
 
   deleteUser: function(userId) {
     database.open();
@@ -108,7 +131,8 @@ module.exports = {
       return database.close();
     });
   },
-
+  // TODO This I think should technically be split out, have one that just returns true
+  // and then something else to return these details
   verifyUser: function(username, password) {
     let currUser = {}
     return module.exports.getUserByUsername(username).then(user => {
