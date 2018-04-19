@@ -1,7 +1,7 @@
 <template>
   <div id="loginForm">
     <h2>Log In</h2>
-    <form class="fullPageForm" id="loginForm" method="post" enctype="multipart/form-data" @submit.prevent="handleSubmit">
+    <form class="fullPageForm" id="loginForm" method="post" enctype="multipart/form-data" @submit.prevent="handleSubmit" @click.capture="resetWarning">
       <div class="formWarning" ref="warning">
 
       </div>
@@ -77,6 +77,9 @@ export default {
             console.log(e)
           }
         })
+    },
+    resetWarning () {
+      this.$refs.warning.style.display = 'none'
     }
   },
   components: {

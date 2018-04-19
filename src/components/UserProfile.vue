@@ -4,9 +4,17 @@
     <div class="formWarning" ref="warning">
 
     </div>
+    <h3>Edit Profile</h3>
     <form id="profileForm" method="post" enctype="multipart/form-data" @submit.prevent="handleSubmit">
       <table border="0px" id="loginTable">
         <form-input v-for="element in formElements" v-bind:type="element.type" v-bind:caption="element.caption" v-bind:name="element.name" v-bind:value="element.value" v-bind:key="element.id" v-bind:optional="element.optional" />
+      </table>
+      <p><input type="submit" value="Update" /></p>
+    </form>
+    <h3>Change Password</h3>
+    <form id="profileForm" method="post" enctype="multipart/form-data" @submit.prevent="handleSubmitPassword" @click.capture="resetWarning">
+      <table border="0px" id="loginTable">
+        <form-input v-for="element in passwordChangeElements" v-bind:type="element.type" v-bind:caption="element.caption" v-bind:name="element.name" v-bind:value="element.value" v-bind:key="element.id" v-bind:optional="element.optional" />
       </table>
       <p><input type="submit" value="Update" /></p>
     </form>
@@ -35,22 +43,29 @@ export default {
           name: 'cell_number',
           caption: 'Phone number',
           value: ''
+        }
+      ],
+      passwordChangeElements: [
+        {
+          id: 0,
+          type: 'password',
+          name: 'curpassword',
+          caption: 'Current Password',
+          value: ''
+        },
+        {
+          id: 1,
+          type: 'password',
+          name: 'password',
+          caption: 'Set new password',
+          value: ''
         },
         {
           id: 2,
           type: 'password',
-          name: 'password',
-          caption: 'Set new password',
-          value: '',
-          optional: true
-        },
-        {
-          id: 3,
-          type: 'password',
           name: 'cpassword',
           caption: 'Confirm new password',
-          value: '',
-          optional: true
+          value: ''
         }
       ],
       myId: 0,
@@ -61,11 +76,6 @@ export default {
     handleSubmit () {
       var formFields = Components.collapse(this.formElements, [])
       formFields.id = this.myId
-      if (formFields.password !== formFields.cpassword) {
-        this.$refs.warning.innerHTML = 'Passwords do not match!'
-        this.$refs.warning.style.display = 'block'
-        return
-      }
       axios.post('/rest/updateuser',
         formFields
       )
@@ -88,6 +98,19 @@ export default {
         .catch(e => {
           console.log(e)
         })
+    },
+    handleSubmitPassword () {
+      var formFields = Components.collapse(this.passwordChangeElements, [])
+      formFields.id = this.myId
+      if (formFields.password !== formFields.cpassword) {
+        this.$refs.warning.innerHTML = 'Passwords do not match!'
+        this.$refs.warning.style.display = 'block'
+        return
+      }
+      // TODO: submit the new password to the backend
+    },
+    resetWarning () {
+      this.$refs.warning.style.display = 'none'
     }
   },
   components: {
