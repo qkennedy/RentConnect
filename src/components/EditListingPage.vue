@@ -6,7 +6,7 @@
       <table border="0px" id="loginTable">
         <form-input v-for="element in formElements" v-bind:type="element.type" v-bind:caption="element.caption" v-bind:name="element.name" v-bind:value="element.value" v-bind:key="element.id" />
       </table>
-      <p><input type="submit" value="List" /></p>
+      <p><input v-if="$route.params.id==null" type="submit" value="Submit Listing" /><input v-else type="submit" value="Update Listing" /></p>
     </form>
   </div>
 </template>
@@ -60,16 +60,29 @@ export default {
       // TODO: if updating a property, then go to a different endpoint
       var formFields = Components.collapse(this.formElements, [])
       formFields.landlordId = this.myId
-      console.log(JSON.stringify(formFields))
-      axios.post('/rest/property/create',
-        formFields
-      )
-        .then(response => {
-          this.$router.push('/LandlordPortal')
-        })
-        .catch(e => {
-          console.log(e)
-        })
+      if (typeof this.$route.params.id === 'undefined') {
+        console.log('creating')
+        axios.post('/rest/property/create',
+          formFields
+        )
+          .then(response => {
+            this.$router.push('/MyProperties')
+          })
+          .catch(e => {
+            console.log(e)
+          })
+      } else {
+        console.log('editing')
+        axios.post('/rest/property/' + this.$route.params.id + '/edit',
+          formFields
+        )
+          .then(response => {
+            this.$router.push('/LandlordPortal')
+          })
+          .catch(e => {
+            console.log(e)
+          })
+      }
     }
   },
   mounted () {
@@ -80,7 +93,7 @@ export default {
       this.$router.push('/')
     }
     this.myId = this.$session.get('userId')
-    if (this.$route.params.id != null) {
+    if (typeof this.$route.params.id !== 'undefined') {
       axios.get('/rest/property/' + this.$route.params.id)
         .then(response => {
           this.formElements[0].value = response.data.address

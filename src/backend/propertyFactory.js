@@ -19,7 +19,6 @@ module.exports = {
 
   createProperty: function(property) {
     database.open();
-    console.log(JSON.stringify(property))
     return database.query(`INSERT INTO property
       (id, landlord_id, address, rent, late_fee, due_date)
       VALUES(null, ?, ?, ?, ?, ?);`,
@@ -27,6 +26,19 @@ module.exports = {
        property = rows[0];
       return database.close();
       //TODO Do I need to return something here, or is resolve/error enough?  Add error handling, check this case.
+    } );
+  },
+
+  editProperty: function(propId, property) {
+    database.open();
+    return database.query(`UPDATE property
+      SET address=?,
+      rent=?,
+      late_fee=?,
+      due_date=?
+      WHERE id=?`,
+      [property.address, property.rent, property.lateFee, property.dueDate, propId]).then( rows => {
+      return database.close();
     } );
   },
 

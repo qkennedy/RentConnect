@@ -110,6 +110,14 @@ server.post('/rest/property/create',
     });
 });
 
+server.post('/rest/property/:id/edit',
+  function(req, res, next) {
+    propertyFactory.editProperty(req.params.id, req.body).then(property => {
+      res.send(201)
+      next()
+    });
+});
+
 server.get('/rest/property/landlord/:id',
   function(req, res, next) {
     propertyFactory.getPropertiesByLandlordId(req.params.id).then(properties => {
