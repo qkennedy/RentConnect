@@ -147,20 +147,14 @@ export default {
 
     // TODO: if property already rented or does not exist, "evict" user from this page
 
-    axios.get('/rest/whoAmI')
+    this.$session.start()
+    if (typeof this.$session.get('userId') === 'undefined' || this.$session.get('userId') < 1 || this.$session.get('userRole') !== 'tenant') {
+      // not a tenant, shouldn't be submitting an application
+      this.$router.push('/')
+    }
+    axios.get('/rest/property/' + this.$route.params.id)
       .then(response => {
-        if (response.data.role !== 'tenant' || typeof response.data.property !== 'undefined') {
-          console.log(response.data.property)
-          // not a tenant, shouldn't be submitting an application
-          this.$router.push('/')
-        }
-        axios.get('/rest/property/' + this.$route.params.id)
-          .then(response => {
-            this.address = response.data.address
-          })
-          .catch(e => {
-            console.log(e)
-          })
+        this.address = response.data.address
       })
       .catch(e => {
         console.log(e)

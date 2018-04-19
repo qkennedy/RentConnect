@@ -17,7 +17,6 @@
 
 <script>
 import Components from '@/components/UIComponents'
-// import axios from 'axios'
 
 export default {
   name: 'LogoutPage',
@@ -30,8 +29,8 @@ export default {
   },
   mounted () {
     document.title = 'Log out'
+    this.$session.destroy()
     this.$eventHub.$emit('update-sidebar')
-    // TODO: access the API endpoint to log user out
   }
 }
 </script>

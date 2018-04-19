@@ -82,7 +82,7 @@ export default {
   methods: {
     handleSubmit () {
       var rentToPay = this.$refs.rentamt.value
-      axios.post('/rest/renthistory/createentry/',
+      axios.post('/rest/renthistory/entry/create',
         {
           payerId: this.myId,
           propertyId: this.propId,
@@ -98,7 +98,7 @@ export default {
         })
     },
     updateEntries () {
-      axios.get('/rest/property/' + this.propId + '/entries')
+      axios.get('/rest/renthistory/entries/property/' + this.propId)
         .then(response => {
           // TODO: based on the rent due date and these receipts, determine if the rent has been paid yet
           // turn the rent due date into a usable string
@@ -125,29 +125,38 @@ export default {
   },
   mounted () {
     document.title = 'Finances'
-    axios.get('/rest/whoAmI')
+    this.$session.start()
+    if (typeof this.$session.get('userId') === 'undefined' || this.$session.get('userId') < 1) {
+      this.$router.push('/')
+    }
+    this.role = this.$session.get('userRole')
+    this.myId = this.$session.get('userId')
+    if (this.role === 'landlord') {
+      if (typeof this.$route.params.id === 'undefined') {
+        // we're a landlord but didn't specify which property
+        this.$router.push('/')
+      }
+      this.propId = this.$route.params.id
+    }
+    axios.get('/rest/user/' + this.$session.get('userId'))
       .then(response => {
-        this.role = response.data.role
-        this.myId = response.data.id
-        if (this.role === 'tenant') {
+        if (this.$session.get('userRole') === 'tenant') {
           this.propId = response.data.property_id
-        } else if (this.role === 'landlord') {
-          if (typeof this.$route.params.id === 'undefined') {
-            // we're a landlord but didn't specify which property
-            this.$router.push('/')
-          }
-          this.propId = this.$route.params.id
         }
-        axios.get('/rest/property/' + this.propId)
-          .then(response => {
-            this.address = response.data.address
-            this.rentAmt = response.data.rent
-            this.rentMonthDay = response.data.due_date
-            this.updateEntries()
-          })
-          .catch(e => {
-            console.log(e)
-          })
+        if (this.propId === null) {
+          this.$router.push('/')
+        } else {
+          axios.get('/rest/property/' + this.propId)
+            .then(response => {
+              this.address = response.data.address
+              this.rentAmt = response.data.rent
+              this.rentMonthDay = response.data.due_date
+              this.updateEntries()
+            })
+            .catch(e => {
+              console.log(e)
+            })
+        }
       })
       .catch(e => {
         console.log(e)

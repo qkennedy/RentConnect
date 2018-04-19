@@ -45,21 +45,20 @@ export default {
   mounted () {
     document.title = 'Maintenance Requests'
 
-    axios.get('/rest/whoAmI')
+    this.$session.start()
+    if (typeof this.$session.get('userId') === 'undefined' || this.$session.get('userId') < 1) {
+      // not logged in, shouldn't be on this page
+      this.$router.push('/')
+    }
+    // TODO: make this pull all requests associated with a user (such as all requests for the tenant's property, all requests assigned to a maintenance worker, and all requests for properties a landlord owns)
+    this.myId = this.$session.get('userId')
+    if (this.$session.get('userRole') === 'landlord') {
+      this.landlord = true
+    }
+    axios.get('/rest/request/byLandlordId/' + this.myId)
       .then(response => {
-        // TODO: make this pull all requests associated with a user (such as all requests for the tenant's property, all requests assigned to a maintenance worker, and all requests for properties a landlord owns)
-        this.myId = response.data.id
-        if (response.data.role === 'landlord') {
-          this.landlord = true
-        }
-        axios.get('/rest/request/byLandlordId/' + this.myId)
-          .then(response => {
-            console.log(JSON.stringify(response))
-            this.maintRequests = response.data
-          })
-          .catch(e => {
-            console.log(e)
-          })
+        console.log(JSON.stringify(response))
+        this.maintRequests = response.data
       })
       .catch(e => {
         console.log(e)

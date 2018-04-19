@@ -32,20 +32,21 @@ export default {
   },
   methods: {
     updateSidebar () {
-      axios.get('/rest/whoAmI')
-        .then(response => {
-          if (response.data.id > 0) {
-            console.log('Logged in')
-            this.loggedIn = true
+      this.$session.start()
+      if (typeof this.$session.get('userId') === 'undefined' || this.$session.get('userId') < 1) {
+        this.loggedIn = false
+      } else {
+        this.loggedIn = true
+        this.role = this.$session.get('userRole')
+        axios.get('/rest/user/' + this.$session.get('userId'))
+          .then(response => {
+            console.log(JSON.stringify(response.data))
             this.username = response.data.username
-            this.role = response.data.role
-          } else {
-            this.loggedIn = false
-          }
-        })
-        .catch(e => {
-          console.log(e)
-        })
+          })
+          .catch(e => {
+            console.log(e)
+          })
+      }
     }
   },
   mounted () {

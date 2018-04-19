@@ -45,7 +45,6 @@ export default {
       )
         .then(response => {
           if (response.status === 200 && 'id' in response.data) {
-            // TODO: update the sidebar
             // TODO: Eventually update this to use JWT tokens
             var role = response.data.role
             this.$session.start()

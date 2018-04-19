@@ -37,14 +37,14 @@ export default {
         {
           id: 2,
           type: 'number',
-          name: 'rentdue',
+          name: 'dueDate',
           caption: 'Rent due date (each month)',
           value: ''
         },
         {
           id: 3,
           type: 'number',
-          name: 'late_fee',
+          name: 'lateFee',
           caption: 'Rent late fee',
           value: ''
         }
@@ -75,32 +75,27 @@ export default {
   mounted () {
     document.title = 'Manage Listing'
 
-    axios.get('/rest/whoAmI')
-      .then(response => {
-        if (response.data.role !== 'landlord') {
-          this.$router.push('/')
-        }
-        this.myId = response.data.id
-        if (this.$route.params.id != null) {
-          axios.get('/rest/property/' + this.$route.params.id)
-            .then(response => {
-              console.log(JSON.stringify(response))
-              this.formElements[0].value = response.data.address
-              this.formElements[1].value = response.data.rent
-              this.formElements[3].value = response.data.late_fee
-            })
-            .catch(e => {
-              if (typeof e.status !== 'undefined' && e.status === 404) {
-                this.$router.push('/404')
-              } else {
-                console.log(e)
-              }
-            })
-        }
-      })
-      .catch(e => {
-        console.log(e)
-      })
+    this.$session.start()
+    if (typeof this.$session.get('userId') === 'undefined' || this.$session.get('userId') < 1 || this.$session.get('userRole') !== 'landlord') {
+      this.$router.push('/')
+    }
+    this.myId = this.$session.get('userId')
+    if (this.$route.params.id != null) {
+      axios.get('/rest/property/' + this.$route.params.id)
+        .then(response => {
+          this.formElements[0].value = response.data.address
+          this.formElements[1].value = response.data.rent
+          this.formElements[2].value = response.data.due_date
+          this.formElements[3].value = response.data.late_fee
+        })
+        .catch(e => {
+          if (typeof e.status !== 'undefined' && e.status === 404) {
+            this.$router.push('/404')
+          } else {
+            console.log(e)
+          }
+        })
+    }
   }
 }
 </script>

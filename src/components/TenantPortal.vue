@@ -62,39 +62,35 @@ export default {
   },
   mounted () {
     document.title = 'Tenant Portal'
-    axios.get('/rest/whoAmI')
+    this.$session.start()
+    if (typeof this.$session.get('userId') === 'undefined' || this.$session.get('userId') < 1 || this.$session.get('userRole') !== 'tenant') {
+      // not logged in or not a tenant, get out of here
+      this.$router.push('/')
+    }
+    axios.get('/rest/user/' + this.$session.get('userId'))
       .then(response => {
-        if (response.data.id > 0) {
-          if (response.data.role !== 'tenant') {
-            // we're not a tenant, get out of here
-            this.$router.push('/')
-          }
-          if (typeof response.data.property_id === 'undefined') {
-            // we're not assigned to any property
-            this.assigned = false
-          } else {
-            // we are assigned to a property, populate fields appropriately
-            this.assigned = true
-            axios.get('/rest/property/' + response.data.property_id)
-              .then(response => {
-                this.address = response.data.address
-                this.rentAmt = response.data.rent
-                this.landlordPhone = response.data.cell_number
-                this.landlordEmail = response.data.email
-                var rentDueDate = new Date()
-                rentDueDate.setDate(response.data.due_date)
-                if (rentDueDate < new Date()) {
-                  rentDueDate.setMonth(rentDueDate.getMonth() + 1)
-                }
-                this.rentDue = rentDueDate.toLocaleDateString()
-              })
-              .catch(e => {
-                console.log(e)
-              })
-          }
+        if (response.data.property_id === null) {
+          // not assigned to a property
+          this.assigned = false
         } else {
-          // not logged in, get out of here
-          this.$router.push('/')
+          // assigned to a property
+          axios.get('/rest/property/' + response.data.property_id)
+            .then(response => {
+              this.assigned = true
+              this.address = response.data.address
+              this.rentAmt = response.data.rent
+              this.landlordPhone = response.data.cell_number
+              this.landlordEmail = response.data.email
+              var rentDueDate = new Date()
+              rentDueDate.setDate(response.data.due_date)
+              if (rentDueDate < new Date()) {
+                rentDueDate.setMonth(rentDueDate.getMonth() + 1)
+              }
+              this.rentDue = rentDueDate.toLocaleDateString()
+            })
+            .catch(e => {
+              console.log(e)
+            })
         }
       })
       .catch(e => {

@@ -18,7 +18,6 @@
 </template>
 
 <script>
-import axios from 'axios'
 import Components from '@/components/UIComponents'
 
 export default {
@@ -46,23 +45,10 @@ export default {
   },
   mounted () {
     document.title = 'Maintenance Portal'
-    axios.get('/rest/whoAmI')
-      .then(response => {
-        console.log(JSON.stringify(response.data))
-        if (response.data.id > 0) {
-          if (response.data.role !== 'maintenanceWorker') {
-            // we're not a tenant, get out of here
-            this.$router.push('/')
-          }
-          // TODO: get information about the maintenance requests and put it in the form
-        } else {
-          // not logged in, get out of here
-          this.$router.push('/')
-        }
-      })
-      .catch(e => {
-        console.log(e)
-      })
+    this.$session.start()
+    if (typeof this.$session.get('userId') === 'undefined' || this.$session.get('userId') < 1 || this.$session.get('userRole') !== 'maintenanceWorker') {
+      this.$router.push('/')
+    }
   }
 }
 

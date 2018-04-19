@@ -84,45 +84,11 @@ export default {
         this.$refs.warning.style.display = 'block'
         return
       }
-      axios.post('/rest/createuser',
+      axios.post('/rest/user/create',
         formFields
       )
         .then(response => {
-          axios.post('/rest/login',
-            {
-              username: formFields.username,
-              password: formFields.password
-            }
-          )
-            .then(response => {
-              if (response.status === 200) {
-                this.$eventHub.$emit('update-sidebar')
-                axios.get('/rest/whoAmI')
-                  .then(response => {
-                    var role = response.data.role
-                    switch (role) {
-                      case 'tenant':
-                        this.$router.push('/TenantPortal')
-                        break
-                      case 'landlord':
-                        this.$router.push('/LandlordPortal')
-                        break
-                      case 'maintenanceWorker':
-                        this.$router.push('/MaintenancePortal')
-                        break
-                      case 'prospectiveUser':
-                        this.$router.push('/')
-                        break
-                    }
-                  })
-                  .catch(e => {
-                    console.log(e)
-                  })
-              }
-            })
-            .catch(e => {
-              console.log(e)
-            })
+          // TODO: log in as user, copying code from login page
         })
         .catch(e => {
           console.log(e)
