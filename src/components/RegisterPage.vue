@@ -2,12 +2,12 @@
 <template>
   <div class="hello" id="registerForm">
     <h2>Register</h2>
-    <form class="fullPageForm" id="loginForm" method="post" enctype="multipart/form-data" @submit.prevent="handleSubmit">
+    <form class="fullPageForm" id="loginForm" method="post" enctype="multipart/form-data" @submit.prevent="handleSubmit" @click.capture="resetWarning">
       <div class="formWarning" ref="warning">
 
       </div>
       <table border="0px" id="loginTable">
-        <form-input v-for="element in formElements" ref="test" v-bind:type="element.type" v-bind:caption="element.caption" v-bind:name="element.name" v-bind:key="element.name" />
+        <form-input v-for="element in formElements" ref="test" v-bind:type="element.type" v-bind:caption="element.caption" v-bind:name="element.name" v-bind:key="element.name"/>
         <tr>
           <td class="leftColumn">Role</td>
           <td class="rightColumn">
@@ -88,11 +88,50 @@ export default {
         formFields
       )
         .then(response => {
-          // TODO: log in as user, copying code from login page
+          axios.post('/rest/login',
+            Components.collapse(this.formElements, [])
+          )
+            .then(response => {
+              if (response.status === 200 && 'id' in response.data) {
+                // TODO: Eventually update this to use JWT tokens
+                var role = response.data.role
+                this.$session.start()
+                this.$session.set('userId', response.data.id)
+                this.$session.set('userRole', role)
+                this.$eventHub.$emit('update-sidebar')
+                switch (role) {
+                  case 'tenant':
+                    this.$router.push('/TenantPortal')
+                    break
+                  case 'landlord':
+                    this.$router.push('/LandlordPortal')
+                    break
+                  case 'maintenanceWorker':
+                    this.$router.push('/MaintenancePortal')
+                    break
+                  case 'prospectiveUser':
+                    this.$router.push('/')
+                    break
+                }
+              }
+            })
+            .catch(e => {
+              if (typeof e.response === 'undefined') {
+                console.log(e)
+              } else if (e.response.status === 401) {
+                this.$refs.warning.innerHTML = 'Login failed. Please try again.'
+                this.$refs.warning.style.display = 'block'
+              } else {
+                console.log(e)
+              }
+            })
         })
         .catch(e => {
           console.log(e)
         })
+    },
+    resetWarning () {
+      this.$refs.warning.style.display = 'none'
     }
   },
   mounted () {
