@@ -20,15 +20,14 @@ server.post('/rest/login',
     //Here is where we can process the login info
     //For now assume that password is being passed in directly
     console.log(req.body.username, req.body.password)
-    userFactory.verifyUser(req.body.username, req.body.password).then( userId => {
-      if(userId === -1) {
-        res.send(401, 'Invalid Login, Please try again')
-      } else {
-        res.send(200, 'This can be replaced with a 303 to send the user to their portal')
-        activeId = userId
-      }
-      next()
+    userFactory.verifyUser(req.body.username, req.body.password).then( user => {
+      console.log("Sending 200")
+        res.send(200, user)
+      }).catch( err => {
+        console.log(`Sending 401: ${err}`)
+        res.send(401, err)
       });
+      next()
   }
 );
 //Get User Details
@@ -56,7 +55,7 @@ server.get('/rest/user/:id',
 });
 
 //TODO need to add error handling on these -- Also, make sure if we are passing the pw across here that it is encrypted
-server.post('/rest/createuser',
+server.post('/rest/user/create',
   function(req, res, next) {
     userFactory.createUser(req.body).then(() => {
       res.send(201)
@@ -64,17 +63,28 @@ server.post('/rest/createuser',
     });
 });
 
-server.post('/rest/updateuser',
+server.post('/rest/user/:id/update',
   function(req, res, next) {
-    userFactory.updateUser(req.body).then(() => {
+    userFactory.updateUser(req.body, req.params.id).then(() => {
       res.send(201)
       next()
     });
 });
 
-server.put('/rest/deleteuser/:id',
+server.post('/rest/user/:id/changePassword',
   function(req, res, next) {
-  userFactory.createUser(req.params).then(() => {
+    userFactory.changePassword(req.params.id).then(() => {
+      res.send(201)
+      next()
+  }).catch( err => {
+    console.log(`Sending 400: ${err}`)
+    res.send(400, err)
+  });
+)
+
+server.put('/rest/user/:id/delete',
+  function(req, res, next) {
+  userFactory.deleteUser(req.params.id).then(() => {
     res.send(202)
     next()
   });
@@ -99,7 +109,7 @@ server.post('/rest/property/create',
     });
 });
 
-server.get('/rest/propertiesByLandlord/:id',
+server.get('/rest/property/landlord/:id',
   function(req, res, next) {
     propertyFactory.getPropertiesByLandlordId(req.params.id).then(properties => {
       res.send(properties)
@@ -170,8 +180,6 @@ server.put('/rest/document/delete/:docId',
 
 server.get('/rest/request/:id',
   function(req, res, next) {
-  //Need to have some security around endpoints like this.
-  //This Works! This is the format we should do almost everything with
   maintRequestFactory.getRequestById(req.params.id).then(request => {
     res.send(request)
     next()
@@ -198,11 +206,10 @@ server.get('/rest/request/byLandlordId/:id',
   });
 });
 
-server.post('/rest/request/createrequest/',
+server.post('/rest/property/:propId/request/create',
   function(req, res, next) {
-    //TODO When we implement getCurrentUser to read the cookie, figure out user
-    //Make this not hard coded
-    maintRequestFactory.createRequest(req.body, 1).then(request => {
+    //TODO Change calls on the backend to respond to these changes
+    maintRequestFactory.createRequest(req.body, req.body.creatorId, req.params.propId).then(request => {
       res.send(201)
       next()
     });
@@ -219,7 +226,7 @@ server.post('/rest/request/:id/addComment',
   }
 );
 
-server.put('/rest/request/delete/:reqId',
+server.put('/rest/request/:reqId/delete',
   function(req, res, next) {
   maintRequestFactory.deleteRequest(req.params.reqId).then(() => {
     res.send(202)
@@ -239,7 +246,7 @@ server.get('/rest/renthistory/entry/:id',
   });
 });
 
-server.get('/rest/user/:userId/entries',
+server.get('/rest/renthistory/entries/user/:userId',
   function(req, res, next) {
   //Need to have some security around endpoints like this.
   //This Works! This is the format we should do almost everything with
@@ -249,7 +256,7 @@ server.get('/rest/user/:userId/entries',
   });
 });
 
-server.get('/rest/property/:propId/entries',
+server.get('/rest/renthistory/entries/property/:propId',
   function(req, res, next) {
   //Need to have some security around endpoints like this.
   //This Works! This is the format we should do almost everything with
@@ -260,7 +267,7 @@ server.get('/rest/property/:propId/entries',
 });
 
 //TODO need to add error handling on these -- Also, make sure if we are passing the pw across here that it is encrypted
-server.post('/rest/renthistory/createentry/',
+server.post('/rest/renthistory/entry/create',
   function(req, res, next) {
     //I need to make sure Jacob is passing stuff in right, or change the refs to match
   rentHistoryFactory.createEntry(req.body).then(request => {
@@ -269,7 +276,7 @@ server.post('/rest/renthistory/createentry/',
   });
 });
 
-server.put('/rest/renthistory/entry/delete/:entryId',
+server.put('/rest/renthistory/entry/:entryId/delete',
   function(req, res, next) {
   rentHistoryFactory.deleteEntry(req.params.entryId).then(() => {
     res.send(202)

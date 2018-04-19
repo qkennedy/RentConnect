@@ -9,8 +9,10 @@
 //also should move away so we can mock this out
 var mysql = require('mysql');
 var Database = require('./database')
+var bcrypt = require('bcrypt');
 
 var database = new Database();
+const saltRounds = 3;
 module.exports = {
 
   getUserById: function(id) {
@@ -18,24 +20,6 @@ module.exports = {
     let user;
       database.open();
       return database.query('select u.*,t.property_id from user as u left join tenants as t on t.tenant_id=u.id where u.id = ?;', [id]).then( rows => {
-        user = rows[0];
-        //return database.close()
-      } )
-      .then( () => {
-        if (typeof user === 'undefined') {
-          user = {
-            id: -1
-          }
-        } else {
-          user.role = this.convertRole(user)
-        }
-        return user;
-     });
-  },
-  getUserByUsername: function(username) {
-    let user;
-      database.open()
-      return database.query('select * from user where username = ?;', [username]).then( rows => {
         user = rows[0];
         return database.close()
       } )
@@ -45,8 +29,25 @@ module.exports = {
             id: -1
           }
         } else {
-          user.role = this.convertRole(user)
+          user.role = module.exports.convertRole(user)
         }
+        return user;
+     });
+  },
+  getUserByUsername: function(username) {
+    let user;
+      database.open()
+      return database.query('select * from user where username = ?;', [username]).then( rows => {
+        user = rows[0];
+        if(!user) {
+          err = {
+            description: `No user with username ${username}`
+          }
+        }
+        return database.close()
+      } )
+      .then( () => {
+        user.role = module.exports.convertRole(user)
         return user;
      });
   },
@@ -79,48 +80,76 @@ module.exports = {
 
   createUser: function(user) {
     //need to add a method to hash password
-    database.open();
-    return database.query(`insert into user (id, username, password, email, cell_number, role)
-                      values(null, ?,?,?,?,?);`,
-                      [user.username, user.password, user.email, user.phone, this.convertRoleToInt(user)]).then(() => {
-      //return database.close();
-    } );
+    console.log(user)
+    return bcrypt.hash(user.password, saltRounds).then(function(hash) {
+      // Store hash in your password DB.
+      database.open();
+      return database.query(`insert into user (id, username, password, email, cell_number, role)
+                            values(null, ?,?,?,?,?);`,
+                            [user.username, hash, user.email, user.phone, module.exports.convertRoleToInt(user)]).then(() => {
+        return database.close();
+      });
+    });
   },
 
-  updateUser: function(user) {
-    console.log(JSON.stringify(user))
+  updateUser: function(user, userId) {
     database.open();
-    var passwordStr = '';
-    var formFields = [user.email, user.cell_number]
-    if (user.password != '') {
-      passwordStr = ',password=?'
-      formFields.push(user.password)
-    }
-    formFields.push(user.id)
-    console.log(JSON.stringify(formFields))
-    return database.query('UPDATE user SET email=?,cell_number=?' + passwordStr + ' WHERE id=?', formFields)
+    var formFields = [user.email, user.cell_number, userId]
+    return database.query('UPDATE user SET email=?,cell_number=? WHERE id=?', formFields)
     .then( () => {
-
+      return database.close();
     })
   },
+
+  changePassword: function(userId, oldPass, NewPass) {
+    return module.exports.getUserByUserId(userId).then(user => {
+      return bcrypt.compare(oldPass, user.password).then( res => {
+        if(res) {
+          // Encrypt the new password, and update the database
+          return bcrypt.hash(user.password, saltRounds).then(function(hash) {
+            database.open();
+            return database.query(`UPDATE user SET password=?`, [hash]).then(() => {
+              return database.close()
+            });
+          });
+
+        } else {
+          //The old password was not correct
+          let err = {
+            description: "Invalid Password"
+          }
+          throw err
+        }
+      });
+    });
+  }
 
   deleteUser: function(userId) {
     database.open();
     return database.query(`DELETE FROM user WHERE id = ?;`,
                       [userId]).then(() => {
-      //return database.close();
+      return database.close();
     });
   },
-
+  // TODO This I think should technically be split out, have one that just returns true
+  // and then something else to return these details
   verifyUser: function(username, password) {
-    return this.getUserByUsername(username).then(user => {
-      if(user.password === password) {
-        return user.id;
-      } else {
-        //This should be changed to throw an error, caught by a error resolve here
-        //TODO fix this.
-        return -1;
-      }
+    let currUser = {}
+    return module.exports.getUserByUsername(username).then(user => {
+      currUser.id = user.id
+      console.log(user)
+      currUser.role = user.role
+      return bcrypt.compare(password, user.password).then( res => {
+        if(!res) {
+          let err = {
+            description: "Invalid Password"
+          }
+          throw err
+        } else {
+          console.log(currUser)
+          return currUser
+        }
+      });
     });
   },
 
