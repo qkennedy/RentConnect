@@ -21,7 +21,7 @@ module.exports = {
     database.open();
     console.log(JSON.stringify(property))
     return database.query(`INSERT INTO property
-      (id, landlord_id, address, rent, late_fee, rent_due)
+      (id, landlord_id, address, rent, late_fee, due_date)
       VALUES(null, ?, ?, ?, ?, ?);`,
       [property.landlordId, property.address, property.rent, property.lateFee, property.dueDate]).then( rows => {
        property = rows[0];

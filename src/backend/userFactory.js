@@ -16,12 +16,11 @@ const saltRounds = 3;
 module.exports = {
 
   getUserById: function(id) {
-    console.log('id: ' + id)
     let user;
       database.open();
       return database.query('select u.*,t.property_id from user as u left join tenants as t on t.tenant_id=u.id where u.id = ?;', [id]).then( rows => {
         user = rows[0];
-        return database.close()
+        //return database.close()
       } )
       .then( () => {
         if (typeof user === 'undefined') {
