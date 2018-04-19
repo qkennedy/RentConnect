@@ -76,10 +76,11 @@ server.post('/rest/user/:id/changePassword',
     userFactory.changePassword(req.params.id).then(() => {
       res.send(201)
       next()
-  }).catch( err => {
-    console.log(`Sending 400: ${err}`)
-    res.send(400, err)
-  });
+    }).catch( err => {
+      console.log(`Sending 400: ${err}`)
+      res.send(400, err)
+    });
+  }
 )
 
 server.put('/rest/user/:id/delete',

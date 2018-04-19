@@ -122,7 +122,7 @@ module.exports = {
         }
       });
     });
-  }
+  },
 
   deleteUser: function(userId) {
     database.open();
