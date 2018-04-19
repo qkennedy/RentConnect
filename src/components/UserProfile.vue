@@ -75,8 +75,7 @@ export default {
   methods: {
     handleSubmit () {
       var formFields = Components.collapse(this.formElements, [])
-      formFields.id = this.myId
-      axios.post('/rest/updateuser',
+      axios.post('/rest/user/' + this.myId + '/update',
         formFields
       )
         .then(response => {
@@ -101,13 +100,38 @@ export default {
     },
     handleSubmitPassword () {
       var formFields = Components.collapse(this.passwordChangeElements, [])
-      formFields.id = this.myId
       if (formFields.password !== formFields.cpassword) {
         this.$refs.warning.innerHTML = 'Passwords do not match!'
         this.$refs.warning.style.display = 'block'
         return
       }
-      // TODO: submit the new password to the backend
+      axios.post('/rest/user/' + this.myId + '/changePassword',
+        formFields
+      )
+        .then(response => {
+          switch (this.role) {
+            case 'tenant':
+              this.$router.push('/TenantPortal')
+              break
+            case 'landlord':
+              this.$router.push('/LandlordPortal')
+              break
+            case 'maintenanceWorker':
+              this.$router.push('/MaintenancePortal')
+              break
+            default:
+              this.$router.push('/')
+              break
+          }
+        })
+        .catch(e => {
+          if (typeof e.response !== 'undefined' && e.response.data.description === 'Invalid Password') {
+            this.$refs.warning.innerHTML = 'Invalid Password'
+            this.$refs.warning.style.display = 'block'
+          } else {
+            console.log(e)
+          }
+        })
     },
     resetWarning () {
       this.$refs.warning.style.display = 'none'

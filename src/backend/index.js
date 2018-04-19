@@ -73,7 +73,7 @@ server.post('/rest/user/:id/update',
 
 server.post('/rest/user/:id/changePassword',
   function(req, res, next) {
-    userFactory.changePassword(req.params.id).then(() => {
+    userFactory.changePassword(req.params.id, req.body.curpassword, req.body.password).then(() => {
       res.send(201)
       next()
     }).catch( err => {

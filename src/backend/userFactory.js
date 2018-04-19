@@ -100,12 +100,12 @@ module.exports = {
     })
   },
 
-  changePassword: function(userId, oldPass, NewPass) {
-    return module.exports.getUserByUserId(userId).then(user => {
+  changePassword: function(userId, oldPass, newPass) {
+    return this.getUserById(userId).then(user => {
       return bcrypt.compare(oldPass, user.password).then( res => {
         if(res) {
           // Encrypt the new password, and update the database
-          return bcrypt.hash(user.password, saltRounds).then(function(hash) {
+          return bcrypt.hash(newPass, saltRounds).then(function(hash) {
             database.open();
             return database.query(`UPDATE user SET password=?`, [hash]).then(() => {
               return database.close()
