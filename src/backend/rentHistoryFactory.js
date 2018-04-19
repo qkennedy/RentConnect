@@ -51,7 +51,7 @@ module.exports = {
   getEntriesForUser: function(userId) {
     let entries;
       database.open()
-      return database.query(`select * from rent_history where payer_id = ?;`, [userId]).then( rows => {
+      return database.query(`select * from rent_history where payer_id = ? order by date desc;`, [userId]).then( rows => {
         entries = rows;
         return database.close()
       } )
@@ -63,7 +63,7 @@ module.exports = {
   getEntriesForProperty: function(propertyId) {
     let entries;
       database.open()
-      return database.query(`select * from rent_history where property_id = ?;`, [propertyId]).then( rows => {
+      return database.query(`select * from rent_history where property_id = ? order by date desc;`, [propertyId]).then( rows => {
         entries = rows;
         return database.close()
       })
