@@ -52,8 +52,8 @@ export default {
         formFields
       )
         .then(response => {
-          // TODO: redirect to page to show this maintenance Request
-          var respId = 1
+          console.log(JSON.stringify(response.data))
+          var respId = response.data.id
           this.$router.push('/ViewMaintenanceRequest/' + respId)
         })
         .catch(e => {

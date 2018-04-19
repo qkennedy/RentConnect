@@ -219,7 +219,7 @@ server.post('/rest/property/:propId/request/create',
   function(req, res, next) {
     //TODO Change calls on the backend to respond to these changes
     maintRequestFactory.createRequest(req.body, req.body.creatorId, req.params.propId).then(request => {
-      res.send(201)
+      res.send(request)
       next()
     });
 });

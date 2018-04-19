@@ -25,7 +25,11 @@ module.exports = {
     return database.query(`INSERT INTO maint_request
       (id, property_id, creator_id, created_date, title, description, attached_files, worker_id, status)
       VALUES(null,?,?,?,?,?,?,null,?);`,
-      [request.propertyId, creatorId, created, request.title, request.description, request.attachedFiles, request.worker_id, 1]).then( () => {
+      [request.propertyId, creatorId, created, request.title, request.description, request.attachedFiles, request.worker_id, 1])
+      .then( data => {
+        return {
+          id: data.insertId
+        }
       return database.close();
     });
   },
