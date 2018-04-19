@@ -8,10 +8,10 @@ module.exports = {
 
   getRequestById: function(id) {
     let request;
-      var db = database.open2()
-      return database.query2(db, 'select * from maint_request where id = ?;', [id]).then( rows => {
+      var db = database.open()
+      return database.query(db, 'select * from maint_request where id = ?;', [id]).then( rows => {
         request = rows[0];
-        return database.close2(db)
+        return database.close(db)
       } )
       .then( () => {
       return request;
@@ -19,10 +19,10 @@ module.exports = {
   },
 
   createRequest: function(request, creatorId, propertyId) {
-    database.open();
+    var db = database.open();
     const created = (new Date()).toISOString().substring(0,10)
     request.status = module.exports.convertStatusToInt(request)
-    return database.query(`INSERT INTO maint_request
+    return database.query(db, `INSERT INTO maint_request
       (id, property_id, creator_id, created_date, title, description, attached_files, worker_id, status)
       VALUES(null,?,?,?,?,?,?,null,?);`,
       [propertyId, creatorId, created, request.title, request.description, request.attachedFiles, request.worker_id, 1])
@@ -30,33 +30,33 @@ module.exports = {
         return {
           id: data.insertId
         }
-      return database.close();
+      return database.close(db);
     });
   },
 
   deleteRequest: function(id) {
-    database.open();
-    return database.query(`DELETE FROM maint_request WHERE id = ?;`,
+    var db = database.open();
+    return database.query(db, `DELETE FROM maint_request WHERE id = ?;`,
                           [id]).then(() => {
       //Do I need to return results here?  Or does promise cover failure case
-      return database.close();
+      return database.close(db);
     });
   },
 
   editMaintRequest: function(request) {
-    database.open();
-    return database.query(`UPDATE maint_request SET
+    var db = database.open();
+    return database.query(db, `UPDATE maint_request SET
       title = ?, description = ?, attached_files = ?, worker_id = ?, status = ?
       WHERE id = ?;`,
       [request.title, request.description, request.attachedFiles, 1, ]).then( () => {
-      return database.close();
+      return database.close(db);
     });
   },
 
   getCommentsByRequestId: function(requestId) {
     let comments;
-      var db = database.open2()
-      return database.query2(db, `select c.*,u.username,u.role
+      var db = database.open()
+      return database.query(db, `select c.*,u.username,u.role
         from comment as c left join user as u on u.id=c.creator_id where request_id = ?;`,
         [requestId]).then( rows => {
         comments = rows;
@@ -64,7 +64,7 @@ module.exports = {
         for (i = 0; i < comments.length; i++) {
           comments[i].role = userFactory.convertRole(comments[i])
         }
-        return database.close2(db)
+        return database.close(db)
       } )
       .then( () => {
       return comments;
@@ -72,20 +72,20 @@ module.exports = {
   },
 
   addCommentForRequest: function(requestId, comment) {
-    database.open();
+    var db = database.open();
     const created = (new Date()).toISOString().substring(0,10)
-    return database.query(`INSERT INTO comment
+    return database.query(db, `INSERT INTO comment
       (id, request_id, creator_id, created_date, comment_text, attached_files)
       VALUES
       (null, ?, ?, ?, ?, ?);`,
       [requestId, comment.creatorId, created, comment.text, comment.attachedFiles]).then( () => {
-      return database.close();
+      return database.close(db);
     });
   },
 
   getRequestsByUser: function(userId, role) {
     let requests;
-    database.open()
+    var db = database.open()
     var whereField = 'm.creator_id'
     switch (role) {
       case 'landlord':
@@ -98,7 +98,7 @@ module.exports = {
         whereField = 'm.worker_id'
         break
     }
-    return database.query(
+    return database.query(db,
       `SELECT p.address,m.status,m.created_date,m.id
        FROM maint_request AS m
        LEFT JOIN property AS p ON p.id=m.property_id

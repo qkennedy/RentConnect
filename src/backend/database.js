@@ -10,27 +10,6 @@ class Database {
         socketPath: '/var/run/mysqld/mysqld.sock'
       }
     }
-    open() {
-      this.connection = mysql.createConnection( this.conf )
-    }
-    query( sql, args ) {
-        return new Promise( ( resolve, reject ) => {
-            this.connection.query( sql, args, ( err, rows ) => {
-                if ( err )
-                    return reject( err );
-                resolve( rows );
-            } );
-        } );
-    }
-    close() {
-        return new Promise( ( resolve, reject ) => {
-            this.connection.end( err => {
-                if ( err )
-                    return reject( err );
-                resolve();
-            } );
-        } );
-    }
     //Converts an array of
     convertArray(array) {
       var newStr = '('
@@ -48,11 +27,10 @@ class Database {
 
     }
 
-    // AN EXPERIMENTAL MODIFED VERSION THAT WORKS ON SPECIFIC CONNECTIONS THAN A SYSTEM-WIDE connection
-    open2() {
+    open() {
       return mysql.createConnection( this.conf )
     }
-    query2( connection, sql, args ) {
+    query( connection, sql, args ) {
         return new Promise( ( resolve, reject ) => {
             connection.query( sql, args, ( err, rows ) => {
                 if ( err )
@@ -61,7 +39,7 @@ class Database {
             } );
         } );
     }
-    close2(connection) {
+    close(connection) {
         return new Promise( ( resolve, reject ) => {
             connection.end( err => {
                 if ( err )

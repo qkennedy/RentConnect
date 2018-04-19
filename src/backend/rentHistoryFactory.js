@@ -8,10 +8,10 @@ module.exports = {
 
   getEntryById: function(id) {
     let entry;
-      database.open()
-      return database.query(`select * from rent_history where id = ?;`, [id]).then( rows => {
+      var db = database.open()
+      return database.query(db, `select * from rent_history where id = ?;`, [id]).then( rows => {
         entry = rows[0];
-        return database.close()
+        return database.close(db)
       } )
       .then( () => {
       return entry;
@@ -19,41 +19,41 @@ module.exports = {
   },
 
   createEntry: function(entry) {
-    database.open();
+    var db = database.open();
     const created = (new Date()).toISOString().substring(0,10)
-    return database.query(`INSERT INTO rent_history
+    return database.query(db, `INSERT INTO rent_history
       (id, payer_id, property_id, payment_date, payment_amount, on_time)
       VALUES (null, ?, ?, ?, ?, ?);`,
       [entry.payerId, entry.propertyId, created, entry.paymentAmount, entry.onTime]).then( () => {
-      return database.close();
+      return database.close(db);
     });
   },
 
   deleteEntry: function(id) {
-    database.open();
-    return database.query(`DELETE FROM rent_history WHERE id = ?;`,
+    var db = database.open();
+    return database.query(db, `DELETE FROM rent_history WHERE id = ?;`,
       [id]).then(() => {
       //Do I need to return results here?  Or does promise cover failure case
-      return database.close();
+      return database.close(db);
     });
   },
 
   editEntry: function(entry) {
-    database.open();
-    return database.query(`UPDATE rent_history SET
+    var db = database.open();
+    return database.query(db, `UPDATE rent_history SET
       payer_id = ?, property_id = ?, payment_amount = ?, on_time = ?
       WHERE id = ?;`,
       [entry.payerId, entry.propertyId, entry.paymentAmount, entry.onTime, entry.id]).then( () => {
-      return database.close();
+      return database.close(db);
     });
   },
 
   getEntriesForUser: function(userId) {
     let entries;
-      database.open()
-      return database.query(`select * from rent_history where payer_id = ? order by payment_date desc;`, [userId]).then( rows => {
+      var db = database.open()
+      return database.query(db, `select * from rent_history where payer_id = ? order by payment_date desc;`, [userId]).then( rows => {
         entries = rows;
-        return database.close()
+        return database.close(db)
       } )
       .then( () => {
       return entries;
@@ -62,10 +62,10 @@ module.exports = {
 
   getEntriesForProperty: function(propertyId) {
     let entries;
-      database.open()
-      return database.query(`select * from rent_history where property_id = ? order by payment_date desc;`, [propertyId]).then( rows => {
+      var db = database.open()
+      return database.query(db, `select * from rent_history where property_id = ? order by payment_date desc;`, [propertyId]).then( rows => {
         entries = rows;
-        return database.close()
+        return database.close(db)
       })
       .then( () => {
       return entries;

@@ -17,10 +17,10 @@ module.exports = {
 
   getUserById: function(id) {
     let user;
-      database.open();
-      return database.query('select u.*,t.property_id from user as u left join tenants as t on t.tenant_id=u.id where u.id = ?;', [id]).then( rows => {
+      var db = database.open();
+      return database.query(db, 'select u.*,t.property_id from user as u left join tenants as t on t.tenant_id=u.id where u.id = ?;', [id]).then( rows => {
         user = rows[0];
-        //return database.close()
+        return database.close(db)
       } )
       .then( () => {
         if (typeof user === 'undefined') {
@@ -35,15 +35,15 @@ module.exports = {
   },
   getUserByUsername: function(username) {
     let user;
-      database.open()
-      return database.query('select * from user where username = ?;', [username]).then( rows => {
+      var db = database.open()
+      return database.query(db, 'select * from user where username = ?;', [username]).then( rows => {
         user = rows[0];
         if(!user) {
           err = {
             description: `No user with username ${username}`
           }
         }
-        return database.close()
+        return database.close(db)
       } )
       .then( () => {
         user.role = module.exports.convertRole(user)
@@ -53,10 +53,10 @@ module.exports = {
 
   getBasicDetails: function(id) {
     let user;
-    database.open()
-    return database.query('select (username, email, cell_number)   from user where id = ?;', [id]).then( rows => {
+    var db = database.open()
+    return database.query(db, 'select (username, email, cell_number)   from user where id = ?;', [id]).then( rows => {
       user = rows[0];
-      return database.close()
+      return database.close(db)
     } )
     .then( () => {
     return user;
@@ -67,10 +67,10 @@ module.exports = {
     let users;
     let sqlArray = database.convertArray(idArr)
     console.log(sqlArray)
-    database.open()
-    return database.query('select (username, email, cell_number)   from user where id in ?;', [sqlArray]).then( rows => {
+    var db = database.open()
+    return database.query(db, 'select (username, email, cell_number)   from user where id in ?;', [sqlArray]).then( rows => {
       users = rows;
-      return database.close()
+      return database.close(db)
     } )
     .then( () => {
     return users;
@@ -82,21 +82,21 @@ module.exports = {
     console.log(user)
     return bcrypt.hash(user.password, saltRounds).then(function(hash) {
       // Store hash in your password DB.
-      database.open();
-      return database.query(`insert into user (id, username, password, email, cell_number, role)
+      var db = database.open();
+      return database.query(db, `insert into user (id, username, password, email, cell_number, role)
                             values(null, ?,?,?,?,?);`,
                             [user.username, hash, user.email, user.phone, module.exports.convertRoleToInt(user)]).then(() => {
-        return database.close();
+        return database.close(db);
       });
     });
   },
 
   updateUser: function(user, userId) {
-    database.open();
+    var db = database.open();
     var formFields = [user.email, user.cell_number, userId]
-    return database.query('UPDATE user SET email=?,cell_number=? WHERE id=?', formFields)
+    return database.query(db, 'UPDATE user SET email=?,cell_number=? WHERE id=?', formFields)
     .then( () => {
-      return database.close();
+      return database.close(db);
     })
   },
 
@@ -106,9 +106,9 @@ module.exports = {
         if(res) {
           // Encrypt the new password, and update the database
           return bcrypt.hash(newPass, saltRounds).then(function(hash) {
-            database.open();
-            return database.query(`UPDATE user SET password=?`, [hash]).then(() => {
-              return database.close()
+            var db = database.open();
+            return database.query(db, `UPDATE user SET password=?`, [hash]).then(() => {
+              return database.close(db)
             });
           });
 
@@ -124,10 +124,10 @@ module.exports = {
   },
 
   deleteUser: function(userId) {
-    database.open();
-    return database.query(`DELETE FROM user WHERE id = ?;`,
+    var db = database.open();
+    return database.query(db, `DELETE FROM user WHERE id = ?;`,
                       [userId]).then(() => {
-      return database.close();
+      return database.close(db);
     });
   },
   // TODO This I think should technically be split out, have one that just returns true

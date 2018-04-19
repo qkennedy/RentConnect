@@ -8,10 +8,10 @@ module.exports = {
 
   getDocumentById: function(id) {
     let property;
-      database.open()
-      return database.query('select * from document where id = ?;', [id]).then( rows => {
+      var db = database.open()
+      return database.query(db, 'select * from document where id = ?;', [id]).then( rows => {
         property = rows[0];
-        return database.close()
+        return database.close(db)
       } )
       .then( () => {
       return property;
@@ -19,22 +19,22 @@ module.exports = {
   },
 
   createDocument: function(propertyId, creatorId, document) {
-    database.open();
+    var db = database.open();
     const created = (new Date()).toISOString().substring(0,10)
-    return database.query(`INSERT INTO document
+    return database.query(db, `INSERT INTO document
       (id,property_id,created_date,creator_id,title,file)
       VALUES(null,?,?,?,?,?,?)`,
       [propertyId, created, creatorId, document.title, document.file]).then( () => {
-      return database.close();
+      return database.close(db);
     } );
   },
 
   deleteDocument: function(id) {
-    database.open();
-    return database.query(`DELETE FROM property WHERE id = ?;`,
+    var db = database.open();
+    return database.query(db, `DELETE FROM property WHERE id = ?;`,
                           [id]).then(() => {
       //Do I need to return results here?  Or does promise cover failure case
-      return database.close();
+      return database.close(db);
     });
   },
 
