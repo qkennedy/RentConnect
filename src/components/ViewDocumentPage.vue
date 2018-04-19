@@ -52,6 +52,10 @@ export default {
   },
   mounted () {
     document.title = 'View Document'
+    this.$session.start()
+    if (typeof this.$session.get('userId') === 'undefined' || this.$session.get('userId') < 1 || (this.$session.get('userRole') !== 'landlord' && this.$session.get('userRole') !== 'tenant')) {
+      this.$router.push('/')
+    }
     axios.get('/rest/document/' + this.$route.params.id)
       .then(response => {
         this.docTitle = response.data.title

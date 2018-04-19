@@ -29,7 +29,6 @@
 
 <script>
 import Components from '@/components/UIComponents'
-import axios from 'axios'
 import Vue from 'vue'
 
 export default {
@@ -70,17 +69,10 @@ export default {
   },
   mounted () {
     document.title = 'Manage Roster'
-    axios.get('/rest/whoAmI')
-      .then(response => {
-        if (response.data.role !== 'landlord') {
-          // not a landlord, don't have a roster
-          this.$router.push('/')
-        }
-        // TODO: load the roster from the API
-      })
-      .catch(e => {
-        console.log(e)
-      })
+    this.$session.start()
+    if (typeof this.$session.get('userId') === 'undefined' || this.$session.get('userId') < 1 || this.$session.get('userRole') !== 'landlord') {
+      this.$router.push('/')
+    }
   }
 }
 

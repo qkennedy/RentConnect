@@ -90,7 +90,7 @@ export default {
         {
           id: 0,
           type: 'textarea',
-          name: 'comment',
+          name: 'text',
           caption: 'Comment'
         },
         {
@@ -152,16 +152,15 @@ export default {
   },
   mounted () {
     document.title = 'View Maintenance Request'
-    axios.get('/rest/whoAmI')
-      .then(response => {
-        this.tenant = response.data.role === 'tenant'
-        this.landlord = response.data.role === 'landlord'
-        this.maintenanceWorker = response.data.role === 'maint'
-        this.myId = response.data.id
-      })
-      .catch(e => {
-        console.log(e)
-      })
+    this.$session.start()
+    if (typeof this.$session.get('userId') === 'undefined' || this.$session.get('userId') < 1) {
+      // not logged in or not a tenant, get out of here
+      this.$router.push('/')
+    }
+    this.tenant = this.$session.get('userRole') === 'tenant'
+    this.landlord = this.$session.get('userRole') === 'landlord'
+    this.maintenanceWorker = this.$session.get('userRole') === 'maintenanceWorker'
+    this.myId = this.$session.get('userId')
     axios.get('/rest/request/' + this.$route.params.id)
       .then(response => {
         this.reqTitle = response.data.title

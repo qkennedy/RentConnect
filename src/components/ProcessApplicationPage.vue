@@ -153,6 +153,10 @@ export default {
   },
   mounted () {
     document.title = 'Process Property Application'
+    this.$session.start()
+    if (typeof this.$session.get('userId') === 'undefined' || this.$session.get('userId') < 1 || this.$session.get('userRole') !== 'landlord') {
+      this.$router.push('/')
+    }
     // TODO: get everything from the backend
   }
 }

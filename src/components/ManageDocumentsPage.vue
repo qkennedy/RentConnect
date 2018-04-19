@@ -98,20 +98,14 @@ export default {
   },
   mounted () {
     document.title = 'Manage Documents'
-    axios.get('/rest/whoAmI')
+    this.$session.start()
+    if (typeof this.$session.get('userId') === 'undefined' || this.$session.get('userId') < 1 || (this.$session.get('userRole') !== 'landlord' && this.$session.get('userRole') !== 'tenant')) {
+      this.$router.push('/')
+    }
+    axios.get('/rest/property/' + this.$route.params.id)
       .then(response => {
-        if (response.data.role !== 'landlord' && response.data.role !== 'tenant') {
-          // not a landlord or tenant, shouldn't be looking at documents
-          this.$router.push('/')
-        }
-        axios.get('/rest/property/' + this.$route.params.id)
-          .then(response => {
-            this.address = response.data.address
-            this.updateDocs()
-          })
-          .catch(e => {
-            console.log(e)
-          })
+        this.address = response.data.address
+        this.updateDocs()
       })
       .catch(e => {
         console.log(e)

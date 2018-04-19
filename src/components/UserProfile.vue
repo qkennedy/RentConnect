@@ -31,6 +31,13 @@ export default {
         },
         {
           id: 1,
+          type: 'text',
+          name: 'cell_number',
+          caption: 'Phone number',
+          value: ''
+        },
+        {
+          id: 2,
           type: 'password',
           name: 'password',
           caption: 'Set new password',
@@ -38,19 +45,12 @@ export default {
           optional: true
         },
         {
-          id: 2,
+          id: 3,
           type: 'password',
           name: 'cpassword',
           caption: 'Confirm new password',
           value: '',
           optional: true
-        },
-        {
-          id: 3,
-          type: 'text',
-          name: 'cell_number',
-          caption: 'Phone number',
-          value: ''
         }
       ],
       myId: 0,
@@ -95,13 +95,16 @@ export default {
   },
   mounted () {
     document.title = 'User Profile'
-    axios.get('/rest/whoAmI')
+    this.$session.start()
+    if (typeof this.$session.get('userId') === 'undefined' || this.$session.get('userId') < 1) {
+      // not logged in or not a tenant, get out of here
+      this.$router.push('/')
+    }
+    axios.get('/rest/user/' + this.$session.get('userId'))
       .then(response => {
-        if (response.data.id === -1) {
-          this.$router.push('/')
-        }
+        console.log(response.data)
         this.formElements[0].value = response.data.email
-        this.formElements[4].value = response.data.cell_number
+        this.formElements[1].value = response.data.cell_number
         this.myId = response.data.id
         this.role = response.data.role
       })

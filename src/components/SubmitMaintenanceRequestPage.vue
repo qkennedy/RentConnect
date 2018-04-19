@@ -46,9 +46,9 @@ export default {
   methods: {
     handleSubmit () {
       var formFields = Components.collapse(this.formElements, [])
-      formFields.propertyId = this.propertyId
+      formFields.propId = this.propertyId
       formFields.creatorId = this.creatorId
-      axios.post('/rest/request/createrequest/',
+      axios.post('/rest/property/' + this.propertyId + '/request/create',
         formFields
       )
         .then(response => {
@@ -66,13 +66,13 @@ export default {
   },
   mounted () {
     document.title = 'Submit Maintenance Request'
-    axios.get('/rest/whoAmI')
+    this.$session.start()
+    if (typeof this.$session.get('userId') === 'undefined' || this.$session.get('userId') < 1 || this.$session.get('userRole') !== 'tenant') {
+      this.$router.push('/')
+    }
+    this.myId = this.$session.get('userId')
+    axios.get('/rest/user/' + this.myId)
       .then(response => {
-        if (response.data.id === -1) {
-          // we aren't logged in
-          this.$router.push('/')
-        }
-        this.myId = response.data.id
         if (response.data.property_id === null) {
           // we haven't been assigned a property
           this.$router.push('/')
