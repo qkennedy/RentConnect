@@ -83,14 +83,27 @@ module.exports = {
     });
   },
 
-  getRequestsByUser: function(landlordId) {
+  getRequestsByUser: function(userId, role) {
     let requests;
     database.open()
+    var whereField = 'm.creator_id'
+    switch (role) {
+      case 'landlord':
+        whereField = 'p.landlord_id'
+        break
+      case 'tenant':
+        whereField = 'm.creator_id'
+        break
+      case 'maintenanceWorker':
+        whereField = 'm.worker_id'
+        break
+    }
     return database.query(
       `SELECT p.address,m.status,m.created_date,m.id
-       FROM maint_request AS m LEFT JOIN property AS p ON p.id=m.property_id
-       WHERE p.landlord_id=?`,
-      [landlordId]).then(rows => {
+       FROM maint_request AS m
+       LEFT JOIN property AS p ON p.id=m.property_id
+       WHERE ` + whereField + `=?`,
+      [userId]).then(rows => {
       requests = rows
       var i
       for (i = 0; i < requests.length; i++) {

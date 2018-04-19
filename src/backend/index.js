@@ -209,7 +209,27 @@ server.get('/rest/request/byLandlordId/:id',
   function(req, res, next) {
   //Need to have some security around endpoints like this.
   //This Works! This is the format we should do almost everything with
-  maintRequestFactory.getRequestsByUser(req.params.id).then(reqs => {
+  maintRequestFactory.getRequestsByUser(req.params.id, 'landlord').then(reqs => {
+    res.send(reqs)
+    next()
+  });
+});
+
+server.get('/rest/request/byTenantId/:id',
+  function(req, res, next) {
+  //Need to have some security around endpoints like this.
+  //This Works! This is the format we should do almost everything with
+  maintRequestFactory.getRequestsByUser(req.params.id, 'tenant').then(reqs => {
+    res.send(reqs)
+    next()
+  });
+});
+
+server.get('/rest/request/byWorkerId/:id',
+  function(req, res, next) {
+  //Need to have some security around endpoints like this.
+  //This Works! This is the format we should do almost everything with
+  maintRequestFactory.getRequestsByUser(req.params.id, 'maintenanceWorker').then(reqs => {
     res.send(reqs)
     next()
   });

@@ -55,7 +55,19 @@ export default {
     if (this.$session.get('userRole') === 'landlord') {
       this.landlord = true
     }
-    axios.get('/rest/request/byLandlordId/' + this.myId)
+    var requestUrl = ''
+    switch (this.$session.get('userRole')) {
+      case 'landlord':
+        requestUrl = 'byLandlordId'
+        break
+      case 'tenant':
+        requestUrl = 'byTenantId'
+        break
+      case 'maintenanceWorker':
+        requestUrl = 'byWorkerId'
+        break
+    }
+    axios.get('/rest/request/' + requestUrl + '/' + this.myId)
       .then(response => {
         console.log(JSON.stringify(response.data))
         this.maintRequests = response.data
