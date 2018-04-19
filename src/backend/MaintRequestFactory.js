@@ -8,10 +8,10 @@ module.exports = {
 
   getRequestById: function(id) {
     let request;
-      database.open()
-      return database.query('select * from maint_request where id = ?;', [id]).then( rows => {
+      var db = database.open2()
+      return database.query2(db, 'select * from maint_request where id = ?;', [id]).then( rows => {
         request = rows[0];
-        return database.close()
+        return database.close2(db)
       } )
       .then( () => {
       return request;
@@ -55,8 +55,8 @@ module.exports = {
 
   getCommentsByRequestId: function(requestId) {
     let comments;
-      database.open()
-      return database.query(`select c.*,u.username,u.role
+      var db = database.open2()
+      return database.query2(db, `select c.*,u.username,u.role
         from comment as c left join user as u on u.id=c.creator_id where request_id = ?;`,
         [requestId]).then( rows => {
         comments = rows;
@@ -64,7 +64,7 @@ module.exports = {
         for (i = 0; i < comments.length; i++) {
           comments[i].role = userFactory.convertRole(comments[i])
         }
-        return database.close()
+        return database.close2(db)
       } )
       .then( () => {
       return comments;
