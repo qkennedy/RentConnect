@@ -40,7 +40,6 @@ export default {
         this.role = this.$session.get('userRole')
         axios.get('/rest/user/' + this.$session.get('userId'))
           .then(response => {
-            console.log(JSON.stringify(response.data))
             this.username = response.data.username
           })
           .catch(e => {

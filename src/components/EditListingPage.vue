@@ -57,11 +57,10 @@ export default {
   },
   methods: {
     handleSubmit () {
-      // TODO: if updating a property, then go to a different endpoint
       var formFields = Components.collapse(this.formElements, [])
       formFields.landlordId = this.myId
       if (typeof this.$route.params.id === 'undefined') {
-        console.log('creating')
+        // creating a property
         axios.post('/rest/property/create',
           formFields
         )
@@ -72,7 +71,7 @@ export default {
             console.log(e)
           })
       } else {
-        console.log('editing')
+        // editing a property
         axios.post('/rest/property/' + this.$route.params.id + '/edit',
           formFields
         )

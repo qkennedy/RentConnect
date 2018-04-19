@@ -57,7 +57,7 @@ export default {
     }
     axios.get('/rest/request/byLandlordId/' + this.myId)
       .then(response => {
-        console.log(JSON.stringify(response))
+        console.log(JSON.stringify(response.data))
         this.maintRequests = response.data
       })
       .catch(e => {

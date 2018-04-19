@@ -46,8 +46,7 @@ export default {
   methods: {
     handleSubmit () {
       var formFields = Components.collapse(this.formElements, [])
-      formFields.propId = this.propertyId
-      formFields.creatorId = this.creatorId
+      formFields.creatorId = this.myId
       axios.post('/rest/property/' + this.propertyId + '/request/create',
         formFields
       )
