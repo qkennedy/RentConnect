@@ -55,10 +55,10 @@ export default {
         formFields.landlordId = this.myId
         axios.post('/rest/notifications/send', formFields)
           .then(response => {
-
+            this.$router.push('/LandlordPortal')
           })
-          .catch(response => {
-
+          .catch(e => {
+            console.log(e)
           })
       }
     }
