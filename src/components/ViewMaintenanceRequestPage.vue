@@ -21,6 +21,23 @@
       </tr>
       <tr>
         <th>
+          Status
+        </th>
+        <td v-if="status === 'open'">
+          Open
+        </td>
+        <td v-if="status === 'pending'">
+          Pending
+        </td>
+        <td v-if="status === 'closed'">
+          Closed
+        </td>
+        <td v-if="status === 'confirmed'">
+          Confirmed
+        </td>
+      </tr>
+      <tr>
+        <th>
           Attached image
         </th>
         <td v-if="attachedImage">
@@ -33,8 +50,8 @@
     </table>
     <h3>Comments</h3>
     <maintenance-comment v-for="comment in comments" v-bind:image="comment.image" v-bind:person="comment.username" v-bind:date="comment.created_date" v-bind:assignedTo="comment.assignedTo" v-bind:comment="comment.comment_text" v-bind:role="comment.role" v-bind:key="comment.id"></maintenance-comment>
-    <h3>Leave a comment</h3>
-    <form class="fullPageForm" id="loginForm" method="post" enctype="multipart/form-data" @submit.prevent="handleSubmit">
+    <h3 v-if="landlord || status !== 'closed'">Leave a comment</h3>
+    <form class="fullPageForm" v-if="landlord || status !== 'closed'" id="loginForm" method="post" enctype="multipart/form-data" @submit.prevent="handleSubmit">
       <table border="0px" id="loginTable">
         <form-input v-for="element in formElements" v-bind:type="element.type" v-bind:caption="element.caption" v-bind:name="element.name" v-bind:key="element.id" v-bind:optional="element.optional" />
         <tr v-if="landlord">
@@ -43,7 +60,7 @@
           </td>
           <td class="rightColumn">
             <select name="worker">
-              <option v-for="worker in workers" v-bind:value="worker.value" v-bind:key="worker.value">{{ worker.text }}</option>
+              <option v-for="worker in workers" v-bind:value="worker.id" v-bind:key="worker.id">{{ worker.username }}</option>
             </select>
           </td>
         </tr>
@@ -54,7 +71,7 @@
           <td class="rightColumn">
             <select name="status">
               <option value="">
-                (don't change)
+                (do not change)
               </option>
               <option value="open">
                 Open
@@ -108,24 +125,31 @@ export default {
       reqContent: '',
       attachedImage: false,
       myId: 0,
-      canClose: this.landlord || this.maintenanceWorker,
+      status: '',
+      canClose: false,
       // TODO: get this from the backend
       workers: [
-        { text: 'Alex Johnson', value: 'ajohnson' }
+        {
+          id: 0,
+          username: '(do not assign)'
+        },
+        {
+          id: 1,
+          username: 'ajohnson'
+        }
       ]
     }
   },
   methods: {
     handleSubmit () {
-      var extraComponents = []
-      if (this.landlord) {
-        extraComponents.add('worker')
-      }
+      var extraFields = []
       if (this.canClose) {
-        extraComponents.add('status')
+        extraFields.push('status')
       }
-      console.log(JSON.stringify(extraComponents))
-      var formFields = Components.collapse(this.formElements, extraComponents)
+      if (this.landlord) {
+        extraFields.push('worker')
+      }
+      var formFields = Components.collapse(this.formElements, extraFields)
       formFields.creatorId = this.myId
       axios.post('/rest/request/' + this.$route.params.id + '/addComment',
         formFields
@@ -136,11 +160,37 @@ export default {
         .catch(e => {
           console.log(e)
         })
+
+      // TODO: if status or worker selected, do something with it
+      if (this.canClose && formFields.status !== '') {
+        console.log('Updating status')
+        axios.post('/rest/request/' + this.$route.params.id + '/updateStatus',
+          formFields
+        )
+          .then(response => {
+            this.updateStatus()
+          })
+          .catch(e => {
+            console.log(e)
+          })
+      }
     },
     updateComments () {
       axios.get('/rest/request/' + this.$route.params.id + '/comments')
         .then(response => {
           this.comments = response.data
+        })
+        .catch(e => {
+          console.log(e)
+        })
+    },
+    updateStatus () {
+      axios.get('/rest/request/' + this.$route.params.id)
+        .then(response => {
+          this.reqTitle = response.data.title
+          this.reqContent = response.data.description
+          this.attachedImage = response.data.attachedImage
+          this.status = response.data.status
         })
         .catch(e => {
           console.log(e)
@@ -160,16 +210,9 @@ export default {
     this.tenant = this.$session.get('userRole') === 'tenant'
     this.landlord = this.$session.get('userRole') === 'landlord'
     this.maintenanceWorker = this.$session.get('userRole') === 'maintenanceWorker'
+    this.canClose = this.landlord || this.maintenanceWorker
     this.myId = this.$session.get('userId')
-    axios.get('/rest/request/' + this.$route.params.id)
-      .then(response => {
-        this.reqTitle = response.data.title
-        this.reqContent = response.data.description
-        this.attachedImage = response.data.attachedImage
-      })
-      .catch(e => {
-        console.log(e)
-      })
+    this.updateStatus()
     this.updateComments()
   }
 }

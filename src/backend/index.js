@@ -255,6 +255,17 @@ server.post('/rest/request/:id/addComment',
   }
 );
 
+server.post('/rest/request/:id/updateStatus',
+  function(req, res, next) {
+    maintRequestFactory.updateStatus(req.params.id, req.body).then(
+      request => {
+        res.send(201)
+        next()
+      }
+    )
+  }
+);
+
 server.put('/rest/request/:reqId/delete',
   function(req, res, next) {
   maintRequestFactory.deleteRequest(req.params.reqId).then(() => {

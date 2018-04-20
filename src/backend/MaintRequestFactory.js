@@ -11,6 +11,7 @@ module.exports = {
       var db = database.open()
       return database.query(db, 'select * from maint_request where id = ?;', [id]).then( rows => {
         request = rows[0];
+        request.status = this.convertIntToStatus(request)
         return database.close(db)
       } )
       .then( () => {
@@ -51,6 +52,21 @@ module.exports = {
       [request.title, request.description, request.attachedFiles, 1, ]).then( () => {
       return database.close(db);
     });
+  },
+
+  updateStatus: function(id, request) {
+    var db = database.open();
+    this.addCommentForRequest(id, {
+      creatorId: request.creatorId,
+      text: 'Set status to ' + request.status,
+      attachedFiles: ''
+    })
+    return database.query(db, `UPDATE maint_request SET
+      status = ?
+      WHERE id = ?;`,
+      [this.convertStatusToInt(request), id ]).then( () => {
+      return database.close(db);
+    });b
   },
 
   getCommentsByRequestId: function(requestId) {
