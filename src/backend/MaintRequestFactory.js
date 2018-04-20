@@ -20,19 +20,24 @@ module.exports = {
   },
 
   createRequest: function(request, creatorId, propertyId) {
-    var db = database.open();
-    const created = (new Date()).toISOString().substring(0,10)
-    request.status = module.exports.convertStatusToInt(request)
-    return database.query(db, `INSERT INTO maint_request
-      (id, property_id, creator_id, created_date, title, description, attached_files, worker_id, status)
-      VALUES(null,?,?,?,?,?,?,null,?);`,
-      [propertyId, creatorId, created, request.title, request.description, request.attachedFiles, request.worker_id, 1])
-      .then( data => {
-        return {
-          id: data.insertId
-        }
-      return database.close(db);
-    });
+    //first get the property info
+    return propertyFactory.getPropertyById(propertyId).then(propertyInfo => {
+      var db = database.open();
+      const created = (new Date()).toISOString().substring(0,10)
+      request.status = module.exports.convertStatusToInt(request)
+      return database.query(db, `INSERT INTO maint_request
+        (id, property_id, creator_id, created_date, title, description, attached_files, worker_id, status)
+        VALUES(null,?,?,?,?,?,?,null,?);`,
+        [propertyId, creatorId, created, request.title, request.description, request.attachedFiles, request.worker_id, 1])
+        .then( data => {
+          userFactory.createNotification(propertyInfo.landlord_id, 'New maintenance request', 'You have a new maintenance request for ' + propertyInfo.address + ': <a href="#/ViewMaintenanceRequest/' + data.insertId +'">' + request.title + '</a>') //notify the landlord
+          return {
+            id: data.insertId
+          }
+        return database.close(db);
+      });
+    })
+
   },
 
   deleteRequest: function(id) {
@@ -55,6 +60,7 @@ module.exports = {
   },
 
   updateStatus: function(id, request) {
+    // TODO: notify all involved (landlord, tenant, worker) besides the one who posted it
     this.addCommentForRequest(id, {
       creatorId: request.creatorId,
       text: 'Set status to ' + request.status,
@@ -70,7 +76,6 @@ module.exports = {
   },
 
   assign: function(id, request) {
-    console.log(request.worker)
     userFactory.createNotification(request.worker, 'Request assigned', 'You have been assigned a request: <a href="#/ViewMaintenanceRequest/' + id + '"">' + request.title + '</a>')
     this.addCommentForRequest(id, {
       creatorId: request.creatorId,
@@ -105,6 +110,7 @@ module.exports = {
   },
 
   addCommentForRequest: function(requestId, comment) {
+    // TODO: notify all involved (landlord, tenants, worker) besides the one who posted it
     var db = database.open();
     const created = (new Date()).toISOString().substring(0,10)
     return database.query(db, `INSERT INTO comment
