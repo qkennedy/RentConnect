@@ -2,7 +2,7 @@
 CREATE DATABASE RentConnect;
 
 -- Create User Table
---TODO add actual name as a col
+-- TODO add actual name as a col
 CREATE TABLE `rentconnect`.`user` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `username` VARCHAR(32) NOT NULL,
@@ -29,7 +29,7 @@ CREATE TABLE `rentconnect`.`user` (
     ADD COLUMN `due_date` INT(11) NULL AFTER `late_fee`;
 
 -- Create tenants table, it maps properties to tenants
---I should reorder this, but I'm not gonna.
+-- I should reorder this, but I'm not gonna.
 CREATE TABLE `rentconnect`.`tenants` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `tenant_id` INT NULL,
@@ -87,7 +87,7 @@ CREATE TABLE `rentconnect`.`document` (
       PRIMARY KEY (`id`),
       UNIQUE INDEX `id_UNIQUE` (`id` ASC));
 
---Create Rent History table
+-- Create Rent History table
 CREATE TABLE `rentconnect`.`rent_history` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `payer_id` INT NOT NULL,
@@ -97,3 +97,12 @@ CREATE TABLE `rentconnect`.`rent_history` (
   `on_time` TINYINT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC));
+
+  -- Create notifications table
+  CREATE TABLE notifications(
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  	recipient INT NOT NULL,
+    subject TEXT NOT NULL,
+  	message TEXT NOT NULL,
+  	time TIME NOT NULL
+  );

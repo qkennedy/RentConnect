@@ -3,7 +3,7 @@
     <div class="left">
       <h2>Tenant Portal</h2>
       <h3 v-if="assigned">Notifications</h3>
-      <notification-entry v-if="assigned" v-for="n in notifications" v-bind:title="n.title" v-bind:contents="n.contents" v-bind:key="n.id"></notification-entry>
+      <notification-entry v-if="assigned" v-for="n in notifications" v-bind:title="n.subject" v-bind:contents="n.message" v-bind:key="n.id"></notification-entry>
       <div v-if="!assigned">
         You are not currently assigned to any apartment.
       </div>
@@ -37,18 +37,6 @@ export default {
   data () {
     return {
       notifications: [
-        // TODO: replace this with a way to get these from the backend
-        {
-          id: 0,
-          title: 'Rent due',
-          contents: 'Your rent is due'
-        },
-        {
-          id: 1,
-          address: '1234 Sesame Street',
-          title: 'Maintenance request comment',
-          contents: 'Your maintenance request has received a new comment: <br /><i>I fixed it.</i>'
-        }
       ],
       landlordPhone: '',
       landlordEmail: '',
@@ -93,6 +81,13 @@ export default {
               console.log(e)
             })
         }
+      })
+      .catch(e => {
+        console.log(e)
+      })
+    axios.get('/rest/user/' + this.$session.get('userId') + '/notifications')
+      .then(response => {
+        this.notifications = response.data
       })
       .catch(e => {
         console.log(e)

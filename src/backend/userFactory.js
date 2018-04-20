@@ -152,6 +152,25 @@ module.exports = {
     });
   },
 
+  getNotifications: function(userId) {
+    let notifs;
+      var db = database.open()
+      return database.query(db, `SELECT * FROM notifications WHERE recipient=? ORDER BY time DESC LIMIT 10;`, [userId]).then( rows => {
+        notifs = rows;
+        return database.close(db)
+      })
+      .then( () => {
+      return notifs;
+     });
+  },
+
+  createNotification: function(userId, subject, message) {
+    var db = database.open()
+    return database.query(db, `INSERT INTO notifications(recipient,subject,message,time) VALUES(?,?,?,NOW())`, [userId, subject, message]).then(() => {
+      return database.close(db)
+    })
+  }
+
   //LandLordSpecific
 
 
