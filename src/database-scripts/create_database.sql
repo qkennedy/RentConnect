@@ -14,6 +14,9 @@ CREATE TABLE `rentconnect`.`user` (
   UNIQUE INDEX `id_UNIQUE` (`id` ASC),
   UNIQUE INDEX `email_UNIQUE` (`email` ASC));
 
+ALTER TABLE user ADD auth_token INT;
+
+
 -- Create property
   CREATE TABLE `rentconnect`.`property` (
     `id` INT NOT NULL AUTO_INCREMENT,
