@@ -151,6 +151,24 @@ module.exports = {
       })
   },
 
+  sendNotifications: function(req) {
+    var notifsToInsert = []
+    var db = database.open()
+    return database.query(db, 'SELECT tenant_id FROM tenants WHERE property_id IN(?)', [req.propIds])
+      .then(rows => {
+        var tenants = []
+        var i
+        for (i = 0; i < rows.length; i++) {
+          tenants.push(rows[i].tenant_id)
+        }
+        console.log(JSON.stringify(tenants))
+        return database.query(db, `INSERT INTO notifications(recipient, subject, message, time) VALUES(?, ?, ?, NOW())`,
+          [tenants, 'Message from landlord: ' + req.subject, req.body]).then(() => {
+            return database.close(db)
+        })
+      })
+  },
+
   getRoster: function(landlordId) {
     var db = database.open()
     return database.query(db, `SELECT u.id,u.username FROM maint_roster AS r

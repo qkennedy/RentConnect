@@ -74,6 +74,17 @@ server.post('/rest/user/addToRoster',
       });
 });
 
+server.post('/rest/notifications/send',
+  function(req, res, next) {
+    userFactory.sendNotifications(req.body).then(() => {
+      res.send(201)
+      next()
+    })
+      .catch(err => {
+        res.send(400, err)
+      });
+});
+
 server.post('/rest/user/removeFromRoster',
   function(req, res, next) {
     userFactory.removeFromRoster(req.body).then(() => {
