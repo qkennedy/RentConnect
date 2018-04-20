@@ -71,7 +71,24 @@ module.exports = {
       status = ?
       WHERE id = ?;`,
       [this.convertStatusToInt(request), id ]).then( () => {
-      return database.close(db);
+        return this.getRequestById(id).then(requestInfo => {
+          //send notifications to those involved
+          var toNotify = []
+          if (requestInfo.creator_id != request.creatorId) {
+            toNotify.push(requestInfo.creator_id)
+          }
+          if (requestInfo.landlord_id != request.creatorId) {
+            toNotify.push(requestInfo.landlord_id)
+          }
+          if (requestInfo.worker_id !== null && request.worker_id != request.creatorId) {
+            toNotify.push(requestInfo.worker_id)
+          }
+          var i
+          for (i = 0; i < toNotify.length; i++) {
+            userFactory.createNotification(toNotify[i], 'Maintenance status updated', 'The maintenance request <a href="#/ViewMaintenanceRequest/' + id + '">' + requestInfo.title + '</a> has had its status changed to ' + request.status)
+          }
+          return database.close(db)
+        })
     });
   },
 
