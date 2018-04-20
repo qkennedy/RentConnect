@@ -9,7 +9,7 @@ module.exports = {
   getRequestById: function(id) {
     let request;
       var db = database.open()
-      return database.query(db, 'select * from maint_request where id = ?;', [id]).then( rows => {
+      return database.query(db, 'select m.*,p.landlord_id from maint_request as m left join property as p on p.id=m.property_id where m.id = ? ;', [id]).then( rows => {
         request = rows[0];
         request.status = this.convertIntToStatus(request)
         return database.close(db)
@@ -65,7 +65,7 @@ module.exports = {
       creatorId: request.creatorId,
       text: 'Set status to ' + request.status,
       attachedFiles: ''
-    })
+    }, true)
     var db = database.open();
     return database.query(db, `UPDATE maint_request SET
       status = ?
@@ -81,7 +81,7 @@ module.exports = {
       creatorId: request.creatorId,
       text: 'Assigned request to worker',
       attachedFiles: ''
-    })
+    }, true)
     var db = database.open();
     return database.query(db, `UPDATE maint_request SET
       worker_id = ?
@@ -109,8 +109,7 @@ module.exports = {
      });
   },
 
-  addCommentForRequest: function(requestId, comment) {
-    // TODO: notify all involved (landlord, tenants, worker) besides the one who posted it
+  addCommentForRequest: function(requestId, comment, automatic = false) {
     var db = database.open();
     const created = (new Date()).toISOString().substring(0,10)
     return database.query(db, `INSERT INTO comment
@@ -118,7 +117,30 @@ module.exports = {
       VALUES
       (null, ?, ?, ?, ?, ?);`,
       [requestId, comment.creatorId, created, comment.text, comment.attachedFiles]).then( () => {
-      return database.close(db);
+        if (automatic) {
+          //automatically generated, don't send any notifications
+          return database.close(db);
+        } else {
+          //an actual comment, notify all involved
+          return this.getRequestById(requestId).then(request => {
+            var toNotify = []
+            if (request.creator_id != comment.creatorId) {
+              toNotify.push(request.creator_id)
+            }
+            if (request.landlord_id != comment.creatorId) {
+              toNotify.push(request.landlord_id)
+            }
+            if (request.worker_id !== null && request.worker_id != comment.creatorId) {
+              toNotify.push(request.worker_id)
+            }
+            var i
+            for (i = 0; i < toNotify.length; i++) {
+              userFactory.createNotification(toNotify[i], 'New maintenance comment', 'The maintenance request <a href="#/ViewMaintenanceRequest/' + requestId + '">' + request.title + '</a> has received a new comment:<br />' + comment.text)
+            }
+            return database.close(db)
+          })
+        }
+
     });
   },
 

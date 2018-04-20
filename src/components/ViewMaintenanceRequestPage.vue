@@ -187,8 +187,8 @@ export default {
           })
       }
 
-      if (this.landlord && formFields.worker !== 0) {
-        console.log('Assigning')
+      if (this.landlord && formFields.worker !== '0') {
+        console.log('Assigning' + formFields.worker)
         axios.post('/rest/request/' + this.$route.params.id + '/assign',
           formFields
         )
