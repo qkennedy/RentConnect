@@ -266,6 +266,17 @@ server.post('/rest/request/:id/updateStatus',
   }
 );
 
+server.post('/rest/request/:id/assign',
+  function(req, res, next) {
+    maintRequestFactory.assign(req.params.id, req.body).then(
+      request => {
+        res.send(201)
+        next()
+      }
+    )
+  }
+);
+
 server.put('/rest/request/:reqId/delete',
   function(req, res, next) {
   maintRequestFactory.deleteRequest(req.params.reqId).then(() => {

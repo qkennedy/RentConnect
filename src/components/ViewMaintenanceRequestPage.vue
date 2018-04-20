@@ -134,8 +134,8 @@ export default {
           username: '(do not assign)'
         },
         {
-          id: 1,
-          username: 'ajohnson'
+          id: 5,
+          username: 'SampleMaint'
         }
       ]
     }
@@ -161,14 +161,27 @@ export default {
           console.log(e)
         })
 
-      // TODO: if status or worker selected, do something with it
       if (this.canClose && formFields.status !== '') {
-        console.log('Updating status')
         axios.post('/rest/request/' + this.$route.params.id + '/updateStatus',
           formFields
         )
           .then(response => {
             this.updateStatus()
+            this.updateComments()
+          })
+          .catch(e => {
+            console.log(e)
+          })
+      }
+
+      if (this.landlord && formFields.worker !== 0) {
+        console.log('Assigning')
+        axios.post('/rest/request/' + this.$route.params.id + '/assign',
+          formFields
+        )
+          .then(response => {
+            this.updateStatus()
+            this.updateComments()
           })
           .catch(e => {
             console.log(e)

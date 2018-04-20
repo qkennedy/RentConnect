@@ -55,18 +55,38 @@ module.exports = {
   },
 
   updateStatus: function(id, request) {
-    var db = database.open();
     this.addCommentForRequest(id, {
       creatorId: request.creatorId,
       text: 'Set status to ' + request.status,
       attachedFiles: ''
     })
+    var db = database.open();
     return database.query(db, `UPDATE maint_request SET
       status = ?
       WHERE id = ?;`,
       [this.convertStatusToInt(request), id ]).then( () => {
       return database.close(db);
-    });b
+    });
+  },
+
+  assign: function(id, request) {
+    console.log(request.worker)
+    // TODO: get username from this
+    var workerInfo = userFactory.getUserById(request.worker)
+    console.log(JSON.stringify(workerInfo))
+    console.log(JSON.stringify(userFactory.getUserById(1)))
+    this.addCommentForRequest(id, {
+      creatorId: request.creatorId,
+      text: 'Assigned to: ' + workerInfo.username,
+      attachedFiles: ''
+    })
+    var db = database.open();
+    return database.query(db, `UPDATE maint_request SET
+      worker_id = ?
+      WHERE id = ?;`,
+      [request.worker, id ]).then( () => {
+      return database.close(db);
+    });
   },
 
   getCommentsByRequestId: function(requestId) {
