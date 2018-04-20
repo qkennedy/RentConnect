@@ -163,6 +163,7 @@ export default {
       }
       var formFields = Components.collapse(this.formElements, extraFields)
       formFields.creatorId = this.myId
+      formFields.title = this.reqTitle
       axios.post('/rest/request/' + this.$route.params.id + '/addComment',
         formFields
       )

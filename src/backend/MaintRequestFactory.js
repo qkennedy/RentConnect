@@ -71,6 +71,7 @@ module.exports = {
 
   assign: function(id, request) {
     console.log(request.worker)
+    userFactory.createNotification(request.worker, 'Request assigned', 'You have been assigned a request: <a href="#/ViewMaintenanceRequest/' + id + '"">' + request.title + '</a>')
     this.addCommentForRequest(id, {
       creatorId: request.creatorId,
       text: 'Assigned request to worker',

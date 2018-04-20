@@ -169,7 +169,7 @@ module.exports = {
     return database.query(db, `INSERT INTO notifications(recipient,subject,message,time) VALUES(?,?,?,NOW())`, [userId, subject, message]).then(() => {
       return database.close(db)
     })
-  }
+  },
 
   //LandLordSpecific
 

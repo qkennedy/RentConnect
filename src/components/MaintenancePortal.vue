@@ -3,7 +3,7 @@
     <div class="left">
       <h2>Maintenance Portal</h2>
       <h3>Notifications</h3>
-      <notification-entry v-for="n in notifications" v-bind:title="n.title" v-bind:contents="n.contents" v-bind:key="n.id"></notification-entry>
+      <notification-entry v-for="n in notifications" v-bind:title="n.subject" v-bind:contents="n.message" v-bind:key="n.id"></notification-entry>
       <p style="text-align: center">
         <router-link to="AllMaintenanceRequests">See more...</router-link>
       </p>
@@ -18,6 +18,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 import Components from '@/components/UIComponents'
 
 export default {
@@ -25,19 +26,8 @@ export default {
   data () {
     return {
       notifications: [
-        // TODO: replace this with a way to get these from the backend
-        {
-          id: 0,
-          title: 'Maintenance request from Bob',
-          contents: 'My window broke!'
-        },
-        {
-          id: 1,
-          title: 'Maintenance request closed',
-          contents: 'Andrea submitted an application to view a property.'
-        }
       ],
-      unread: 35
+      unread: 35 // TODO: get this from the backend
     }
   },
   components: {
@@ -49,6 +39,13 @@ export default {
     if (typeof this.$session.get('userId') === 'undefined' || this.$session.get('userId') < 1 || this.$session.get('userRole') !== 'maintenanceWorker') {
       this.$router.push('/')
     }
+    axios.get('/rest/user/' + this.$session.get('userId') + '/notifications')
+      .then(response => {
+        this.notifications = response.data
+      })
+      .catch(e => {
+        console.log(e)
+      })
   }
 }
 
