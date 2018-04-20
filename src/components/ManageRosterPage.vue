@@ -7,16 +7,16 @@
           Username
         </th>
         <th>
-          Email address
-        </th>
-        <th>
           Actions
         </th>
       </tr>
-      <worker-entry v-for="worker in roster" v-bind:key="worker.id" v-bind:username="worker.username" v-bind:email="worker.email" v-bind:id="worker.id"></worker-entry>
+      <worker-entry v-for="worker in roster" v-bind:key="worker.id" v-bind:username="worker.username" v-bind:id="worker.id" v-bind:landlordId="myId"></worker-entry>
     </table>
     <h3>Add Worker</h3>
-    <form class="fullPageForm" @submit.prevent="handleAddWorker">
+    <form class="fullPageForm" @submit.prevent="handleAddWorker" @click.capture="resetWarning">
+      <div class="formWarning" ref="warning">
+
+      </div>
       <table border="0px">
         <form-input v-for="element in formElements" v-bind:type="element.type" v-bind:caption="element.caption" v-bind:name="element.name" v-bind:key="element.id" />
       </table>
@@ -30,22 +30,13 @@
 <script>
 import Components from '@/components/UIComponents'
 import Vue from 'vue'
+import axios from 'axios'
 
 export default {
   name: 'LoginPage',
   data () {
     return {
       roster: [
-        {
-          id: 3,
-          username: 'DanSmith',
-          email: 'dsmith@gmail.com'
-        },
-        {
-          id: 6,
-          username: 'JohnQuincyAdams',
-          email: 'jqadams@gmail.com'
-        }
       ],
       formElements: [
         {
@@ -54,14 +45,38 @@ export default {
           name: 'username',
           caption: 'Username'
         }
-      ]
+      ],
+      myId: 0
     }
   },
   methods: {
     handleAddWorker () {
-      // TODO: submit this to the appropriate API endpoint, and if the user doesn't exist or isn't a maintenance worker, return an error
-      var username = Components.collapse(this.formElements, []).username
-      console.log('Adding: ' + username)
+      var formFields = Components.collapse(this.formElements, [])
+      formFields.landlordId = this.myId
+      axios.post('/rest/user/addToRoster', formFields)
+        .then(response => {
+          this.reloadWorkers()
+        })
+        .catch(e => {
+          if (typeof e.response !== 'undefined' && e.response.status === 400) {
+            this.$refs.warning.innerHTML = 'User does not exist or is not a maintenance worker. Please check your spelling.'
+            this.$refs.warning.style.display = 'block'
+          } else {
+            console.log(e)
+          }
+        })
+    },
+    resetWarning () {
+      this.$refs.warning.style.display = 'none'
+    },
+    reloadWorkers () {
+      axios.get('/rest/user/getRoster/' + this.myId)
+        .then(response => {
+          this.roster = response.data
+        })
+        .catch(e => {
+          console.log(e)
+        })
     }
   },
   components: {
@@ -73,20 +88,30 @@ export default {
     if (typeof this.$session.get('userId') === 'undefined' || this.$session.get('userId') < 1 || this.$session.get('userRole') !== 'landlord') {
       this.$router.push('/')
     }
+    this.myId = this.$session.get('userId')
+    this.reloadWorkers()
+    this.$eventHub.$on('reload-workers', this.reloadWorkers)
   }
 }
 
 Vue.component('worker-entry', {
-  props: ['id', 'username', 'email'],
+  props: ['id', 'username', 'landlordId'],
   template: '<tr>' +
   '<td>{{ username }}</td>' +
-  '<td>{{ email }}</td>' +
-  '<td><button v-on:click.stop="removeTenant(id)">Remove</button></td>' +
+  '<td><button v-on:click.stop="removeTenant(id, landlordId)">Remove</button></td>' +
   '</tr>',
   methods: {
-    removeTenant (id) {
-      // TODO: make this actually remove the tenant
-      console.log('Removing: ' + id)
+    removeTenant (id, landlordId) {
+      axios.post('/rest/user/removeFromRoster', {
+        landlordId: landlordId,
+        workerId: id
+      })
+        .then(response => {
+          this.$eventHub.$emit('reload-workers')
+        })
+        .catch(e => {
+          console.log(e)
+        })
     }
   }
 })

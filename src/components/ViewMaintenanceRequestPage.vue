@@ -141,14 +141,6 @@ export default {
       assignedUsername: '',
       // TODO: get this from the backend
       workers: [
-        {
-          id: 0,
-          username: '(do not assign)'
-        },
-        {
-          id: 5,
-          username: 'SampleMaint'
-        }
       ]
     }
   },
@@ -249,6 +241,21 @@ export default {
     this.myId = this.$session.get('userId')
     this.updateStatus()
     this.updateComments()
+    if (this.landlord) {
+      axios.get('/rest/user/getRoster/' + this.myId)
+        .then(response => {
+          var workers = [{
+            id: 0,
+            username: '(do not change)'
+          }]
+          console.log(response.data)
+          workers = workers.concat(response.data)
+          this.workers = workers
+        })
+        .catch(e => {
+          console.log(e)
+        })
+    }
   }
 }
 

@@ -63,6 +63,40 @@ server.post('/rest/user/create',
     });
 });
 
+server.post('/rest/user/addToRoster',
+  function(req, res, next) {
+    userFactory.addUserToRoster(req.body).then(() => {
+      res.send(201)
+      next()
+    })
+      .catch(err => {
+        res.send(400, err)
+      });
+});
+
+server.post('/rest/user/removeFromRoster',
+  function(req, res, next) {
+    userFactory.removeFromRoster(req.body).then(() => {
+      res.send(201)
+      next()
+    })
+      .catch(err => {
+        res.send(400, err)
+      });
+});
+
+server.get('/rest/user/getRoster/:id',
+  function(req, res, next) {
+    userFactory.getRoster(req.params.id).then(roster => {
+      res.send(roster)
+      next()
+    })
+      .catch(err => {
+        console.log(err)
+        res.send(400, err)
+      });
+});
+
 server.post('/rest/user/:id/update',
   function(req, res, next) {
     userFactory.updateUser(req.body, req.params.id).then(() => {

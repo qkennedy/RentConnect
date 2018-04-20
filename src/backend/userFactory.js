@@ -130,6 +130,46 @@ module.exports = {
       return database.close(db);
     });
   },
+
+  addUserToRoster: function(user) {
+    return this.getUserByUsername(user.username)
+      .then(userInfo => {
+        if (userInfo.role !== 'maintenanceWorker') {
+          let err = {
+            description: 'User is not a maintenance worker'
+          }
+          throw err
+        }
+        var db = database.open();
+        return database.query(db, `INSERT INTO maint_roster(landlord_id,worker_id) VALUES(?,?)`,
+                          [user.landlordId, userInfo.id]).then(() => {
+          return database.close(db);
+        });
+      })
+      .catch(e => {
+        throw e
+      })
+  },
+
+  getRoster: function(landlordId) {
+    var db = database.open()
+    return database.query(db, `SELECT u.id,u.username FROM maint_roster AS r
+      LEFT JOIN user AS u ON u.id=r.worker_id
+      WHERE r.landlord_id=?`, [landlordId]).then(rows => {
+      database.close(db)
+      return rows
+    })
+  },
+
+  removeFromRoster: function(request) {
+    var db = database.open()
+    return database.query(db, `DELETE FROM maint_roster
+      WHERE worker_id=? AND landlord_id=?`, [request.workerId, request.landlordId]).then(rows => {
+      database.close(db)
+      return rows
+    })
+  },
+
   // TODO This I think should technically be split out, have one that just returns true
   // and then something else to return these details
   verifyUser: function(username, password) {
