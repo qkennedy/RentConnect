@@ -60,7 +60,6 @@ module.exports = {
   },
 
   updateStatus: function(id, request) {
-    // TODO: notify all involved (landlord, tenant, worker) besides the one who posted it
     this.addCommentForRequest(id, {
       creatorId: request.creatorId,
       text: 'Set status to ' + request.status,
