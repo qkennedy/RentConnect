@@ -19,8 +19,9 @@
           <li v-if="assigned"><router-link to="Finances">View Finances</router-link></li>
           <li v-if="assigned"><router-link to="SubmitMaintenanceRequest">Submit Maintenance Request</router-link></li>
           <li v-if="assigned"><router-link to="ManageDocuments">Manage Documents</router-link></li>
+          <li v-if="assigned"><router-link to="AllMaintenanceRequests">Maintenance Requests</router-link></li>
           <li v-if="!assigned" class="first">
-            No options at this time.
+            No options available.
           </li>
         </ul>
     </div>

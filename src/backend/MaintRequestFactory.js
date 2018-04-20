@@ -71,13 +71,9 @@ module.exports = {
 
   assign: function(id, request) {
     console.log(request.worker)
-    // TODO: get username from this
-    var workerInfo = userFactory.getUserById(request.worker)
-    console.log(JSON.stringify(workerInfo))
-    console.log(JSON.stringify(userFactory.getUserById(1)))
     this.addCommentForRequest(id, {
       creatorId: request.creatorId,
-      text: 'Assigned to: ' + workerInfo.username,
+      text: 'Assigned request to worker',
       attachedFiles: ''
     })
     var db = database.open();
@@ -138,7 +134,8 @@ module.exports = {
       `SELECT p.address,m.status,m.created_date,m.id
        FROM maint_request AS m
        LEFT JOIN property AS p ON p.id=m.property_id
-       WHERE ` + whereField + `=?`,
+       WHERE ` + whereField + `=?
+       ORDER BY m.created_date DESC`,
       [userId]).then(rows => {
       requests = rows
       var i

@@ -50,7 +50,6 @@ export default {
       // not logged in, shouldn't be on this page
       this.$router.push('/')
     }
-    // TODO: make this pull all requests associated with a user (such as all requests for the tenant's property, all requests assigned to a maintenance worker, and all requests for properties a landlord owns)
     this.myId = this.$session.get('userId')
     if (this.$session.get('userRole') === 'landlord') {
       this.landlord = true
@@ -67,6 +66,7 @@ export default {
         requestUrl = 'byWorkerId'
         break
     }
+    console.log('/rest/request/' + requestUrl + '/' + this.myId)
     axios.get('/rest/request/' + requestUrl + '/' + this.myId)
       .then(response => {
         console.log(JSON.stringify(response.data))

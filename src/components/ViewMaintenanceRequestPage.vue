@@ -38,7 +38,18 @@
       </tr>
       <tr>
         <th>
-          Attached image
+          Assigned Worker
+        </th>
+        <td v-if="assignedUsername == ''">
+          <i>Not assigned</i>
+        </td>
+        <td v-else>
+          {{ assignedUsername }}
+        </td>
+      </tr>
+      <tr>
+        <th>
+          Attached Image
         </th>
         <td v-if="attachedImage">
           <img v-bind:src="attachedImage" alt="image" />
@@ -127,6 +138,7 @@ export default {
       myId: 0,
       status: '',
       canClose: false,
+      assignedUsername: '',
       // TODO: get this from the backend
       workers: [
         {
@@ -204,6 +216,15 @@ export default {
           this.reqContent = response.data.description
           this.attachedImage = response.data.attachedImage
           this.status = response.data.status
+          if (response.data.worker_id !== null) {
+            axios.get('/rest/user/' + response.data.worker_id)
+              .then(response => {
+                this.assignedUsername = response.data.username
+              })
+              .catch(e => {
+                console.log(e)
+              })
+          }
         })
         .catch(e => {
           console.log(e)
