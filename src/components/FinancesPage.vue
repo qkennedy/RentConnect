@@ -138,7 +138,7 @@ export default {
       }
       this.propId = this.$route.params.id
     }
-    axios.get('/rest/user/' + this.$session.get('userId'))
+    axios.get('/rest/user/' + this.$session.get('userId') + '/' + this.$session.get('authToken'))
       .then(response => {
         if (this.$session.get('userRole') === 'tenant') {
           this.propId = response.data.property_id

@@ -44,14 +44,22 @@ server.get('/rest/whoAmI',
 //User EP
 
 
-server.get('/rest/user/:id',
+server.get('/rest/user/:id/:token',
   function(req, res, next) {
   //Need to have some security around endpoints like this.
   //This Works! This is the format we should do almost everything with
-  userFactory.getUserById(req.params.id).then(user => {
-    res.send(user)
-    next()
-  });
+  userFactory.verifyToken(req.params.id, req.params.token).then(allowed => {
+    if (allowed) {
+      userFactory.getUserById(req.params.id).then(user => {
+        res.send(user)
+        next()
+      });
+    } else {
+      res.send(403)
+      next()
+    }
+  })
+
 });
 
 //TODO need to add error handling on these -- Also, make sure if we are passing the pw across here that it is encrypted

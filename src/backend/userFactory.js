@@ -18,7 +18,7 @@ module.exports = {
   getUserById: function(id) {
     let user;
       var db = database.open();
-      return database.query(db, 'select u.*,t.property_id from user as u left join tenants as t on t.tenant_id=u.id where u.id = ?;', [id]).then( rows => {
+      return database.query(db, 'select u.id,u.username,u.email,u.cell_number,u.role,t.property_id from user as u left join tenants as t on t.tenant_id=u.id where u.id = ?;', [id]).then( rows => {
         user = rows[0];
         return database.close(db)
       } )
@@ -33,10 +33,14 @@ module.exports = {
         return user;
      });
   },
-  getUserByUsername: function(username) {
+  getUserByUsername: function(username, getPassword = false) {
     let user;
+      var pwdFields = ''
+      if (getPassword) {
+        pwdFields = 'password,auth_token,'
+      }
       var db = database.open()
-      return database.query(db, 'select * from user where username = ?;', [username]).then( rows => {
+      return database.query(db, 'select ' + pwdFields + 'id,username,email,cell_number,role from user where username = ?;', [username]).then( rows => {
         user = rows[0];
         if(!user) {
           err = {
@@ -83,9 +87,9 @@ module.exports = {
     return bcrypt.hash(user.password, saltRounds).then(function(hash) {
       // Store hash in your password DB.
       var db = database.open();
-      return database.query(db, `insert into user (id, username, password, email, cell_number, role)
+      return database.query(db, `insert into user (id, username, password, email, cell_number, role, auth_token)
                             values(null, ?,?,?,?,?);`,
-                            [user.username, hash, user.email, user.phone, module.exports.convertRoleToInt(user)]).then(() => {
+                            [user.username, hash, user.email, user.phone, module.exports.convertRoleToInt(user), Math.floor(Math.random() * 10000000)]).then(() => {
         return database.close(db);
       });
     });
@@ -192,10 +196,11 @@ module.exports = {
   // and then something else to return these details
   verifyUser: function(username, password) {
     let currUser = {}
-    return module.exports.getUserByUsername(username).then(user => {
+    return module.exports.getUserByUsername(username, true).then(user => {
       currUser.id = user.id
       console.log(user)
       currUser.role = user.role
+      currUser.auth_token = user.auth_token
       return bcrypt.compare(password, user.password).then( res => {
         if(!res) {
           let err = {
@@ -226,6 +231,18 @@ module.exports = {
     var db = database.open()
     return database.query(db, `INSERT INTO notifications(recipient,subject,message,time) VALUES(?,?,?,NOW())`, [userId, subject, message]).then(() => {
       return database.close(db)
+    })
+  },
+
+  verifyToken: function(userId, token) {
+    console.log(userId, token)
+    var db = database.open()
+    return database.query(db, 'SELECT id FROM user WHERE id=? AND auth_token=?', [userId, token]).then(rows => {
+      if (rows.length > 0) {
+        return true
+      } else {
+        return false
+      }
     })
   },
 

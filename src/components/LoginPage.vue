@@ -49,7 +49,10 @@ export default {
             var role = response.data.role
             this.$session.start()
             this.$session.set('userId', response.data.id)
+            this.$session.set('authToken', response.data.auth_token)
             this.$session.set('userRole', role)
+            console.log(response.data)
+            console.log(response.data.auth_token)
             this.$eventHub.$emit('update-sidebar')
             switch (role) {
               case 'tenant':

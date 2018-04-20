@@ -56,7 +56,7 @@ export default {
       // not logged in or not a tenant, get out of here
       this.$router.push('/')
     }
-    axios.get('/rest/user/' + this.$session.get('userId'))
+    axios.get('/rest/user/' + this.$session.get('userId') + '/' + this.$session.get('authToken'))
       .then(response => {
         if (response.data.property_id === null) {
           // not assigned to a property

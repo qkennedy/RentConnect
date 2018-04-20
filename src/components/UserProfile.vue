@@ -147,7 +147,7 @@ export default {
       // not logged in or not a tenant, get out of here
       this.$router.push('/')
     }
-    axios.get('/rest/user/' + this.$session.get('userId'))
+    axios.get('/rest/user/' + this.$session.get('userId') + '/' + this.$session.get('auth_token'))
       .then(response => {
         console.log(response.data)
         this.formElements[0].value = response.data.email

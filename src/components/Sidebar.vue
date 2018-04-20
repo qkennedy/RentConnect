@@ -38,7 +38,7 @@ export default {
       } else {
         this.loggedIn = true
         this.role = this.$session.get('userRole')
-        axios.get('/rest/user/' + this.$session.get('userId'))
+        axios.get('/rest/user/' + this.$session.get('userId') + '/' + this.$session.get('authToken'))
           .then(response => {
             this.username = response.data.username
           })
