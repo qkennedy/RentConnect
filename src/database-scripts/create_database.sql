@@ -102,10 +102,15 @@ CREATE TABLE `rentconnect`.`rent_history` (
   UNIQUE INDEX `id_UNIQUE` (`id` ASC));
 
   -- Create notifications table
-  CREATE TABLE notifications(
-    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  	recipient INT NOT NULL,
-    subject TEXT NOT NULL,
-  	message TEXT NOT NULL,
-  	time TIME NOT NULL
+  CREATE TABLE `notifications` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `recipient` int(11) NOT NULL,
+    `subject` text NOT NULL,
+    `message` text NOT NULL,
+    `time` time NOT NULL,
+    `user_id` int(11) DEFAULT NULL,
+    `property_id` int(11) DEFAULT NULL,
+    `maint_req_id` int(11) DEFAULT NULL,
+    `type` varchar(32) NOT NULL,
+    PRIMARY KEY (`id`)
   );
