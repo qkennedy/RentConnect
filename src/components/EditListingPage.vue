@@ -2,11 +2,12 @@
   <div class="hello" id="applicationForm">
     <h2 v-if="$route.params.id==null">Create Listing</h2>
     <h2 v-else>Edit Listing</h2>
-    <form class="fullPageForm" id="loginForm" method="post" enctype="multipart/form-data" @submit.prevent="handleSubmit">
+    <form class=".form-horizontal auth-form" id="loginForm" method="post" enctype="multipart/form-data" @submit.prevent="handleSubmit">
       <table border="0px" id="loginTable">
-        <form-input v-for="element in formElements" v-bind:type="element.type" v-bind:caption="element.caption" v-bind:name="element.name" v-bind:value="element.value" v-bind:key="element.id" />
+        <form-input v-for="element in formElements" v-bind:type="element.type" v-bind:caption="element.caption" v-bind:name="element.name" v-bind:value="element.value" v-bind:key="element.id"
+          divclass="form-group" labelclass="control-label auth-label" inputclass="form-control" />
       </table>
-      <p><input v-if="$route.params.id==null" type="submit" value="Submit Listing" /><input v-else type="submit" value="Update Listing" /></p>
+      <p><input class="btn btn-primary" v-if="$route.params.id==null" type="submit" value="Submit Listing" /><input class="btn btn-primary" v-else type="submit" value="Update Listing" /></p>
     </form>
   </div>
 </template>
@@ -112,7 +113,6 @@ export default {
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 h1, h2 {
   font-weight: normal;
@@ -127,5 +127,12 @@ li {
 }
 a {
   color: #42b983;
+}
+.auth-form {
+    width: 340px;
+    margin: 0 auto;
+}
+.form-group {
+  text-align: left;
 }
 </style>

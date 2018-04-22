@@ -2,22 +2,21 @@
   <div class="hello" id="applicationPage">
     <h2>Apply to rent property</h2>
     <h3>Property Information</h3>
-    <table border="0">
-      <tr>
-        <th>
-          Address
-        </th>
-        <td>
+    <div class=".form-horizontal auth-form">
+      <div class="form-group">
+        <label class="control-label auth-label" for="address">Address</label>
+        <p id="address">
           {{ address }}
-        </td>
-      </tr>
-    </table>
+        </p>
+      </div>
+    </div>
     <h3>Submit Application</h3>
-    <form class="fullPageForm" id="applicationForm" method="post" enctype="multipart/form-data" @submit.prevent="handleSubmit">
+    <form class=".form-horizontal auth-form" id="applicationForm" method="post" enctype="multipart/form-data" @submit.prevent="handleSubmit">
       <table border="0px" id="loginTable">
-        <form-input v-for="element in formElements" v-bind:type="element.type" v-bind:caption="element.caption" v-bind:name="element.name" v-bind:key="element.id" />
+        <form-input v-for="element in formElements" v-bind:type="element.type" v-bind:caption="element.caption" v-bind:name="element.name"
+          v-bind:key="element.id" divclass="form-group" labelclass="control-label auth-label" inputclass="form-control" />
       </table>
-      <p><input type="submit" value="Register" /></p>
+      <p><input class="btn btn-primary" type="submit" value="Register" /></p>
     </form>
   </div>
 </template>
@@ -163,7 +162,6 @@ export default {
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 h1, h2 {
   font-weight: normal;
@@ -178,5 +176,12 @@ li {
 }
 a {
   color: #42b983;
+}
+.auth-form {
+    width: 340px;
+    margin: 0 auto;
+}
+.form-group {
+  text-align: left;
 }
 </style>

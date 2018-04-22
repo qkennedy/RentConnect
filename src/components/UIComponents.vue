@@ -38,7 +38,8 @@ Vue.component('form-input', {
   template: `
   <div v-bind:class="divclass">
     <label v-bind:class="labelclass" v-bind:for="name">{{caption}}</label>
-    <input v-bind:type="type" v-bind:class="inputclass" v-bind:id="name" v-bind:name="name" v-bind:value="value">
+    <textarea v-if="type == 'textarea'" v-bind:class="inputclass" v-bind:id="name" v-bind:name="name">{{ value }}</textarea>
+    <input v-if="type !== 'textarea'" v-bind:type="type" v-bind:class="inputclass" v-bind:id="name" v-bind:name="name" v-bind:value="value">
   </div>
   `
 })

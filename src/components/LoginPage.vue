@@ -15,7 +15,8 @@
       </div>
     -->
 
-      <form-input v-for="e in formElements" v-bind:key="e.id" v-bind:name="e.name" v-bind:caption="e.caption" v-bind:type="e.type" divclass="form-group" labelclass="control-label auth-label" inputclass="form-control"></form-input>
+      <form-input v-for="e in formElements" v-bind:key="e.id" v-bind:name="e.name" v-bind:caption="e.caption" v-bind:type="e.type"
+        divclass="form-group" labelclass="control-label auth-label" inputclass="form-control"></form-input>
       <p><input class="btn btn-primary" type="submit" value="Log in!" /></p>
     </form>
   </div>

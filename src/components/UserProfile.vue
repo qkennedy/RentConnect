@@ -5,18 +5,14 @@
 
     </div>
     <h3>Edit Profile</h3>
-    <form id="profileForm" method="post" enctype="multipart/form-data" @submit.prevent="handleSubmit">
-      <table border="0px" id="loginTable">
-        <form-input v-for="element in formElements" v-bind:type="element.type" v-bind:caption="element.caption" v-bind:name="element.name" v-bind:value="element.value" v-bind:key="element.id" v-bind:optional="element.optional" />
-      </table>
-      <p><input type="submit" value="Update" /></p>
+    <form class=".form-horizontal auth-form" method="post" enctype="multipart/form-data" @submit.prevent="handleSubmit">
+      <form-input v-for="element in formElements" v-bind:type="element.type" v-bind:caption="element.caption" v-bind:name="element.name" v-bind:value="element.value" v-bind:key="element.id" v-bind:optional="element.optional" divclass="form-group" labelclass="control-label auth-label" inputclass="form-control" />
+      <p><input class="btn btn-primary" type="submit" value="Update" /></p>
     </form>
     <h3>Change Password</h3>
-    <form id="profileForm" method="post" enctype="multipart/form-data" @submit.prevent="handleSubmitPassword" @click.capture="resetWarning">
-      <table border="0px" id="loginTable">
-        <form-input v-for="element in passwordChangeElements" v-bind:type="element.type" v-bind:caption="element.caption" v-bind:name="element.name" v-bind:value="element.value" v-bind:key="element.id" v-bind:optional="element.optional" />
-      </table>
-      <p><input type="submit" value="Update" /></p>
+    <form class=".form-horizontal auth-form"  id="profileForm" method="post" enctype="multipart/form-data" @submit.prevent="handleSubmitPassword" @click.capture="resetWarning">
+      <form-input v-for="element in passwordChangeElements" v-bind:type="element.type" v-bind:caption="element.caption" v-bind:name="element.name" v-bind:value="element.value" v-bind:key="element.id" v-bind:optional="element.optional" divclass="form-group" labelclass="control-label auth-label" inputclass="form-control" />
+      <p><input class="btn btn-primary" type="submit" value="Update" /></p>
     </form>
   </div>
 </template>
@@ -147,7 +143,7 @@ export default {
       // not logged in or not a tenant, get out of here
       this.$router.push('/')
     }
-    axios.get('/rest/user/' + this.$session.get('userId') + '/' + this.$session.get('auth_token'))
+    axios.get('/rest/user/' + this.$session.get('userId') + '/' + this.$session.get('authToken'))
       .then(response => {
         console.log(response.data)
         this.formElements[0].value = response.data.email
@@ -178,12 +174,11 @@ li {
 a {
   color: #42b983;
 }
-
-#loginForm {
-  text-align:center;
+.auth-form {
+    width: 340px;
+    margin: 0 auto;
 }
-
-#loginTable {
-  width: 100%;
+.form-group {
+  text-align: left;
 }
 </style>

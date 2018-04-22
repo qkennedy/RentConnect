@@ -1,12 +1,14 @@
 <template>
   <div id="notificationPage">
     <h2>Send Bulk Notification</h2>
-    <form class="fullPageForm" id="notificationForm" method="post" enctype="multipart/form-data" @submit.prevent="handleSubmit">
-      <table border="0px" id="loginTable">
-        <form-input v-for="element in formElements" v-bind:type="element.type" v-bind:caption="element.caption" v-bind:name="element.name" v-bind:key="element.id" />
+    <form class=".form-horizontal auth-form" id="notificationForm" method="post" enctype="multipart/form-data" @submit.prevent="handleSubmit">
+      <form-input v-for="element in formElements" v-bind:type="element.type" v-bind:caption="element.caption" v-bind:name="element.name"
+        v-bind:key="element.id" divclass="form-group" labelclass="control-label auth-label" inputclass="form-control" />
+      <div class="form-group">
+        <label class="control-label auth-label">Tenants</label>
         <property-checkbox-row v-for="prop in properties" v-bind:key="prop.id" v-bind:address="prop.address" v-bind:id="prop.id"></property-checkbox-row>
-      </table>
-      <p><input type="submit" value="Send" /></p>
+      </div>
+      <p><input class="btn btn-primary" type="submit" value="Send" /></p>
     </form>
   </div>
 </template>
@@ -84,10 +86,7 @@ export default {
 
 Vue.component('property-checkbox-row', {
   props: ['id', 'address'],
-  template: `<tr>
-  <td class="leftColumn">{{ address }}</td>
-  <td class="rightColumn"><input type="checkbox" checked="checked" v-bind:name="'properties[' + id + ']'" /></td>
-  </tr>`
+  template: `<div><input type="checkbox" checked="checked" v-bind:name="'properties[' + id + ']'" v-bind:id="'prop' + id"/> <label v-bind:for="'prop' + id">{{address}}</label></div>`
 })
 </script>
 
@@ -106,5 +105,12 @@ li {
 }
 a {
   color: #42b983;
+}
+.auth-form {
+    width: 340px;
+    margin: 0 auto;
+}
+.form-group {
+  text-align: left;
 }
 </style>

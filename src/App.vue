@@ -90,4 +90,11 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 }
+
+.formWarning {
+  display: none;
+  background-color: #9c2b2e;
+  color: #e84e4f;
+  border: 1px solid #e84e4f;
+}
 </style>

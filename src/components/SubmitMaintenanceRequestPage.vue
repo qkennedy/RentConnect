@@ -1,11 +1,10 @@
 <template>
   <div id="loginForm">
     <h2>Submit Maintenance Request</h2>
-    <form class="fullPageForm" id="loginForm" method="post" enctype="multipart/form-data" @submit.prevent="handleSubmit">
-      <table border="0px" id="loginTable">
-        <form-input v-for="element in formElements" v-bind:type="element.type" v-bind:caption="element.caption" v-bind:name="element.name" v-bind:key="element.id" v-bind:optional="element.optional" />
-      </table>
-      <p><input type="submit" value="Submit" /></p>
+    <form class=".form-horizontal auth-form" id="loginForm" method="post" enctype="multipart/form-data" @submit.prevent="handleSubmit">
+      <form-input v-for="element in formElements" v-bind:type="element.type" v-bind:caption="element.caption" v-bind:name="element.name"
+        v-bind:key="element.id" v-bind:optional="element.optional" divclass="form-group" labelclass="control-label auth-label" inputclass="form-control" />
+      <p><input class="btn btn-primary" type="submit" value="Submit" /></p>
     </form>
   </div>
 </template>
@@ -70,7 +69,7 @@ export default {
       this.$router.push('/')
     }
     this.myId = this.$session.get('userId')
-    axios.get('/rest/user/' + this.myId)
+    axios.get('/rest/user/' + this.myId + '/' + this.$session.get('authToken'))
       .then(response => {
         if (response.data.property_id === null) {
           // we haven't been assigned a property
@@ -100,5 +99,12 @@ li {
 }
 a {
   color: #42b983;
+}
+.auth-form {
+    width: 340px;
+    margin: 0 auto;
+}
+.form-group {
+  text-align: left;
 }
 </style>
