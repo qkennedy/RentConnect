@@ -1,86 +1,73 @@
 <template>
   <div id="loginForm">
     <h2>View Maintenance Request</h2>
-    <h3>Request details</h3>
-    <table border="0" class="standardTable">
-      <tr>
-        <th>
-          Title
-        </th>
-        <td>
-          {{ reqTitle }}
-        </td>
-      </tr>
-      <tr>
-        <th>
-          Message
-        </th>
-        <td>
-          {{ reqContent }}
-        </td>
-      </tr>
-      <tr>
-        <th>
-          Status
-        </th>
-        <td v-if="status === 'open'">
-          Open
-        </td>
-        <td v-if="status === 'pending'">
-          Pending
-        </td>
-        <td v-if="status === 'closed'">
-          Closed
-        </td>
-        <td v-if="status === 'confirmed'">
-          Confirmed
-        </td>
-      </tr>
-      <tr>
-        <th>
-          Assigned Worker
-        </th>
-        <td v-if="assignedUsername == ''">
-          <i>Not assigned</i>
-        </td>
-        <td v-else>
-          {{ assignedUsername }}
-        </td>
-      </tr>
-      <tr>
-        <th>
-          Attached Image
-        </th>
-        <td v-if="attachedImage">
-          <img v-bind:src="attachedImage" alt="image" />
-        </td>
-        <td v-else>
-          <i>No image</i>
-        </td>
-      </tr>
-    </table>
-    <h3>Comments</h3>
-    <maintenance-comment v-for="comment in comments" v-bind:image="comment.image" v-bind:person="comment.username" v-bind:date="comment.created_date" v-bind:assignedTo="comment.assignedTo" v-bind:comment="comment.comment_text" v-bind:role="comment.role" v-bind:key="comment.id"></maintenance-comment>
-    <h3 v-if="landlord || status !== 'closed'">Leave a comment</h3>
-    <form class="fullPageForm" v-if="landlord || status !== 'closed'" id="loginForm" method="post" enctype="multipart/form-data" @submit.prevent="handleSubmit">
-      <table border="0px" id="loginTable">
-        <form-input v-for="element in formElements" v-bind:type="element.type" v-bind:caption="element.caption" v-bind:name="element.name" v-bind:key="element.id" v-bind:optional="element.optional" />
-        <tr v-if="landlord">
-          <td class="leftColumn">
-            Assign to worker<br v-if="landlord" /><router-link v-if="landlord" to="/ManageRoster">Manage Workers</router-link>
-          </td>
-          <td class="rightColumn">
-            <select name="worker">
+    <div class="column one-third">
+      <h3>Request details</h3>
+      <fieldset>
+        <dl>
+          <dt>
+            Title
+          </dt>
+          <dd>
+            {{ reqTitle }}
+          </dd>
+        </dl>
+        <dl>
+          <dt>
+            Message
+          </dt>
+          <dd>
+            {{ reqContent }}
+          </dd>
+        </dl>
+        <dl>
+          <dt>
+            Status
+          </dt>
+          <dd v-if="status === 'open'">
+            Open
+          </dd>
+          <dd v-if="status === 'pending'">
+            Pending
+          </dd>
+          <dd v-if="status === 'closed'">
+            Closed
+          </dd>
+          <dd v-if="status === 'confirmed'">
+            Confirmed
+          </dd>
+        </dl>
+        <dl>
+          <dt>
+            Assigned Worker
+          </dt>
+          <dd v-if="assignedUsername == ''">
+            <i>Not assigned</i>
+          </dd>
+          <dd v-else>
+            {{ assignedUsername }}
+          </dd>
+        </dl>
+      </fieldset>
+    </div>
+    <div class="column two-thirds">
+      <h3>Comments</h3>
+      <maintenance-comment v-for="comment in comments" v-bind:image="comment.image" v-bind:person="comment.username" v-bind:date="comment.created_date" v-bind:assignedTo="comment.assignedTo" v-bind:comment="comment.comment_text" v-bind:role="comment.role" v-bind:key="comment.id"></maintenance-comment>
+      <h3 v-if="landlord || status !== 'closed'">Leave a comment</h3>
+      <form class="form-horizontal auth-form" v-if="landlord || status !== 'closed'" id="loginForm" method="post" enctype="multipart/form-data" @submit.prevent="handleSubmit">
+          <form-input v-for="element in formElements" v-bind:type="element.type" v-bind:caption="element.caption"
+          v-bind:name="element.name" v-bind:key="element.id" v-bind:optional="element.optional" divclass="form-group" labelclass="control-label auth-label" inputclass="form-control" />
+          <div class="form-group" v-if="landlord">
+            <label class="control-label auth-label" for="worker">
+              Assign to worker (<router-link to="/ManageRoster">Manage Workers</router-link>)
+            </label>
+            <select name="worker" id="worker" class="form-control">
               <option v-for="worker in workers" v-bind:value="worker.id" v-bind:key="worker.id">{{ worker.username }}</option>
             </select>
-          </td>
-        </tr>
-        <tr v-if="canClose">
-          <td class="leftColumn">
-            Change request status
-          </td>
-          <td class="rightColumn">
-            <select name="status">
+          </div>
+          <div class="form-group">
+            <label class="control-label auth-label" for="status">Change Status</label>
+            <select name="status" id="status" class="form-control">
               <option value="">
                 (do not change)
               </option>
@@ -97,11 +84,10 @@
                 Confirmed
               </option>
             </select>
-          </td>
-        </tr>
-      </table>
-      <p><input type="submit" value="Submit" /></p>
-    </form>
+          </div>
+        <p><input class="btn btn-primary" type="submit" value="Submit" /></p>
+      </form>
+    </div>
   </div>
 </template>
 
@@ -261,12 +247,50 @@ export default {
 
 Vue.component('maintenance-comment', {
   props: ['image', 'person', 'role', 'date', 'assignedTo', 'comment'],
-  template: '<div style="text-align:left"><h4>{{ date }}</h4><table border="0" class="maintenanceTable"><tr><th>Person</th><td>{{ person }} ({{ role }})</td></tr><tr v-if="assignedTo"><th>Assigned to</th><td>{{ assignedTo }}</td></tr><tr><th>Comment</th><td>{{ comment }}</td></tr><tr v-if="image"><th>Attached image</th><td><img v-bind:src="image" alt="image" /></td></tr></table></div>'
+  template: `<div class="maintenance-comment">
+    <fieldset>
+      <dl>
+        <dt>
+          Date
+        </dt>
+        <dd>
+          {{ date }}
+        </dd>
+      </dl>
+      <dl>
+        <dt>
+          Person
+        </dt>
+        <dd>
+          {{person}} ({{role}})
+        </dd>
+      </dl>
+      <dl>
+        <dt>
+          Comment
+        </dt>
+        <dd>
+          {{ comment }}
+        </dd>
+      </dl>
+    </fieldset>
+  </div>`
 })
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style>
+.two-thirds {
+  width: 66.666667%
+}
+.one-third {
+  width: 33.333333%
+}
+.column {
+    float: left;
+    padding-right: 10px;
+    padding-left: 10px;
+}
+
 h1, h2 {
   font-weight: normal;
 }
@@ -274,11 +298,26 @@ ul {
   list-style-type: none;
   padding: 0;
 }
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
 a {
   color: #42b983;
+}
+.auth-form {
+    width: 340px;
+    margin: 0 auto;
+}
+.form-group {
+  text-align: left;
+}
+
+.maintenance-comment {
+  text-align:left;
+  border: 1px solid #000;
+  margin-top: 2px
+}
+
+.maintenance-comment dl, .maintenance-comment dd {
+  margin:0px;
+  padding-bottom: 0px !important;
+  padding:0px;
 }
 </style>
