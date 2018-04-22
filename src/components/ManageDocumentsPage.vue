@@ -1,4 +1,5 @@
 <template>
+  <!-- TODO: redo CSS on this -->
   <div class="hello" id="manageDocumentsPage">
     <h2>Manage Documents</h2>
     <h3>Property Information</h3>

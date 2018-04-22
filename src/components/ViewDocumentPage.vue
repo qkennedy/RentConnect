@@ -1,5 +1,6 @@
 <template>
   <div class="hello" id="viewDocumentPage">
+    <!-- TODO: adapt CSS to bootstrap -->
     <h2>View Document</h2>
     <div style="text-align: left; padding-left: 5px">
       <h3>{{ docTitle }}</h3>

@@ -1,27 +1,30 @@
 <template>
   <div id="loginForm">
     <h2>Manage Maintenance Roster</h2>
-    <table border="0px" class="standardTable">
-      <tr>
-        <th>
-          Username
-        </th>
-        <th>
-          Actions
-        </th>
-      </tr>
-      <worker-entry v-for="worker in roster" v-bind:key="worker.id" v-bind:username="worker.username" v-bind:id="worker.id" v-bind:landlordId="myId"></worker-entry>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>
+            Username
+          </th>
+          <th>
+            Actions
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <worker-entry v-for="worker in roster" v-bind:key="worker.id" v-bind:username="worker.username" v-bind:id="worker.id" v-bind:landlordId="myId"></worker-entry>
+      </tbody>
     </table>
     <h3>Add Worker</h3>
-    <form class="fullPageForm" @submit.prevent="handleAddWorker" @click.capture="resetWarning">
+    <form class=".form-horizontal auth-form" @submit.prevent="handleAddWorker" @click.capture="resetWarning">
       <div class="formWarning" ref="warning">
 
       </div>
-      <table border="0px">
-        <form-input v-for="element in formElements" v-bind:type="element.type" v-bind:caption="element.caption" v-bind:name="element.name" v-bind:key="element.id" />
-      </table>
+      <form-input v-for="element in formElements" v-bind:type="element.type" v-bind:caption="element.caption" v-bind:name="element.name" v-bind:key="element.id"
+        divclass="form-group" labelclass="control-label auth-label" inputclass="form-control" />
       <p>
-        <input type="submit" value="Add" />
+        <input class="btn btn-primary" type="submit" value="Add" />
       </p>
     </form>
   </div>
@@ -132,5 +135,12 @@ li {
 }
 a {
   color: #42b983;
+}
+.auth-form {
+    width: 340px;
+    margin: 0 auto;
+}
+.form-group {
+  text-align: left;
 }
 </style>

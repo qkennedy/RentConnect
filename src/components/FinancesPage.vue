@@ -3,6 +3,7 @@
     <h2>Finances</h2>
     <div v-if="role==='tenant'">
       <h3>Pay Rent</h3>
+      <!-- TODO: redo CSS on this to use bootstrap -->
       <form @submit.prevent="handleSubmit">
         <table border="0px" style="width: 100%">
           <tr>
@@ -20,39 +21,43 @@
     </div>
     <div v-if="role==='landlord'">
       <h3>Property Information</h3>
-      <table class="standardTable">
-        <tr>
-          <th>
+      <fieldset>
+        <dl>
+          <dt>
             Address
-          </th>
-          <td>
+          </dt>
+          <dd>
             {{ address }}
-          </td>
-        </tr>
-        <tr>
-          <th>
+          </dd>
+        </dl>
+        <dl>
+          <dt>
             Tenant
-          </th>
-          <td>
+          </dt>
+          <dd>
             {{ tenant }}
-          </td>
-        </tr>
-      </table>
+          </dd>
+        </dl>
+      </fieldset>
     </div>
     <h3>Past Receipts</h3>
-    <table border="0px" style="width:100%">
-      <tr>
-        <th style="width:33%">
-          Date
-        </th>
-        <th style="width:33%">
-          Amount
-        </th>
-        <th style="width:33%">
-          File
-        </th>
-      </tr>
-      <rent-row v-for="rentEvent in rentHistory" v-bind:date="rentEvent.payment_date" v-bind:amount="rentEvent.payment_amount" v-bind:receiptLink="rentEvent.receiptLink" v-bind:late="!rentEvent.on_time" v-bind:key="rentEvent.id"></rent-row>
+    <table class="table" style="width:100%">
+      <thead>
+        <tr>
+          <th style="width:33%">
+            Date
+          </th>
+          <th style="width:33%">
+            Amount
+          </th>
+          <th style="width:33%">
+            File
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <rent-row v-for="rentEvent in rentHistory" v-bind:date="rentEvent.payment_date" v-bind:amount="rentEvent.payment_amount" v-bind:receiptLink="rentEvent.receiptLink" v-bind:late="!rentEvent.on_time" v-bind:key="rentEvent.id"></rent-row>
+      </tbody>
     </table>
   </div>
 </template>

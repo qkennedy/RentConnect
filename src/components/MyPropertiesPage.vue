@@ -4,25 +4,29 @@
     <p>
       <router-link to="CreateListing">List New Property</router-link>
     </p>
-    <table border="0" class="standardTable">
-      <tr>
-        <th>
-          Address
-        </th>
-        <th>
-          Status
-        </th>
-        <th>
-          Tenant
-        </th>
-        <th>
-          Rent
-        </th>
-        <th>
-          Actions
-        </th>
-      </tr>
-      <property-entry v-for="prop in properties" v-bind:key="prop.id" v-bind:address="prop.address" v-bind:status="prop.status" v-bind:tenant="prop.tenant" v-bind:rentamt="prop.rent" v-bind:rentdue="prop.due_date" v-bind:id="prop.id"></property-entry>
+    <table border="0" class="table">
+      <thead>
+        <tr>
+          <th>
+            Address
+          </th>
+          <th>
+            Status
+          </th>
+          <th>
+            Tenant
+          </th>
+          <th>
+            Rent
+          </th>
+          <th>
+            Actions
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <property-entry v-for="prop in properties" v-bind:key="prop.id" v-bind:address="prop.address" v-bind:status="prop.status" v-bind:tenant="prop.tenant" v-bind:rentamt="prop.rent" v-bind:rentdue="prop.due_date" v-bind:id="prop.id"></property-entry>
+      </tbody>
     </table>
   </div>
 </template>

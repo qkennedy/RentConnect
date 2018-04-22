@@ -4,22 +4,26 @@
     <p v-if="landlord" style="text-align:center">
       <router-link to="/ManageRoster">Manage Workers</router-link>
     </p>
-    <table border="0px" style="width:100%">
-      <tr>
-        <th style="width:25%">
-          Property
-        </th>
-        <th style="width:25%">
-          Status
-        </th>
-        <th style="width:25%">
-          Last Updated
-        </th>
-        <th style="width:25%">
-          Actions
-        </th>
-      </tr>
-      <maint-row v-for="req in maintRequests" v-bind:key="req.id" v-bind:property="req.address" v-bind:status="req.status" v-bind:lastUpdated="req.lastUpdated" v-bind:id="req.id"></maint-row>
+    <table class="table" style="width:100%">
+      <thead>
+        <tr>
+          <th style="width:25%" scope="col">
+            Property
+          </th>
+          <th style="width:25%" scope="col">
+            Status
+          </th>
+          <th style="width:25%" scope="col">
+            Last Updated
+          </th>
+          <th style="width:25%" scope="col">
+            Actions
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <maint-row v-for="req in maintRequests" v-bind:key="req.id" v-bind:property="req.address" v-bind:status="req.status" v-bind:lastUpdated="req.lastUpdated" v-bind:id="req.id"></maint-row>
+      </tbody>
     </table>
   </div>
 </template>
