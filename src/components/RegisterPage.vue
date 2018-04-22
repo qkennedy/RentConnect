@@ -2,23 +2,21 @@
 <template>
   <div class="hello" id="registerForm">
     <h2>Register</h2>
-    <form class="fullPageForm" id="loginForm" method="post" enctype="multipart/form-data" @submit.prevent="handleSubmit" @click.capture="resetWarning">
+    <form class=".form-horizontal auth-form" id="loginForm" method="post" enctype="multipart/form-data" @submit.prevent="handleSubmit" @click.capture="resetWarning">
       <div class="formWarning" ref="warning">
 
       </div>
-      <table border="0px" id="loginTable">
-        <form-input v-for="element in formElements" ref="test" v-bind:type="element.type" v-bind:caption="element.caption" v-bind:name="element.name" v-bind:key="element.name"/>
-        <tr>
-          <td class="leftColumn">Role</td>
-          <td class="rightColumn">
-            <select name="role" ref="role">
-              <option value="tenant">Tenant</option>
-              <option value="landlord">Landlord</option>
-              <option value="maintenanceWorker">Maintenance Worker</option>
-            </select>
-          </td>
-        </tr>
-      </table>
+        <form-input v-for="element in formElements" ref="test" v-bind:type="element.type"
+          v-bind:caption="element.caption" v-bind:name="element.name" v-bind:key="element.name"
+          divclass="form-group" labelclass="control-label auth-label" inputclass="form-control"/>
+        <div class="form-group">
+          <label class="control-label auth-label" for="role">Role</label>
+          <select name="role" id="role" ref="role" class="form-control">
+            <option value="tenant">Tenant</option>
+            <option value="landlord">Landlord</option>
+            <option value="maintenanceWorker">Maintenance Worker</option>
+          </select>
+        </div>
       <p><input type="submit" value="Register" /></p>
     </form>
   </div>
@@ -140,7 +138,6 @@ export default {
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 h1, h2 {
   font-weight: normal;
@@ -155,5 +152,12 @@ li {
 }
 a {
   color: #42b983;
+}
+.auth-form {
+    width: 340px;
+    margin: 0 auto;
+}
+.form-group {
+  text-align: left;
 }
 </style>

@@ -22,6 +22,7 @@ import EditListingPage from '@/components/EditListingPage'
 import Error404Page from '@/components/404Page'
 import LogoutPage from '@/components/LogoutPage'
 import ManageRosterPage from '@/components/ManageRosterPage'
+import 'bootstrap/dist/css/bootstrap.min.css'
 
 Vue.use(Router)
 Vue.use(VueSession)

@@ -1,14 +1,22 @@
 <template>
-  <div id="loginForm">
-    <h2>Log In</h2>
-    <form class="fullPageForm" id="loginForm" method="post" enctype="multipart/form-data" @submit.prevent="handleSubmit" @click.capture="resetWarning">
+  <div id="loginForm" width = 500px>
+    <h2>Sign into RentConnect</h2>
+    <form class=".form-horizontal auth-form" id="loginForm" method="post" enctype="multipart/form-data" @submit.prevent="handleSubmit" @click.capture="resetWarning">
       <div class="formWarning" ref="warning">
-
       </div>
-      <table border="0px" id="loginTable">
-        <form-input v-for="element in formElements" v-bind:type="element.type" v-bind:caption="element.caption" v-bind:name="element.name" v-bind:key="element.id" />
-      </table>
-      <p><input type="submit" value="Log in!" /></p>
+      <!--
+      <div class="form-group">
+        <label class = ".control-label auth-label" for="usr">Name:</label>
+        <input type="text" class="form-control" id="usr">
+      </div>
+      <div class="form-group">
+        <label class = "control-label auth-label" for="pwd">Password:</label>
+        <input type="password" class="form-control" id="pwd">
+      </div>
+    -->
+
+      <form-input v-for="e in formElements" v-bind:key="e.id" v-bind:name="e.name" v-bind:caption="e.caption" v-bind:type="e.type" divclass="form-group" labelclass="control-label auth-label" inputclass="form-control"></form-input>
+      <p><input class="btn btn-primary" type="submit" value="Log in!" /></p>
     </form>
   </div>
 </template>
@@ -109,5 +117,12 @@ li {
 }
 a {
   color: #42b983;
+}
+.auth-form {
+    width: 340px;
+    margin: 0 auto;
+}
+.form-group {
+  text-align: left;
 }
 </style>
