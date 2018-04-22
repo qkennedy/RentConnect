@@ -1,6 +1,6 @@
 <template>
   <div class="hello" id="tenantPortal">
-    <div class="left">
+    <div class="column">
       <h2>Tenant Portal</h2>
       <h3 v-if="assigned">Notifications</h3>
       <notification-entry v-if="assigned" v-for="n in notifications" v-bind:title="n.subject" v-bind:contents="n.message" v-bind:key="n.id"></notification-entry>
@@ -8,7 +8,7 @@
         You are not currently assigned to any apartment.
       </div>
     </div>
-    <div class="right">
+    <div class="column">
         <h3>Options</h3>
         <ul class="optionlist">
           <li class="first" v-if="assigned"><b>Contact landlord:</b><br />

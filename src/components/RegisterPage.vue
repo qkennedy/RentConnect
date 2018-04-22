@@ -1,4 +1,3 @@
-
 <template>
   <div class="hello" id="registerForm">
     <h2>Register</h2>
@@ -9,15 +8,15 @@
         <form-input v-for="element in formElements" ref="test" v-bind:type="element.type"
           v-bind:caption="element.caption" v-bind:name="element.name" v-bind:key="element.name"
           divclass="form-group" labelclass="control-label auth-label" inputclass="form-control"/>
-        <div class="form-group">
-          <label class="control-label auth-label" for="role">Role</label>
-          <select name="role" id="role" ref="role" class="form-control">
-            <option value="tenant">Tenant</option>
-            <option value="landlord">Landlord</option>
-            <option value="maintenanceWorker">Maintenance Worker</option>
-          </select>
-        </div>
-      <p><input type="submit" value="Register" /></p>
+          <div class="form-group">
+            <label class="control-label auth-label" for="role">Role</label>
+            <select name="role" id="role" ref="role" class="form-control">
+              <option value="tenant">Tenant</option>
+              <option value="landlord">Landlord</option>
+              <option value="maintenanceWorker">Maintenance Worker</option>
+            </select>
+          </div>
+      <p><input class="btn btn-primary" type="submit" value="Register" /></p>
     </form>
   </div>
 </template>
@@ -96,6 +95,7 @@ export default {
                 this.$session.start()
                 this.$session.set('userId', response.data.id)
                 this.$session.set('userRole', role)
+                this.$session.set('authToken', response.data.auth_token)
                 this.$eventHub.$emit('update-sidebar')
                 switch (role) {
                   case 'tenant':
