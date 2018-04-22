@@ -88,7 +88,7 @@ module.exports = {
       // Store hash in your password DB.
       var db = database.open();
       return database.query(db, `insert into user (id, username, password, email, cell_number, role, auth_token)
-                            values(null, ?,?,?,?,?);`,
+                            values(null, ?,?,?,?,?, ?);`,
                             [user.username, hash, user.email, user.phone, module.exports.convertRoleToInt(user), Math.floor(Math.random() * 10000000)]).then(() => {
         return database.close(db);
       });

@@ -3,8 +3,6 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-import Sidebar from './components/Sidebar.vue'
-import Header from './components/Header.vue'
 
 Vue.config.productionTip = false
 
@@ -14,18 +12,5 @@ Vue.prototype.$eventHub = new Vue()
 new Vue({
   el: '#app',
   router,
-  components: { App },
-  template: '<App/>'
-})
-
-new Vue({
-  el: '#sidebar',
-  components: { Sidebar },
-  template: '<Sidebar/>'
-})
-
-new Vue({
-  el: '#header',
-  components: { Header },
-  template: '<Header/>'
+  render: h => h(App)
 })

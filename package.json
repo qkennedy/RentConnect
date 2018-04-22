@@ -17,6 +17,7 @@
   "dependencies": {
     "axios": "^0.18.0 ",
     "bcrypt": "^1.0.3",
+    "bootstrap": "^3.3.7",
     "mysql": "^2.15.0",
     "restify": "^7.0.0",
     "uppy": "^0.23.2",

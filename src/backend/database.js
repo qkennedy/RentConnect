@@ -7,7 +7,6 @@ class Database {
         user     : 'root',
         password : 'postgres',
         database : 'rentconnect',
-        socketPath: '/var/run/mysqld/mysqld.sock'
       }
     }
     //Converts an array of
