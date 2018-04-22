@@ -1,11 +1,12 @@
 <template>
-  <div class="hello" id="landlordPortal">
-    <div class="left">
-      <h2>Landlord Portal</h2>
+  <div class="portal" id="landlordPortal">
+    <h2>Landlord Portal</h2>
+    <div class="two-thirds column notifications">
+
       <h3>Notifications</h3>
       <notification-entry v-for="n in notifications" v-bind:title="n.subject" v-bind:contents="n.message" v-bind:key="n.id"></notification-entry>
     </div>
-    <div class="right">
+    <div class=" one-third column options">
         <h3>Options</h3>
         <ul class="optionlist">
           <li class="first"><router-link to="BulkNotification">Notify tenants</router-link></li>
@@ -52,6 +53,18 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.two-thirds {
+  width: 66.666667%
+}
+.one-third {
+  width: 33.333333%
+}
+.column {
+    float: left;
+    padding-right: 10px;
+    padding-left: 10px;
+}
+
 h1, h2 {
   font-weight: normal;
 }
