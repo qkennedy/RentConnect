@@ -3,19 +3,31 @@ import Vue from 'vue'
 export default {
   data () {
 
-  },
+  }
 }
 
+Vue.component('notification-entry', {
+  props: ['notif'],
+  template:
+    `
+    <div>
+    <bulk-notification v-if="notif.type === 'bulk'" v-bind:subject="notif.subject" v-bind:message="notif.message" />
+    <maint-req-created-notification v-if="notif.type === 'newmaint'" v-bind:requestId="notif.maint_req_id"
+      v-bind:creatorUsername="notif.username" v-bind:title="notif.mtitle" />
+    </div>
+    `
+})
 
 Vue.component('bulk-notification', {
   props: ['subject', 'message'],
   template:
-    `<div class="notification-header">
-      <h4>Message From Landlord:</h4>
-    </div>
-    <div class="notification bulk-notification">
-      <h4>{{subject}}</h4>
-      <p>{{message}}</p>
+    `<div class="panel panel-default">
+      <div class="panel-heading">
+      Message from landlord: <b>{{ subject }}</b>
+      </div>
+      <div>
+        {{ message }}
+      </div>
     </div>`
 })
 
@@ -28,12 +40,18 @@ Vue.component('rent-due-notification', {
 })
 
 Vue.component('maint-req-created-notification', {
-  props: ['subject', 'requestId', 'creatorUsername'],
+  props: ['subject', 'requestId', 'creatorUsername', 'title'],
   template:
-  `<div class="notification-header">
-    <h4>New Maint. Request created by user: {{username}} </h4>
-  </div>
-  <div>
+  `<div class="panel panel-default">
+    <div class="panel-heading">
+      New Maintenance Request created by user: {{creatorUsername}}
+    </div>
+    <div class="panel-body">
+      <p>
+        {{ title }}
+      </p>
+      <router-link v-bind:to="'/ViewMaintenanceRequest/' + requestId" class="btn btn-primary">View Request</router-link>
+    </div>
   </div>`
 })
 </script>

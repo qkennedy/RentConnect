@@ -2,6 +2,7 @@ var mysql = require('mysql');
 var Database = require('./database')
 const userFactory = require('./userFactory');
 const propertyFactory = require('./propertyFactory')
+const notificationsFactory = require('./notificationsFactory')
 
 var database = new Database();
 module.exports = {
@@ -34,7 +35,7 @@ module.exports = {
         VALUES(null,?,?,?,?,?,?,null,?);`,
         [propertyId, creatorId, created, request.title, request.description, request.attachedFiles, request.worker_id, 1])
         .then( data => {
-          //userFactory.createNotification(propertyInfo.landlord_id, 'New maintenance request', 'You have a new maintenance request for ' + propertyInfo.address + ': <a href="#/ViewMaintenanceRequest/' + data.insertId +'">' + request.title + '</a>') //notify the landlord
+          notificationsFactory.createNotification(propertyInfo.landlord_id, '', '', creatorId, propertyId, data.insertId, 'newmaint') //notify the landlord
           return {
             id: data.insertId
           }

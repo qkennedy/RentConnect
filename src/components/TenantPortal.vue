@@ -1,14 +1,14 @@
 <template>
   <div class="hello" id="tenantPortal">
-    <div class="column">
-      <h2>Tenant Portal</h2>
+    <h2>Tenant Portal</h2>
+    <div class="two-thirds column notifications">
       <h3 v-if="assigned">Notifications</h3>
-      <notification-entry v-if="assigned" v-for="n in notifications" v-bind:title="n.subject" v-bind:contents="n.message" v-bind:key="n.id"></notification-entry>
+      <notification-entry v-if="assigned" v-for="n in notifications" v-bind:notif="n" v-bind:key="n.id"></notification-entry>
       <div v-if="!assigned">
         You are not currently assigned to any apartment.
       </div>
     </div>
-    <div class="column">
+    <div class="one-third column options">
         <h3>Options</h3>
         <ul class="optionlist">
           <li class="first" v-if="assigned"><b>Contact landlord:</b><br />
@@ -30,7 +30,7 @@
 
 <script>
 import axios from 'axios'
-import Components from '@/components/UIComponents'
+import NotificationComponents from '@/components/NotificationComponents'
 
 export default {
   name: 'TenantPortal',
@@ -47,7 +47,7 @@ export default {
     }
   },
   components: {
-    Components
+    NotificationComponents
   },
   mounted () {
     document.title = 'Tenant Portal'
@@ -98,6 +98,17 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.two-thirds {
+  width: 66.666667%
+}
+.one-third {
+  width: 33.333333%
+}
+.column {
+    float: left;
+    padding-right: 10px;
+    padding-left: 10px;
+}
 h1, h2 {
   font-weight: normal;
 }

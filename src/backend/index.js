@@ -4,6 +4,7 @@ const propertyFactory = require('./propertyFactory');
 const documentFactory = require('./documentFactory');
 const maintRequestFactory = require('./MaintRequestFactory')
 const rentHistoryFactory = require('./rentHistoryFactory')
+const notificationsFactory = require('./notificationsFactory')
 
 function respond(req, res, next) {
   res.send('you got' + req.params.resp);
@@ -84,11 +85,13 @@ server.post('/rest/user/addToRoster',
 
 server.post('/rest/notifications/send',
   function(req, res, next) {
-    userFactory.sendNotifications(req.body).then(() => {
+    console.log(JSON.stringify(req.body.propIds))
+    notificationsFactory.sendBulkNotification(req.body).then(() => {
       res.send(201)
       next()
     })
       .catch(err => {
+        console.log(err)
         res.send(400, err)
       });
 });
@@ -146,11 +149,10 @@ server.put('/rest/user/:id/delete',
 
 server.get('/rest/user/:id/notifications',
   function(req, res, next) {
-  /*userFactory.getNotifications(req.params.id).then(notifications => {
+  notificationsFactory.getNotifications(req.params.id).then(notifications => {
     res.send(notifications)
     next()
-  });*/
-  res.send({})
+  });
 });
 
 

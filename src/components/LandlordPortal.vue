@@ -2,11 +2,10 @@
   <div class="portal" id="landlordPortal">
     <h2>Landlord Portal</h2>
     <div class="two-thirds column notifications">
-
       <h3>Notifications</h3>
-      <notification-entry v-for="n in notifications" v-bind:title="n.subject" v-bind:contents="n.message" v-bind:key="n.id"></notification-entry>
+      <notification-entry v-for="n in notifications" v-bind:notif="n" v-bind:key="n.id"></notification-entry>
     </div>
-    <div class=" one-third column options">
+    <div class="one-third column options">
         <h3>Options</h3>
         <ul class="optionlist">
           <li class="first"><router-link to="BulkNotification">Notify tenants</router-link></li>
@@ -20,7 +19,7 @@
 
 <script>
 import axios from 'axios'
-import Components from '@/components/UIComponents'
+import NotificationComponents from '@/components/NotificationComponents'
 
 export default {
   name: 'LandlordPortal',
@@ -32,7 +31,7 @@ export default {
     }
   },
   components: {
-    Components
+    NotificationComponents
   },
   mounted () {
     document.title = 'Landlord Portal'
