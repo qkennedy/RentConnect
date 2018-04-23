@@ -114,3 +114,5 @@ CREATE TABLE `rentconnect`.`rent_history` (
     `type` varchar(32) NOT NULL,
     PRIMARY KEY (`id`)
   );
+
+  ALTER TABLE notifications ADD application_id INT NULL;

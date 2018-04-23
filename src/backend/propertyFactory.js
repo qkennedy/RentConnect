@@ -5,7 +5,6 @@ const notificationsFactory = require('./notificationsFactory')
 
 var database = new Database();
 module.exports = {
-
   getPropertyById: function(id) {
     let property;
       var db = database.open()
@@ -102,13 +101,16 @@ module.exports = {
   },
 
   createApplication: function(propertyId, applicantId, data) {
-    // TODO: notify landlord
     var db = database.open();
-    return database.query(db, `INSERT INTO application(property_id,applicant_id,status,application_data)
-    VALUES(?,?,'unread',?)`,
-                      [propertyId, applicantId, JSON.stringify(data)]).then( () => {
-      return database.close(db);
-    });
+    return database.query(db, 'SELECT landlord_id FROM property WHERE id=?', [propertyId])
+      .then( rows => {
+        return database.query(db, `INSERT INTO application(property_id,applicant_id,status,application_data)
+        VALUES(?,?,'unread',?)`,
+                          [propertyId, applicantId, JSON.stringify(data)]).then( data => {
+          notificationsFactory.createNotification(rows[0].landlord_id, '', '', applicantId, propertyId, null, 'application', data.insertId)
+          return database.close(db);
+        });
+      })
   },
 
   getApplicationById: function(applicationId) {

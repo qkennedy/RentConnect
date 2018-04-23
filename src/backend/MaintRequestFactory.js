@@ -1,8 +1,8 @@
 var mysql = require('mysql');
 var Database = require('./database')
 const userFactory = require('./userFactory');
-const propertyFactory = require('./propertyFactory')
 const notificationsFactory = require('./notificationsFactory')
+const propertyFactory = require('./propertyFactory')
 
 var database = new Database();
 module.exports = {

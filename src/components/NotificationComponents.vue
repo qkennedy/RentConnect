@@ -21,6 +21,7 @@ Vue.component('notification-entry', {
     <maint-assign-notification v-if="notif.type === 'maintassign'" v-bind:requestId="notif.maint_req_id"
       v-bind:creatorUsername="notif.username" v-bind:title="notif.mtitle" />
     <prop-assign-notification v-if="notif.type === 'propassign'" v-bind:address="notif.paddress" />
+    <prop-apply-notification v-if="notif.type === 'application'" v-bind:appId="notif.application_id" v-bind:address="notif.paddress" />
     </div>
     `
 })
@@ -126,6 +127,22 @@ Vue.component('prop-assign-notification', {
       <p>
         You have been assigned to the property at <b>{{ address }}</b>.
       </p>
+    </div>
+  </div>`
+})
+
+Vue.component('prop-apply-notification', {
+  props: ['address', 'appId'],
+  template:
+  `<div class="panel panel-default">
+    <div class="panel-heading">
+      New Application
+    </div>
+    <div class="panel-body">
+      <p>
+        Your property at <b>{{ address }}</b> has received a new application.
+      </p>
+      <router-link v-bind:to="'/ProcessApplication/' + appId" class="btn btn-primary">View Application</router-link>
     </div>
   </div>`
 })
