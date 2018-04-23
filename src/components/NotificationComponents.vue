@@ -22,6 +22,7 @@ Vue.component('notification-entry', {
       v-bind:creatorUsername="notif.username" v-bind:title="notif.mtitle" />
     <prop-assign-notification v-if="notif.type === 'propassign'" v-bind:address="notif.paddress" />
     <prop-apply-notification v-if="notif.type === 'application'" v-bind:appId="notif.application_id" v-bind:address="notif.paddress" />
+    <prop-reject-notification v-if="notif.type === 'applicationreject'" v-bind:address="notif.paddress" />
     </div>
     `
 })
@@ -143,6 +144,21 @@ Vue.component('prop-apply-notification', {
         Your property at <b>{{ address }}</b> has received a new application.
       </p>
       <router-link v-bind:to="'/ProcessApplication/' + appId" class="btn btn-primary">View Application</router-link>
+    </div>
+  </div>`
+})
+
+Vue.component('prop-reject-notification', {
+  props: ['address'],
+  template:
+  `<div class="panel panel-default">
+    <div class="panel-heading">
+      Application Rejected
+    </div>
+    <div class="panel-body">
+      <p>
+        Your application to rent <b>{{ address }}</b> has been rejected.
+      </p>
     </div>
   </div>`
 })

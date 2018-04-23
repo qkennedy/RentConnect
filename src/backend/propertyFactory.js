@@ -7,7 +7,7 @@ var database = new Database();
 module.exports = {
   notificationsFactory: null,
   userFactory: null,
-  
+
   getPropertyById: function(id) {
     let property;
       var db = database.open()
@@ -101,6 +101,19 @@ module.exports = {
                       [tenantId, propertyId]).then( () => {
       return database.close(db);
     });
+  },
+
+  rejectApplication: function(applicationId) {
+    var db = database.open();
+    return database.query(db, 'SELECT property_id,applicant_id FROM application WHERE id=?', [applicationId]).then(rows => {
+      var applicantId = rows[0].applicant_id
+      var propertyId = rows[0].property_id
+      return database.query(db, `UPDATE application SET status='rejected' WHERE id=?`,
+                        [applicationId]).then( () => {
+        this.notificationsFactory.createNotification(applicantId, '', '', null, propertyId, null, 'applicationreject')
+        return database.close(db);
+      });
+    })
   },
 
   createApplication: function(propertyId, applicantId, data) {

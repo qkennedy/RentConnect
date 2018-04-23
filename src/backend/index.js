@@ -240,8 +240,15 @@ server.get('/rest/property/:propId/tenants',
 
 server.put('/rest/property/:propId/addTenant/:tenantId',
 function(req, res, next) {
-  // TODO: send a notification
   propertyFactory.addTenant(req.params.tenantId, req.params.propId).then(() => {
+    res.send(201)
+    next()
+  });
+});
+
+server.put('/rest/property/application/:id/reject',
+function(req, res, next) {
+  propertyFactory.rejectApplication(req.params.id).then(() => {
     res.send(201)
     next()
   });

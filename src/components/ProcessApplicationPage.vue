@@ -1,7 +1,6 @@
 <template>
   <div class="hello" id="applicationForm">
     <h2>Process application</h2>
-    <!-- TODO: include information about the property -->
     <h3>Property Information</h3>
     <dl style="text-align:center">
       <dt>
@@ -12,11 +11,15 @@
       </dd>
     </dl>
     <h3>Application</h3>
-    <div class="column">
+    <div>
       <dl style="text-align:center">
         <app-entry v-for="e in pageElements" v-bind:key="e.id" v-bind:caption="e.caption" v-bind:value="e.value"></app-entry>
       </dl>
-      <p><input type="submit" name="accept" value="Accept" v-on:click.stop="handleAccept" /><input type="submit" value="Reject" /><input type="submit" value="Ignore" /></p>
+      <p>
+        <input type="submit" name="accept" value="Accept" v-on:click.stop="handleAccept" />
+        <input type="submit" value="Reject" v-on:click.stop="handleReject" />
+        <input type="submit" value="Ignore" v-on:click.stop="handleIgnore" />
+      </p>
     </div>
   </div>
 </template>
@@ -144,7 +147,6 @@ export default {
   },
   methods: {
     handleAccept () {
-      console.log(this.propertyId)
       axios.put('/rest/property/' + this.propertyId + '/addTenant/' + this.applicantId)
         .then(response => {
           this.$router.push('/LandlordPortal')
@@ -152,8 +154,19 @@ export default {
         .catch(e => {
           console.log(e)
         })
+    },
+    handleReject () {
+      axios.put('/rest/property/application/' + this.$route.params.id + '/reject')
+        .then(response => {
+          this.$router.push('/LandlordPortal')
+        })
+        .catch(e => {
+          console.log(e)
+        })
+    },
+    handleIgnore () {
+      this.$router.push('/LandlordPortal')
     }
-    // TODO: add code to reject application
   },
   components: {
     Components

@@ -3,7 +3,7 @@
     <h2>Tenant Portal</h2>
     <div class="two-thirds column notifications">
       <h3>Notifications</h3>
-      <notification-entry v-if="assigned" v-for="n in notifications" v-bind:notif="n" v-bind:key="n.id"></notification-entry>
+      <notification-entry v-for="n in notifications" v-bind:notif="n" v-bind:key="n.id"></notification-entry>
       <p v-if="notifications.length === 0">
         You have no notifications at this time.
       </p>
