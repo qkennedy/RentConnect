@@ -33,7 +33,7 @@
       </fieldset>
     </div>
     <h3>Past Receipts</h3>
-    <table class="table" id="financesTable" style="width:100%">
+    <table v-if="rentHistory.length > 0" class="table" id="financesTable" style="width:100%">
       <thead>
         <tr>
           <th style="width:33%">
@@ -51,6 +51,9 @@
         <rent-row v-for="rentEvent in rentHistory" v-bind:date="rentEvent.payment_date" v-bind:amount="rentEvent.payment_amount" v-bind:receiptLink="rentEvent.receiptLink" v-bind:late="!rentEvent.on_time" v-bind:key="rentEvent.id"></rent-row>
       </tbody>
     </table>
+    <p v-if="rentHistory.length === 0">
+      No receipts to view at this time.
+    </p>
   </div>
 </template>
 

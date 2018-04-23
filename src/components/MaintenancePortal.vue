@@ -4,6 +4,9 @@
     <div class="two-thirds column notifications">
       <h3>Notifications</h3>
       <notification-entry v-for="n in notifications" v-bind:notif="n" v-bind:key="n.id"></notification-entry>
+      <p v-if="notifications.length === 0">
+        You have no notifications at this time.
+      </p>
       <p style="text-align: center">
         <router-link to="AllMaintenanceRequests">See more...</router-link>
       </p>
@@ -64,7 +67,6 @@ document.title = 'Maintenance Portal'
     padding-right: 10px;
     padding-left: 10px;
 }
-
 
 h1, h2 {
   font-weight: normal;

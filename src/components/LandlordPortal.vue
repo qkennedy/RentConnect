@@ -4,14 +4,17 @@
     <div class="two-thirds column notifications">
       <h3>Notifications</h3>
       <notification-entry v-for="n in notifications" v-bind:notif="n" v-bind:key="n.id"></notification-entry>
+      <p v-if="notifications.length === 0">
+        You have no notifications at this time.
+      </p>
     </div>
     <div class="one-third column options">
         <h3>Options</h3>
-        <ul class="optionlist">
-          <li class="first"><router-link to="BulkNotification">Notify tenants</router-link></li>
-          <li><router-link to="MyProperties">My properties</router-link></li>
-          <li><router-link to="Finances">View finances</router-link></li>
-          <li><router-link to="AllMaintenanceRequests">Maintenance requests</router-link><br />{{ unreadMaint }} unread</li>
+        <ul class="list-group">
+          <li class="list-group-item"><router-link to="BulkNotification">Notify tenants</router-link></li>
+          <li class="list-group-item"><router-link to="MyProperties">My properties</router-link></li>
+          <li class="list-group-item"><router-link to="Finances">View finances</router-link></li>
+          <li class="list-group-item"><router-link to="AllMaintenanceRequests">Maintenance requests</router-link></li>
         </ul>
     </div>
   </div>
@@ -26,8 +29,7 @@ export default {
   data () {
     return {
       notifications: [
-      ],
-      unreadMaint: 11 // TODO: get this from the backend
+      ]
     }
   },
   components: {

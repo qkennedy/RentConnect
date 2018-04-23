@@ -4,7 +4,7 @@
     <p>
       <router-link to="CreateListing">List New Property</router-link>
     </p>
-    <table border="0" class="table" id="propsTable">
+    <table v-if="properties.length > 0" border="0" class="table" id="propsTable">
       <thead>
         <tr>
           <th>
@@ -28,6 +28,9 @@
         <property-entry v-for="prop in properties" v-bind:key="prop.id" v-bind:address="prop.address" v-bind:status="prop.status" v-bind:tenant="prop.tenant" v-bind:rentamt="prop.rent" v-bind:rentdue="prop.due_date" v-bind:id="prop.id"></property-entry>
       </tbody>
     </table>
+    <p v-if="properties.length === 0">
+      You have no notifications at this time.
+    </p>
   </div>
 </template>
 

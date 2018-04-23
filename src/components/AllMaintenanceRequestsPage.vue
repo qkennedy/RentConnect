@@ -4,7 +4,7 @@
     <p v-if="landlord" style="text-align:center">
       <router-link to="/ManageRoster">Manage Workers</router-link>
     </p>
-    <table class="table" id="reqTable" style="width:100%">
+    <table class="table" id="reqTable" style="width:100%" v-if="maintRequests.length > 0">
       <thead>
         <tr>
           <th style="width:25%" scope="col">
@@ -25,6 +25,9 @@
         <maint-row v-for="req in maintRequests" v-bind:key="req.id" v-bind:property="req.address" v-bind:status="req.status" v-bind:lastUpdated="req.lastUpdated" v-bind:id="req.id"></maint-row>
       </tbody>
     </table>
+    <p v-if="maintRequests.length === 0">
+      There are no maintenance requests to view.
+    </p>
   </div>
 </template>
 

@@ -1,7 +1,7 @@
 <template>
   <div id="loginForm">
     <h2>Manage Maintenance Roster</h2>
-    <table class="table" id="workerTable">
+    <table class="table" id="workerTable" v-if="roster.length > 0">
       <thead>
         <tr>
           <th>
@@ -16,6 +16,9 @@
         <worker-entry v-for="worker in roster" v-bind:key="worker.id" v-bind:username="worker.username" v-bind:id="worker.id" v-bind:landlordId="myId"></worker-entry>
       </tbody>
     </table>
+    <p v-if="roster.length === 0">
+      Your maintenance roster is currently empty.
+    </p>
     <h3>Add Worker</h3>
     <form class=".form-horizontal auth-form" @submit.prevent="handleAddWorker" @click.capture="resetWarning">
       <div class="alert alert-danger" style="display:none" role="alert" ref="warning">
