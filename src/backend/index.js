@@ -189,6 +189,13 @@ server.get('/rest/property/landlord/:id',
     });
 });
 
+server.get('/rest/property/getAvailableProperties',
+  function(req, res, next) {
+    propertyFactory.getAvailableProperties().then(properties => {
+      res.send(properties)
+      next()
+    });
+});
 
 //Tenant EPs
 

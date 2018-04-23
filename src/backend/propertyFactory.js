@@ -16,6 +16,17 @@ module.exports = {
       return property;
      });
   },
+  getAvailableProperties: function(){
+    let properties;
+      var db = database.open()
+      return database.query(db, `select * from property  where id not in (select property_id from tenants);`, []).then( rows => {
+        properties = rows;
+        return database.close(db)
+      } )
+      .then( () => {
+      return properties;
+     });
+  },
 
   createProperty: function(property) {
     var db = database.open();
