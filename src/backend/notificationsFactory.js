@@ -2,7 +2,12 @@ module.exports = {
   getNotifications: function(userId) {
     let notifs;
       var db = database.open()
-      return database.query(db, `SELECT * FROM notifications WHERE recipient=? ORDER BY time DESC LIMIT 10;`, [userId]).then( rows => {
+      return database.query(db, `
+        SELECT n.*,u.*,p.*,m.* FROM notifications AS n
+        LEFT JOIN user AS u ON u.id=n.user_id
+        LEFT JOIN property AS p ON p.id=n.property_id
+        LEFT JOIN maint_request AS m ON m.id=n.maint_req_id
+        WHERE n.recipient=? ORDER BY time DESC LIMIT 10;`, [userId]).then( rows => {
         notifs = rows;
         return database.close(db)
       })
