@@ -1,7 +1,7 @@
 <template>
   <div class="hello" id="loginForm">
     <h2>User Profile</h2>
-    <div class="formWarning" ref="warning">
+    <div class="alert alert-danger" style="display:none" role="alert" ref="warning">
 
     </div>
     <h3>Edit Profile</h3>

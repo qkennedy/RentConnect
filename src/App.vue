@@ -3,7 +3,7 @@
     <nav class="navbar navbar-default navbar-fixed-top">
       <div class="container-fluid">
         <div class="navbar-header">
-          <a class="navbar-brand" href="#/">RentConnect</a>
+          <router-link class="navbar-brand" to="/">RentConnect</router-link>
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbarSupportedContent" aria-expanded="false">
             <span class="sr-only">Toggle navigation</span>
             <span class="icon-bar"></span>
@@ -15,11 +15,11 @@
           <ul class="nav navbar-nav">
             <li v-if="!loggedIn"><router-link to="/Login">Log In</router-link></li>
             <li v-if="!loggedIn"><router-link to="/Register">Register</router-link></li>
-            <li v-if="loggedIn"><router-link to="/UserProfile">Edit Profile</router-link></li>
-            <li v-if="loggedIn"><router-link to="/Logout">Log Out</router-link></li>
             <li v-if="loggedIn && role==='tenant'"><router-link to="/TenantPortal">My Portal</router-link></li>
             <li v-if="loggedIn && role==='landlord'"><router-link to="/LandlordPortal">My Portal</router-link></li>
             <li v-if="loggedIn && role==='maintenanceWorker'"><router-link to="/MaintenancePortal">My Portal</router-link></li>
+            <li v-if="loggedIn"><router-link to="/UserProfile">Edit Profile</router-link></li>
+            <li v-if="loggedIn"><router-link to="/Logout">Log Out</router-link></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
           </ul>
@@ -91,10 +91,7 @@ export default {
   margin-top: 60px;
 }
 
-.formWarning {
-  display: none;
-  background-color: #9c2b2e;
-  color: #e84e4f;
-  border: 1px solid #e84e4f;
+dl {
+  text-align:left
 }
 </style>

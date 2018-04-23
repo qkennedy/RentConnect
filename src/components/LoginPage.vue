@@ -2,7 +2,7 @@
   <div id="loginForm" width = 500px>
     <h2>Sign into RentConnect</h2>
     <form class=".form-horizontal auth-form" id="loginForm" method="post" enctype="multipart/form-data" @submit.prevent="handleSubmit" @click.capture="resetWarning">
-      <div class="formWarning" ref="warning">
+      <div class="alert alert-danger" style="display:none" role="alert" ref="warning">
       </div>
       <!--
       <div class="form-group">

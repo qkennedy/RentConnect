@@ -4,7 +4,7 @@
     <p>
       <router-link to="CreateListing">List New Property</router-link>
     </p>
-    <table border="0" class="table">
+    <table border="0" class="table" id="propsTable">
       <thead>
         <tr>
           <th>
@@ -84,5 +84,8 @@ li {
 }
 a {
   color: #42b983;
+}
+#propsTable {
+  text-align:left
 }
 </style>

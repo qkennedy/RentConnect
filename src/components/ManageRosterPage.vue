@@ -1,7 +1,7 @@
 <template>
   <div id="loginForm">
     <h2>Manage Maintenance Roster</h2>
-    <table class="table">
+    <table class="table" id="workerTable">
       <thead>
         <tr>
           <th>
@@ -18,7 +18,7 @@
     </table>
     <h3>Add Worker</h3>
     <form class=".form-horizontal auth-form" @submit.prevent="handleAddWorker" @click.capture="resetWarning">
-      <div class="formWarning" ref="warning">
+      <div class="alert alert-danger" style="display:none" role="alert" ref="warning">
 
       </div>
       <form-input v-for="element in formElements" v-bind:type="element.type" v-bind:caption="element.caption" v-bind:name="element.name" v-bind:key="element.id"
@@ -142,5 +142,8 @@ a {
 }
 .form-group {
   text-align: left;
+}
+#workerTable {
+  text-align:left
 }
 </style>

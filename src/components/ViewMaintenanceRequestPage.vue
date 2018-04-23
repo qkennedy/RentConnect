@@ -2,57 +2,61 @@
   <div id="loginForm">
     <h2>View Maintenance Request</h2>
     <div class="column one-third">
-      <h3>Request details</h3>
-      <fieldset>
-        <dl>
-          <dt>
-            Title
-          </dt>
-          <dd>
-            {{ reqTitle }}
-          </dd>
-        </dl>
-        <dl>
-          <dt>
-            Message
-          </dt>
-          <dd>
-            {{ reqContent }}
-          </dd>
-        </dl>
-        <dl>
-          <dt>
-            Status
-          </dt>
-          <dd v-if="status === 'open'">
-            Open
-          </dd>
-          <dd v-if="status === 'pending'">
-            Pending
-          </dd>
-          <dd v-if="status === 'closed'">
-            Closed
-          </dd>
-          <dd v-if="status === 'confirmed'">
-            Confirmed
-          </dd>
-        </dl>
-        <dl>
-          <dt>
-            Assigned Worker
-          </dt>
-          <dd v-if="assignedUsername == ''">
-            <i>Not assigned</i>
-          </dd>
-          <dd v-else>
-            {{ assignedUsername }}
-          </dd>
-        </dl>
-      </fieldset>
+      <div class="panel panel-default">
+        <h3>Details</h3>
+        <div class="panel-body">
+          <dl>
+            <dt>
+              Title
+            </dt>
+            <dd>
+              {{ reqTitle }}
+            </dd>
+          </dl>
+          <dl>
+            <dt>
+              Message
+            </dt>
+            <dd>
+              {{ reqContent }}
+            </dd>
+          </dl>
+          <dl>
+            <dt>
+              Status
+            </dt>
+            <dd v-if="status === 'open'">
+              Open
+            </dd>
+            <dd v-if="status === 'pending'">
+              Pending
+            </dd>
+            <dd v-if="status === 'closed'">
+              Closed
+            </dd>
+            <dd v-if="status === 'confirmed'">
+              Confirmed
+            </dd>
+          </dl>
+          <dl>
+            <dt>
+              Assigned Worker
+            </dt>
+            <dd v-if="assignedUsername == ''">
+              <i>Not assigned</i>
+            </dd>
+            <dd v-else>
+              {{ assignedUsername }}
+            </dd>
+          </dl>
+        </div>
+      </div>
     </div>
     <div class="column two-thirds">
       <h3>Comments</h3>
-      <maintenance-comment v-for="comment in comments" v-bind:image="comment.image" v-bind:person="comment.username" v-bind:date="comment.created_date" v-bind:assignedTo="comment.assignedTo" v-bind:comment="comment.comment_text" v-bind:role="comment.role" v-bind:key="comment.id"></maintenance-comment>
+      <div class="panel-group">
+        <maintenance-comment v-for="comment in comments" v-bind:image="comment.image" v-bind:person="comment.username" v-bind:date="comment.created_date" v-bind:assignedTo="comment.assignedTo" v-bind:comment="comment.comment_text" v-bind:role="comment.role" v-bind:key="comment.id"></maintenance-comment>
+      </div>
       <h3 v-if="landlord || status !== 'closed'">Leave a comment</h3>
       <form class="form-horizontal auth-form" v-if="landlord || status !== 'closed'" id="loginForm" method="post" enctype="multipart/form-data" @submit.prevent="handleSubmit">
           <form-input v-for="element in formElements" v-bind:type="element.type" v-bind:caption="element.caption"
@@ -65,7 +69,7 @@
               <option v-for="worker in workers" v-bind:value="worker.id" v-bind:key="worker.id">{{ worker.username }}</option>
             </select>
           </div>
-          <div class="form-group">
+          <div class="form-group" v-if="canClose">
             <label class="control-label auth-label" for="status">Change Status</label>
             <select name="status" id="status" class="form-control">
               <option value="">
@@ -182,7 +186,12 @@ export default {
     updateComments () {
       axios.get('/rest/request/' + this.$route.params.id + '/comments')
         .then(response => {
-          this.comments = response.data
+          var comments = response.data
+          var i
+          for (i = 0; i < comments.length; i++) {
+            comments[i].created_date = (new Date(comments[i].created_date)).toDateString()
+          }
+          this.comments = comments
         })
         .catch(e => {
           console.log(e)
@@ -196,6 +205,7 @@ export default {
           this.attachedImage = response.data.attachedImage
           this.status = response.data.status
           if (response.data.worker_id !== null) {
+            // TODO: make this get just the username without needing the auth token
             axios.get('/rest/user/' + response.data.worker_id)
               .then(response => {
                 this.assignedUsername = response.data.username
@@ -247,16 +257,11 @@ export default {
 
 Vue.component('maintenance-comment', {
   props: ['image', 'person', 'role', 'date', 'assignedTo', 'comment'],
-  template: `<div class="maintenance-comment">
-    <fieldset>
-      <dl>
-        <dt>
-          Date
-        </dt>
-        <dd>
-          {{ date }}
-        </dd>
-      </dl>
+  template: `<div class="panel panel-default">
+    <div class="panel-heading">
+    {{ date }}
+    </div>
+    <div class="panel-body">
       <dl>
         <dt>
           Person
@@ -273,7 +278,7 @@ Vue.component('maintenance-comment', {
           {{ comment }}
         </dd>
       </dl>
-    </fieldset>
+    </div>
   </div>`
 })
 </script>
@@ -307,17 +312,5 @@ a {
 }
 .form-group {
   text-align: left;
-}
-
-.maintenance-comment {
-  text-align:left;
-  border: 1px solid #000;
-  margin-top: 2px
-}
-
-.maintenance-comment dl, .maintenance-comment dd {
-  margin:0px;
-  padding-bottom: 0px !important;
-  padding:0px;
 }
 </style>

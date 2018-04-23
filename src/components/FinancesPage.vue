@@ -30,18 +30,10 @@
             {{ address }}
           </dd>
         </dl>
-        <dl>
-          <dt>
-            Tenant
-          </dt>
-          <dd>
-            {{ tenant }}
-          </dd>
-        </dl>
       </fieldset>
     </div>
     <h3>Past Receipts</h3>
-    <table class="table" style="width:100%">
+    <table class="table" id="financesTable" style="width:100%">
       <thead>
         <tr>
           <th style="width:33%">
@@ -190,5 +182,8 @@ li {
 }
 a {
   color: #42b983;
+}
+#financesTable {
+  text-align: left
 }
 </style>
