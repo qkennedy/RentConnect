@@ -129,7 +129,6 @@ export default {
       status: '',
       canClose: false,
       assignedUsername: '',
-      // TODO: get this from the backend
       workers: [
       ]
     }
@@ -170,7 +169,6 @@ export default {
       }
 
       if (this.landlord && formFields.worker !== '0') {
-        console.log('Assigning' + formFields.worker)
         axios.post('/rest/request/' + this.$route.params.id + '/assign',
           formFields
         )
@@ -204,15 +202,10 @@ export default {
           this.reqContent = response.data.description
           this.attachedImage = response.data.attachedImage
           this.status = response.data.status
+          console.log(JSON.stringify(response.data))
           if (response.data.worker_id !== null) {
             // TODO: make this get just the username without needing the auth token
-            axios.get('/rest/user/' + response.data.worker_id)
-              .then(response => {
-                this.assignedUsername = response.data.username
-              })
-              .catch(e => {
-                console.log(e)
-              })
+            this.assignedUsername = response.data.worker_username
           }
         })
         .catch(e => {
@@ -244,7 +237,6 @@ export default {
             id: 0,
             username: '(do not change)'
           }]
-          console.log(response.data)
           workers = workers.concat(response.data)
           this.workers = workers
         })

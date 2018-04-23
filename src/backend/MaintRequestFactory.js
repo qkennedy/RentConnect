@@ -9,7 +9,11 @@ module.exports = {
   getRequestById: function(id) {
     let request;
       var db = database.open()
-      return database.query(db, 'select m.*,p.landlord_id from maint_request as m left join property as p on p.id=m.property_id where m.id = ? ;', [id]).then( rows => {
+      return database.query(db, `select m.*,p.landlord_id,w.username AS worker_username
+        from maint_request as m
+        left join property as p on p.id=m.property_id
+        LEFT JOIN user AS w ON w.id=m.worker_id
+        where m.id = ? ;`, [id]).then( rows => {
         request = rows[0];
         request.status = this.convertIntToStatus(request)
         return database.close(db)
@@ -30,7 +34,7 @@ module.exports = {
         VALUES(null,?,?,?,?,?,?,null,?);`,
         [propertyId, creatorId, created, request.title, request.description, request.attachedFiles, request.worker_id, 1])
         .then( data => {
-          userFactory.createNotification(propertyInfo.landlord_id, 'New maintenance request', 'You have a new maintenance request for ' + propertyInfo.address + ': <a href="#/ViewMaintenanceRequest/' + data.insertId +'">' + request.title + '</a>') //notify the landlord
+          //userFactory.createNotification(propertyInfo.landlord_id, 'New maintenance request', 'You have a new maintenance request for ' + propertyInfo.address + ': <a href="#/ViewMaintenanceRequest/' + data.insertId +'">' + request.title + '</a>') //notify the landlord
           return {
             id: data.insertId
           }
@@ -84,7 +88,7 @@ module.exports = {
           }
           var i
           for (i = 0; i < toNotify.length; i++) {
-            userFactory.createNotification(toNotify[i], 'Maintenance status updated', 'The maintenance request <a href="#/ViewMaintenanceRequest/' + id + '">' + requestInfo.title + '</a> has had its status changed to ' + request.status)
+            //userFactory.createNotification(toNotify[i], 'Maintenance status updated', 'The maintenance request <a href="#/ViewMaintenanceRequest/' + id + '">' + requestInfo.title + '</a> has had its status changed to ' + request.status)
           }
           return database.close(db)
         })
@@ -92,7 +96,7 @@ module.exports = {
   },
 
   assign: function(id, request) {
-    userFactory.createNotification(request.worker, 'Request assigned', 'You have been assigned a request: <a href="#/ViewMaintenanceRequest/' + id + '"">' + request.title + '</a>')
+    //userFactory.createNotification(request.worker, 'Request assigned', 'You have been assigned a request: <a href="#/ViewMaintenanceRequest/' + id + '"">' + request.title + '</a>')
     this.addCommentForRequest(id, {
       creatorId: request.creatorId,
       text: 'Assigned request to worker',
@@ -151,7 +155,7 @@ module.exports = {
             }
             var i
             for (i = 0; i < toNotify.length; i++) {
-              userFactory.createNotification(toNotify[i], 'New maintenance comment', 'The maintenance request <a href="#/ViewMaintenanceRequest/' + requestId + '">' + request.title + '</a> has received a new comment:<br />' + comment.text)
+              //userFactory.createNotification(toNotify[i], 'New maintenance comment', 'The maintenance request <a href="#/ViewMaintenanceRequest/' + requestId + '">' + request.title + '</a> has received a new comment:<br />' + comment.text)
             }
             return database.close(db)
           })

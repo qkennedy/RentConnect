@@ -146,10 +146,11 @@ server.put('/rest/user/:id/delete',
 
 server.get('/rest/user/:id/notifications',
   function(req, res, next) {
-  userFactory.getNotifications(req.params.id).then(notifications => {
+  /*userFactory.getNotifications(req.params.id).then(notifications => {
     res.send(notifications)
     next()
-  });
+  });*/
+  res.send({})
 });
 
 
