@@ -6,6 +6,14 @@ const maintRequestFactory = require('./MaintRequestFactory')
 const rentHistoryFactory = require('./rentHistoryFactory')
 const notificationsFactory = require('./notificationsFactory')
 
+//cross-reference the classes
+maintRequestFactory.userFactory = userFactory
+maintRequestFactory.notificationsFactory = notificationsFactory
+maintRequestFactory.propertyFactory = propertyFactory
+
+propertyFactory.userFactory = userFactory
+propertyFactory.notificationsFactory = notificationsFactory
+
 function respond(req, res, next) {
   res.send('you got' + req.params.resp);
   next();
@@ -332,7 +340,7 @@ server.get('/rest/request/byWorkerId/:id',
 server.post('/rest/property/:propId/request/create',
   function(req, res, next) {
     //TODO Change calls on the backend to respond to these changes
-    maintRequestFactory.createRequest(req.body, req.body.creatorId, req.params.propId).then(request => {
+    maintRequestFactory.createRequest(req.body, req.body.creatorId, req.params.propId, propertyFactory).then(request => {
       res.send(request)
       next()
     });

@@ -5,6 +5,9 @@ const notificationsFactory = require('./notificationsFactory')
 
 var database = new Database();
 module.exports = {
+  notificationsFactory: null,
+  userFactory: null,
+  
   getPropertyById: function(id) {
     let property;
       var db = database.open()
@@ -80,7 +83,7 @@ module.exports = {
     let tenants;
       var db = database.open()
       return database.query(db, 'select (tenant_id) from tenants where property_id = ?;', [propertyId]).then( rows => {
-        return userFactory.getBasicDetForUsers(rows)
+        return this.userFactory.getBasicDetForUsers(rows)
       }).then( users => {
         tenants = users;
         return database.close(db)
@@ -91,7 +94,7 @@ module.exports = {
   },
 
   addTenant: function(tenantId, propertyId) {
-    notificationsFactory.createNotification(tenantId, '', '', null, propertyId, null, 'propassign')
+    this.notificationsFactory.createNotification(tenantId, '', '', null, propertyId, null, 'propassign')
     var db = database.open();
     return database.query(db, `insert into tenants (id, tenant_id, property_id)
                       values(null, ?,?);`,
@@ -107,7 +110,7 @@ module.exports = {
         return database.query(db, `INSERT INTO application(property_id,applicant_id,status,application_data)
         VALUES(?,?,'unread',?)`,
                           [propertyId, applicantId, JSON.stringify(data)]).then( data => {
-          notificationsFactory.createNotification(rows[0].landlord_id, '', '', applicantId, propertyId, null, 'application', data.insertId)
+          this.notificationsFactory.createNotification(rows[0].landlord_id, '', '', applicantId, propertyId, null, 'application', data.insertId)
           return database.close(db);
         });
       })
