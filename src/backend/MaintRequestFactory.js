@@ -89,7 +89,7 @@ module.exports = {
           }
           var i
           for (i = 0; i < toNotify.length; i++) {
-            //userFactory.createNotification(toNotify[i], 'Maintenance status updated', 'The maintenance request <a href="#/ViewMaintenanceRequest/' + id + '">' + requestInfo.title + '</a> has had its status changed to ' + request.status)
+            notificationsFactory.createNotification(toNotify[i], '', '', request.creatorId, null, id, 'maintstatus')
           }
           return database.close(db)
         })
@@ -97,7 +97,7 @@ module.exports = {
   },
 
   assign: function(id, request) {
-    //userFactory.createNotification(request.worker, 'Request assigned', 'You have been assigned a request: <a href="#/ViewMaintenanceRequest/' + id + '"">' + request.title + '</a>')
+    notificationsFactory.createNotification(request.worker, '', '', request.creatorId, null, id, 'maintassign')
     this.addCommentForRequest(id, {
       creatorId: request.creatorId,
       text: 'Assigned request to worker',
@@ -156,7 +156,7 @@ module.exports = {
             }
             var i
             for (i = 0; i < toNotify.length; i++) {
-              //userFactory.createNotification(toNotify[i], 'New maintenance comment', 'The maintenance request <a href="#/ViewMaintenanceRequest/' + requestId + '">' + request.title + '</a> has received a new comment:<br />' + comment.text)
+              notificationsFactory.createNotification(toNotify[i], '', '', comment.creatorId, null, requestId, 'maintcomment')
             }
             return database.close(db)
           })
@@ -199,7 +199,7 @@ module.exports = {
   },
 
 
-  convertIntToStatus(request) {
+  convertIntToStatus: function(request) {
     switch(request.status) {
       case 1:
         return 'open'

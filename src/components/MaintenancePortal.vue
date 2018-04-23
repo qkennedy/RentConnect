@@ -1,17 +1,17 @@
 <template>
   <div class="hello" id="maintenancePortal">
-    <div class="left">
-      <h2>Maintenance Portal</h2>
+    <h2>Maintenance Portal</h2>
+    <div class="two-thirds column notifications">
       <h3>Notifications</h3>
-      <notification-entry v-for="n in notifications" v-bind:title="n.subject" v-bind:contents="n.message" v-bind:key="n.id"></notification-entry>
+      <notification-entry v-for="n in notifications" v-bind:notif="n" v-bind:key="n.id"></notification-entry>
       <p style="text-align: center">
         <router-link to="AllMaintenanceRequests">See more...</router-link>
       </p>
     </div>
-    <div class="right">
+    <div class="one-third column options">
         <h3>Options</h3>
         <ul class="optionlist">
-          <li class="first"><router-link to="AllMaintenanceRequests">My Requests</router-link><br />{{ unread }} unread</li>
+          <li class="first"><router-link to="AllMaintenanceRequests">My Requests</router-link></li>
         </ul>
     </div>
   </div>
@@ -19,19 +19,18 @@
 
 <script>
 import axios from 'axios'
-import Components from '@/components/UIComponents'
+import NotificationComponents from '@/components/NotificationComponents'
 
 export default {
   name: 'TenantPortal',
   data () {
     return {
       notifications: [
-      ],
-      unread: 35 // TODO: get this from the backend
+      ]
     }
   },
   components: {
-    Components
+    NotificationComponents
   },
   mounted () {
     document.title = 'Maintenance Portal'
@@ -54,6 +53,19 @@ document.title = 'Maintenance Portal'
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.two-thirds {
+  width: 66.666667%
+}
+.one-third {
+  width: 33.333333%
+}
+.column {
+    float: left;
+    padding-right: 10px;
+    padding-left: 10px;
+}
+
+
 h1, h2 {
   font-weight: normal;
 }
