@@ -1,26 +1,30 @@
 <template>
   <div class="hello" id="tenantPortal">
+    <h2>Tenant Portal</h2>
     <div class="two-thirds column notifications">
-      <h2>Tenant Portal</h2>
       <h3 v-if="assigned">Notifications</h3>
-      <notification-entry v-if="assigned" v-for="n in notifications" v-bind:title="n.subject" v-bind:contents="n.message" v-bind:key="n.id"></notification-entry>
-      <div v-if="!assigned">
+      <notification-entry v-if="assigned" v-for="n in notifications" v-bind:notif="n" v-bind:key="n.id"></notification-entry>
+      <p v-if="assigned && notifications.length === 0">
+        You have no notifications at this time.
+      </p>
+      <h3 v-if="!assigned">No Apartment</h3>
+      <p v-if="!assigned">
         You are not currently assigned to any apartment.
-      </div>
+      </p>
     </div>
     <div class="one-third column options">
         <h3>Options</h3>
-        <ul class="optionlist">
-          <li class="first" v-if="assigned"><b>Contact landlord:</b><br />
+        <ul class="list-group">
+          <li class="list-group-item" v-if="assigned"><b>Contact landlord:</b><br />
             Phone: <i v-if="landlordPhone===''">(not given)</i><span v-else>{{ landlordPhone }}</span><br />
             Email: {{ landlordEmail }}
           </li>
-          <li v-if="assigned"><b>My apartment:</b><br />Address: {{ address }}<br />Rent due: ${{ rentAmt }}, {{ rentDue }}</li>
-          <li v-if="assigned"><router-link to="Finances">View Finances</router-link></li>
-          <li v-if="assigned"><router-link to="SubmitMaintenanceRequest">Submit Maintenance Request</router-link></li>
-          <li v-if="assigned"><router-link to="ManageDocuments">Manage Documents</router-link></li>
-          <li v-if="assigned"><router-link to="AllMaintenanceRequests">Maintenance Requests</router-link></li>
-          <li v-if="!assigned" class="first">
+          <li class="list-group-item" v-if="assigned"><b>My apartment:</b><br />Address: {{ address }}<br />Rent due: ${{ rentAmt }}, {{ rentDue }}</li>
+          <li class="list-group-item" v-if="assigned"><router-link to="Finances">View Finances</router-link></li>
+          <li class="list-group-item" v-if="assigned"><router-link to="SubmitMaintenanceRequest">Submit Maintenance Request</router-link></li>
+          <li class="list-group-item" v-if="assigned"><router-link to="ManageDocuments">Manage Documents</router-link></li>
+          <li class="list-group-item" v-if="assigned"><router-link to="AllMaintenanceRequests">Maintenance Requests</router-link></li>
+          <li class="list-group-item" v-if="!assigned">
             <router-link to="ViewAvailableListings">View Available Listings</router-link>
           </li>
         </ul>
@@ -30,7 +34,7 @@
 
 <script>
 import axios from 'axios'
-import Components from '@/components/UIComponents'
+import NotificationComponents from '@/components/NotificationComponents'
 
 export default {
   name: 'TenantPortal',
@@ -47,7 +51,7 @@ export default {
     }
   },
   components: {
-    Components
+    NotificationComponents
   },
   mounted () {
     document.title = 'Tenant Portal'
@@ -109,7 +113,6 @@ export default {
     padding-right: 10px;
     padding-left: 10px;
 }
-
 h1, h2 {
   font-weight: normal;
 }

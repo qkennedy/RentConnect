@@ -29,7 +29,7 @@
       </tbody>
     </table>
     <p v-if="properties.length === 0">
-      You have no notifications at this time.
+      You have no properties to view.
     </p>
   </div>
 </template>
