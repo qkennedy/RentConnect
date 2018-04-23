@@ -129,12 +129,13 @@ export default {
   },
   methods: {
     handleSubmit () {
-      // TODO: make this submit to the appropriate endpoint
-      axios.post('/rest/',
-        Components.collapse(this.formElements, [])
+      var formFields = Components.collapse(this.formElements, [])
+      formFields.applicantId = this.$session.get('userId')
+      axios.post('/rest/property/' + this.$route.params.id + '/apply',
+        formFields
       )
         .then(response => {
-          alert('Application submitted!')
+          this.$router.push('/TenantPortal')
         })
         .catch(e => {
           console.log(e)

@@ -173,6 +173,29 @@ server.post('/rest/property/create',
     });
 });
 
+server.post('/rest/property/:id/apply',
+  function(req, res, next) {
+    propertyFactory.createApplication(req.params.id, req.body.applicantId, req.body).then(property => {
+      res.send(201)
+      next()
+    });
+});
+
+server.get('/rest/application/:id',
+  function(req, res, next) {
+    propertyFactory.getApplicationById(req.params.id).then(application => {
+      res.send(application)
+      next()
+    })
+    .catch(e => {
+      if (e.description === 'No such application') {
+        res.send(400)
+      } else {
+        res.send(500)
+      }
+    });
+});
+
 server.post('/rest/property/:id/edit',
   function(req, res, next) {
     propertyFactory.editProperty(req.params.id, req.body).then(property => {
@@ -209,7 +232,8 @@ server.get('/rest/property/:propId/tenants',
 
 server.put('/rest/property/:propId/addTenant/:tenantId',
 function(req, res, next) {
-  propertyFactory.addTenant(req.params.propId, req.params.tenantId).then(() => {
+  // TODO: send a notification
+  propertyFactory.addTenant(req.params.tenantId, req.params.propId).then(() => {
     res.send(201)
     next()
   });

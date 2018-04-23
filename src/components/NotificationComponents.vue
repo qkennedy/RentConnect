@@ -20,6 +20,7 @@ Vue.component('notification-entry', {
       v-bind:creatorUsername="notif.username" v-bind:title="notif.mtitle" v-bind:status="notif.mstatus" />
     <maint-assign-notification v-if="notif.type === 'maintassign'" v-bind:requestId="notif.maint_req_id"
       v-bind:creatorUsername="notif.username" v-bind:title="notif.mtitle" />
+    <prop-assign-notification v-if="notif.type === 'propassign'" v-bind:address="notif.paddress" />
     </div>
     `
 })
@@ -110,6 +111,21 @@ Vue.component('maint-assign-notification', {
         The maintenance request <router-link v-bind:to="'/ViewMaintenanceRequest/' + requestId">{{ title }}</router-link> has been assigned to you.
       </p>
       <router-link v-bind:to="'/ViewMaintenanceRequest/' + requestId" class="btn btn-primary">View Request</router-link>
+    </div>
+  </div>`
+})
+
+Vue.component('prop-assign-notification', {
+  props: ['address'],
+  template:
+  `<div class="panel panel-default">
+    <div class="panel-heading">
+      Assigned Property
+    </div>
+    <div class="panel-body">
+      <p>
+        You have been assigned to the property at <b>{{ address }}</b>.
+      </p>
     </div>
   </div>`
 })

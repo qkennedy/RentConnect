@@ -2,151 +2,158 @@
   <div class="hello" id="applicationForm">
     <h2>Process application</h2>
     <!-- TODO: include information about the property -->
-    <form class="fullPageForm" id="loginForm" method="post" enctype="multipart/form-data" @submit.prevent="handleSubmit">
-      <table border="0px" id="loginTable">
-        <leftright-static-display v-for="element in pageElements" v-bind:type="element.type" v-bind:caption="element.caption" v-bind:name="element.name" v-bind:key="element.id" />
-      </table>
-      <p><input type="submit" name="accept" value="Accept" /><input type="submit" value="Reject" /><input type="submit" value="Ignore" /></p>
-    </form>
+    <h3>Property Information</h3>
+    <dl style="text-align:center">
+      <dt>
+        Address
+      </dt>
+      <dd>
+        {{ address }}
+      </dd>
+    </dl>
+    <h3>Application</h3>
+    <div class="column">
+      <dl style="text-align:center">
+        <app-entry v-for="e in pageElements" v-bind:key="e.id" v-bind:caption="e.caption" v-bind:value="e.value"></app-entry>
+      </dl>
+      <p><input type="submit" name="accept" value="Accept" v-on:click.stop="handleAccept" /><input type="submit" value="Reject" /><input type="submit" value="Ignore" /></p>
+    </div>
   </div>
 </template>
 
 <script>
 import axios from 'axios'
 import Components from '@/components/UIComponents'
+import Vue from 'vue'
 
 export default {
   name: 'Register',
   data () {
     return {
-      // TODO: populate this with the values from the application
       pageElements: [
         {
           id: 0,
           type: 'text',
           name: 'name',
           caption: 'Your name',
-          value: 'John Smith'
+          value: ''
         },
         {
           id: 1,
           type: 'text',
           name: 'ssn',
           caption: 'Your Social Security number',
-          value: '123-45-6789'
+          value: ''
         },
         {
           id: 2,
           type: 'text',
           name: 'dln',
           caption: 'Your driver\'s license number',
-          value: 'AAAAAA111111'
+          value: ''
         },
         {
           id: 3,
           type: 'text',
           name: 'othernames',
           caption: 'Other names used in the past 5 years (if applicable)',
-          value: 'N/A'
+          value: ''
         },
         {
           id: 4,
           type: 'text',
           name: 'phone',
           caption: 'Cell phone number',
-          value: '1-800-411-PAIN'
+          value: ''
         },
         {
           id: 5,
           type: 'email',
           name: 'email',
           caption: 'Your email address',
-          value: 'myemail@gmail.com'
+          value: ''
         },
         {
           id: 6,
           type: 'text',
           name: 'address',
           caption: 'Your current address',
-          value: '123 Sesame Street'
+          value: ''
         },
         {
           id: 7,
           type: 'text',
           name: 'city',
           caption: 'Your current city',
-          value: 'New York City'
+          value: ''
         },
         {
           id: 8,
           type: 'text',
           name: 'state',
           caption: 'Your current state',
-          value: 'New York'
+          value: ''
         },
         {
           id: 9,
           type: 'text',
           name: 'zip',
           caption: 'Your current ZIP code',
-          value: '12345'
+          value: ''
         },
         {
           id: 10,
           type: 'date',
           name: 'birthday',
           caption: 'Your birth date',
-          value: '1/1/1990'
+          value: ''
         },
         {
           id: 11,
           type: 'text',
           name: 'employer',
           caption: 'Your current employer',
-          value: 'FutureSight Technologies'
+          value: ''
         },
         {
           id: 12,
           type: 'text',
           name: 'jobtitle',
           caption: 'Your current job title',
-          value: 'Executive director or whatever'
+          value: ''
         },
         {
           // TODO: make this a link
           id: 13,
           type: 'file',
           name: 'proofofincome',
-          caption: 'Proof of income'
+          caption: ''
         },
         {
           id: 14,
           type: 'yesno',
           name: 'felony',
           caption: 'Have you ever been convicted of a felony?',
-          value: false
+          value: ''
         }
-      ]
+      ],
+      address: '',
+      applicantId: 0,
+      propertyId: 0
     }
   },
   methods: {
-    handleSubmit () {
-      var dummy = false
-      if (dummy) {
-        // TODO: make it so that if accepted, it adds the tenant to the property
-        axios.post('/rest/property/' + 1 /* property ID */ + '/addTenant/' + 1 /* tenant ID */,
-          Components.collapse(this.formElements, [''])
-        )
-          .then(response => {
-            // TODO: explain that the action was successful
-          })
-          .catch(e => {
-            console.log(e)
-          })
-      } else {
-        // TODO: reject application
-      }
+    handleAccept () {
+      console.log(this.propertyId)
+      axios.put('/rest/property/' + this.propertyId + '/addTenant/' + this.applicantId)
+        .then(response => {
+          this.$router.push('/LandlordPortal')
+        })
+        .catch(e => {
+          console.log(e)
+        })
     }
+    // TODO: add code to reject application
   },
   components: {
     Components
@@ -157,9 +164,52 @@ export default {
     if (typeof this.$session.get('userId') === 'undefined' || this.$session.get('userId') < 1 || this.$session.get('userRole') !== 'landlord') {
       this.$router.push('/')
     }
-    // TODO: get everything from the backend
+    axios.get('/rest/application/' + this.$route.params.id)
+      .then(response => {
+        this.applicantId = response.data.applicantId
+        this.propertyId = response.data.propertyId
+        for (var prop in response.data.application) {
+          if (response.data.application.hasOwnProperty(prop)) {
+            var i
+            for (i = 0; i < this.pageElements.length; i++) {
+              if (this.pageElements[i].name === prop) {
+                this.pageElements[i].value = response.data.application[prop]
+                break
+              }
+            }
+          }
+        }
+        axios.get('/rest/property/' + response.data.propertyId)
+          .then(response => {
+            this.address = response.data.address
+          })
+          .catch(error => {
+            console.log(error)
+          })
+      })
+      .catch(error => {
+        if (error.response.status === 400) {
+          this.$router.push('/404')
+        } else {
+          console.log(error)
+        }
+      })
   }
 }
+
+Vue.component('app-entry', {
+  props: ['caption', 'value'],
+  template: `
+  <div>
+    <dt>
+      {{ caption }}
+    </dt>
+    <dd>
+      {{ value }}
+    </dd>
+  </div>
+    `
+})
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

@@ -1,6 +1,7 @@
 var mysql = require('mysql');
 var Database = require('./database')
 const userFactory = require('./userFactory');
+const notificationsFactory = require('./notificationsFactory')
 
 var database = new Database();
 module.exports = {
@@ -91,12 +92,43 @@ module.exports = {
   },
 
   addTenant: function(tenantId, propertyId) {
+    notificationsFactory.createNotification(tenantId, '', '', null, propertyId, null, 'propassign')
     var db = database.open();
     return database.query(db, `insert into tenants (id, tenant_id, property_id)
                       values(null, ?,?);`,
-                      [tenantId, property_id]).then( () => {
+                      [tenantId, propertyId]).then( () => {
       return database.close(db);
     });
+  },
+
+  createApplication: function(propertyId, applicantId, data) {
+    // TODO: notify landlord
+    var db = database.open();
+    return database.query(db, `INSERT INTO application(property_id,applicant_id,status,application_data)
+    VALUES(?,?,'unread',?)`,
+                      [propertyId, applicantId, JSON.stringify(data)]).then( () => {
+      return database.close(db);
+    });
+  },
+
+  getApplicationById: function(applicationId) {
+    var db = database.open();
+    return database.query(db, 'SELECT * FROM application WHERE id=?', [applicationId]).then( rows => {
+      database.close(db);
+      if (rows.length > 0) {
+        var appData = {
+          application: JSON.parse(rows[0].application_data),
+          propertyId: rows[0].property_id,
+          applicantId: rows[0].applicant_id
+        }
+        return appData
+      } else {
+        let err = {
+          description: 'No such application'
+        }
+        throw err
+      }
+    })
   },
 
   //TODO Implement
