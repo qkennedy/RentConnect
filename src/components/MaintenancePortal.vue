@@ -13,8 +13,8 @@
     </div>
     <div class="one-third column options">
         <h3>Options</h3>
-        <ul class="optionlist">
-          <li class="first"><router-link to="AllMaintenanceRequests">My Requests</router-link></li>
+        <ul class="list-group">
+          <li class="list-group-item"><router-link to="AllMaintenanceRequests">My Requests</router-link></li>
         </ul>
     </div>
   </div>
