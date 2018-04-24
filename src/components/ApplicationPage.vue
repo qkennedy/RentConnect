@@ -110,12 +110,6 @@ export default {
         },
         {
           id: 13,
-          type: 'file',
-          name: 'proofofincome',
-          caption: 'Proof of income'
-        },
-        {
-          id: 14,
           type: 'yesno',
           name: 'felony',
           caption: 'Have you ever been convicted of a felony?'

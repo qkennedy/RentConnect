@@ -204,7 +204,6 @@ export default {
           this.status = response.data.status
           console.log(JSON.stringify(response.data))
           if (response.data.worker_id !== null) {
-            // TODO: make this get just the username without needing the auth token
             this.assignedUsername = response.data.worker_username
           }
         })

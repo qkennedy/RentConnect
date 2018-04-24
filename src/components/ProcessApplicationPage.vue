@@ -126,14 +126,7 @@ export default {
           value: ''
         },
         {
-          // TODO: make this a link
           id: 13,
-          type: 'file',
-          name: 'proofofincome',
-          caption: ''
-        },
-        {
-          id: 14,
           type: 'yesno',
           name: 'felony',
           caption: 'Have you ever been convicted of a felony?',

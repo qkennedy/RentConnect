@@ -54,7 +54,6 @@ export default {
       )
         .then(response => {
           if (response.status === 200 && 'id' in response.data) {
-            // TODO: Eventually update this to use JWT tokens
             var role = response.data.role
             this.$session.start()
             this.$session.set('userId', response.data.id)
