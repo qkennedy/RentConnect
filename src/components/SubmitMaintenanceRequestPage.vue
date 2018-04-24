@@ -29,7 +29,8 @@ export default {
           type: 'textarea',
           name: 'description',
           caption: 'Description'
-        },
+        }
+        /*
         {
           id: 2,
           type: 'file',
@@ -37,6 +38,7 @@ export default {
           caption: 'Image to attach',
           optional: true
         }
+        */
       ],
       propertyId: 1,
       myId: 0

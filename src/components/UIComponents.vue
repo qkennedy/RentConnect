@@ -33,13 +33,13 @@ Vue.component('property-li-info', {
 })
 
 Vue.component('form-input', {
-  props: ['type', 'name', 'caption', 'value', 'optional', 'divclass', 'labelclass', 'inputclass'],
+  props: ['type', 'name', 'caption', 'value', 'optional', 'divclass', 'labelclass', 'inputclass', 'min', 'max'],
   // template: '<tr><td class="leftColumn">{{ caption }}</td><td class="rightColumn" v-if="type!==\'yesno\' && type!==\'textarea\'"><input v-bind:type="type" v-bind:name="name" v-bind:placeholder="caption" v-bind:value="value" v-bind:required="!optional" /></td><td class="rightColumn" v-if="type===\'textarea\'"><textarea v-bind:name="name" rows="6" cols="30" v-bind:required="!optional"></textarea></td><td class="rightColumn" v-if="type===\'yesno\'"><input type="radio" v-bind:name="name" value="1" v-bind:checked="value === 1" v-bind:required="!optional" />Yes <input type="radio" v-bind:name="name" value="0" v-bind:checked="value === 0" v-bind:required="!optional" />No</td></tr>'
   template: `
   <div v-bind:class="divclass">
     <label v-bind:class="labelclass" v-bind:for="name">{{caption}}</label>
     <textarea v-if="type == 'textarea'" v-bind:class="inputclass" v-bind:id="name" v-bind:name="name">{{ value }}</textarea>
-    <input v-if="type !== 'textarea'" v-bind:type="type" v-bind:class="inputclass" v-bind:id="name" v-bind:name="name" v-bind:value="value">
+    <input v-if="type !== 'textarea'" v-bind:type="type" v-bind:class="inputclass" v-bind:id="name" v-bind:name="name" v-bind:value="value" v-bind:min="min" v-bind:max="max">
   </div>
   `
 })

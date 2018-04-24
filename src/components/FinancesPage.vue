@@ -3,7 +3,6 @@
     <h2>Finances</h2>
     <div v-if="role==='tenant'">
       <h3>Pay Rent</h3>
-      <!-- TODO: redo CSS on this to use bootstrap -->
       <form @submit.prevent="handleSubmit">
         <table border="0px" style="width: 100%">
           <tr>
@@ -12,8 +11,8 @@
             </td>
             <td style="width:50%">
               Amount due: ${{rentAmt}}<br />
-              Pay amount: $<input type="text" ref="rentamt" v-bind:value="rentAmt" />
-              <input type="submit" value="Pay" />
+              Pay amount: $<input type="number" ref="rentamt" v-bind:value="rentAmt" />
+              <input type="submit" value="Pay" class="btn btn-primary" />
             </td>
           </tr>
         </table>
@@ -36,19 +35,16 @@
     <table v-if="rentHistory.length > 0" class="table" id="financesTable" style="width:100%">
       <thead>
         <tr>
-          <th style="width:33%">
+          <th style="width:50%">
             Date
           </th>
-          <th style="width:33%">
+          <th style="width:50%">
             Amount
-          </th>
-          <th style="width:33%">
-            File
           </th>
         </tr>
       </thead>
       <tbody>
-        <rent-row v-for="rentEvent in rentHistory" v-bind:date="rentEvent.payment_date" v-bind:amount="rentEvent.payment_amount" v-bind:receiptLink="rentEvent.receiptLink" v-bind:late="!rentEvent.on_time" v-bind:key="rentEvent.id"></rent-row>
+        <rent-row v-for="rentEvent in rentHistory" v-bind:date="rentEvent.payment_date" v-bind:amount="rentEvent.payment_amount" v-bind:late="!rentEvent.on_time" v-bind:key="rentEvent.id"></rent-row>
       </tbody>
     </table>
     <p v-if="rentHistory.length === 0">
@@ -100,20 +96,22 @@ export default {
     updateEntries () {
       axios.get('/rest/renthistory/entries/property/' + this.propId)
         .then(response => {
-          // TODO: based on the rent due date and these receipts, determine if the rent has been paid yet
           // turn the rent due date into a usable string
-          var rentDueDate = new Date()
-          rentDueDate.setDate(this.rentMonthDay)
-          if (rentDueDate < new Date()) {
-            rentDueDate.setMonth(rentDueDate.getMonth() + 1)
-          }
-          this.dueDate = rentDueDate.toLocaleDateString()
-          var i
           var rentHistory = response.data
+
+          this.rentHistory = rentHistory
+
+          var nextDueDate = new Date()
+          nextDueDate.setDate(this.rentMonthDay)
+          if (nextDueDate < new Date()) {
+            nextDueDate.setMonth(nextDueDate.getMonth() + 1)
+          }
+          var i
           for (i = 0; i < response.data.length; i++) {
             rentHistory[i].payment_date = new Date(rentHistory[i].payment_date).toLocaleDateString()
           }
-          this.rentHistory = rentHistory
+
+          this.dueDate = nextDueDate.toLocaleDateString()
         })
         .catch(e => {
           console.log(e)
@@ -165,8 +163,8 @@ export default {
 }
 
 Vue.component('rent-row', {
-  props: ['date', 'amount', 'receiptLink', 'late'],
-  template: '<tr><td>{{ date }} <span v-if="late" style="color:#F00; font-weight:bold">LATE</span></td><td>{{ amount }}</td><td v-html="receiptLink"></td></tr>'
+  props: ['date', 'amount', 'late'],
+  template: '<tr><td>{{ date }} <span v-if="late" style="color:#F00; font-weight:bold">LATE</span></td><td>{{ amount }}</td></tr>'
 })
 </script>
 
