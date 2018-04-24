@@ -110,13 +110,6 @@ export default {
           type: 'textarea',
           name: 'text',
           caption: 'Comment'
-        },
-        {
-          id: 1,
-          type: 'file',
-          name: 'image',
-          caption: 'Attach image',
-          optional: true
         }
       ],
       comments: [],

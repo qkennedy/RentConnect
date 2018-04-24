@@ -137,7 +137,8 @@ module.exports = {
         var appData = {
           application: JSON.parse(rows[0].application_data),
           propertyId: rows[0].property_id,
-          applicantId: rows[0].applicant_id
+          applicantId: rows[0].applicant_id,
+          status: rows[0].status
         }
         return appData
       } else {

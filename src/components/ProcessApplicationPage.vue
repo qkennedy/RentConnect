@@ -11,12 +11,15 @@
       </dd>
     </dl>
     <h3>Application</h3>
+    <div class="alert alert-info" v-if="alreadyProcessed" role="alert" ref="warning">
+      You have already processed this application.
+    </div>
     <div>
       <dl style="text-align:center">
         <app-entry v-for="e in pageElements" v-bind:key="e.id" v-bind:caption="e.caption" v-bind:value="e.value"></app-entry>
       </dl>
-      <p>
-        <input type="submit" name="accept" value="Accept" v-on:click.stop="handleAccept" />
+      <p v-if="!alreadyProcessed">
+        <input type="submit" value="Accept" v-on:click.stop="handleAccept" />
         <input type="submit" value="Reject" v-on:click.stop="handleReject" />
         <input type="submit" value="Ignore" v-on:click.stop="handleIgnore" />
       </p>
@@ -135,11 +138,13 @@ export default {
       ],
       address: '',
       applicantId: 0,
-      propertyId: 0
+      propertyId: 0,
+      alreadyProcessed: false
     }
   },
   methods: {
     handleAccept () {
+      // TODO: actually mark the request as accepted
       axios.put('/rest/property/' + this.propertyId + '/addTenant/' + this.applicantId)
         .then(response => {
           this.$router.push('/LandlordPortal')
@@ -174,6 +179,10 @@ export default {
       .then(response => {
         this.applicantId = response.data.applicantId
         this.propertyId = response.data.propertyId
+        if (response.data.status === 'accepted' || response.data.status === 'rejected') {
+          this.alreadyProcessed = true
+        }
+        console.log(response.data)
         for (var prop in response.data.application) {
           if (response.data.application.hasOwnProperty(prop)) {
             var i
