@@ -19,7 +19,7 @@
         </tr>
       </thead>
       <tbody>
-        <property-entry v-for="prop in properties" v-bind:key="prop.id" v-bind:address="prop.address" v-bind:rentamt="prop.rent" v-bind:rentdue="prop.due_date" v-bind:id="prop.id"></property-entry>
+        <tenant-property-entry v-for="prop in properties" v-bind:key="prop.id" v-bind:address="prop.address" v-bind:rentamt="prop.rent" v-bind:rentdue="prop.due_date" v-bind:id="prop.id"></tenant-property-entry>
       </tbody>
     </table>
   </div>
@@ -57,7 +57,7 @@ export default {
   }
 }
 
-Vue.component('property-entry', {
+Vue.component('tenant-property-entry', {
   props: ['id', 'address', 'rentamt', 'rentdue'],
   template:
   `<tr>

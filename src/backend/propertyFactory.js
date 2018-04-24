@@ -94,7 +94,7 @@ module.exports = {
     var db = database.open();
     return database.query(db, `insert into tenants (id, tenant_id, property_id)
                       values(null, ?,?);`,
-                      [tenantId, property_id]).then( () => {
+                      [tenantId, propertyId]).then( () => {
       return database.close(db);
     });
   },
