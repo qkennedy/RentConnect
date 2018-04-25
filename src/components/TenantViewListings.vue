@@ -1,9 +1,6 @@
 <template>
   <div id="myPropertiesPage">
-    <h2>My Properties</h2>
-    <p>
-      <router-link to="CreateListing">List New Property</router-link>
-    </p>
+    <h2>Available Properties</h2>
     <table v-if="properties.length > 0" border="0" class="table" id="propsTable">
       <thead>
         <tr>
@@ -19,7 +16,11 @@
         </tr>
       </thead>
       <tbody>
+<<<<<<< HEAD
         <tenant-property-entry v-for="prop in properties" v-bind:key="prop.id" v-bind:address="prop.address" v-bind:rentamt="prop.rent" v-bind:rentdue="prop.due_date" v-bind:id="prop.id"></tenant-property-entry>
+=======
+        <property-apply-entry v-for="prop in properties" v-bind:key="prop.id" v-bind:address="prop.address" v-bind:rentamt="prop.rent" v-bind:rentdue="prop.due_date" v-bind:id="prop.id"></property-apply-entry>
+>>>>>>> 07a910ab0ff7db8fb2e5321e16a813bd432c31e8
       </tbody>
     </table>
   </div>
@@ -31,7 +32,7 @@ import Vue from 'vue'
 import Components from '@/components/UIComponents'
 
 export default {
-  name: 'MyPropertiesPage',
+  name: 'ViewAvailableListings',
   data () {
     return {
       properties: []
@@ -57,14 +58,18 @@ export default {
   }
 }
 
+<<<<<<< HEAD
 Vue.component('tenant-property-entry', {
+=======
+Vue.component('property-apply-entry', {
+>>>>>>> 07a910ab0ff7db8fb2e5321e16a813bd432c31e8
   props: ['id', 'address', 'rentamt', 'rentdue'],
   template:
   `<tr>
     <td>{{ address }}</td>
     <td>$ {{ rentamt }}<br />Due {{ rentdue }} of each month</td>
     <td>
-      <router-link v-bind:to="'/apply/' + id">Apply</router-link>
+      <router-link v-bind:to="'/Apply/' + id">Apply</router-link>
     </td>
   </tr>`
 })

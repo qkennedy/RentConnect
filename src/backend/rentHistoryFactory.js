@@ -20,11 +20,10 @@ module.exports = {
 
   createEntry: function(entry) {
     var db = database.open();
-    const created = (new Date()).toISOString().substring(0,10)
     return database.query(db, `INSERT INTO rent_history
-      (id, payer_id, property_id, payment_date, payment_amount, on_time)
-      VALUES (null, ?, ?, ?, ?, ?);`,
-      [entry.payerId, entry.propertyId, created, entry.paymentAmount, entry.onTime]).then( () => {
+      (payer_id, property_id, payment_date, payment_amount, on_time)
+      VALUES (?, ?, NOW(), ?, ?, ?);`,
+      [entry.payerId, entry.propertyId, entry.paymentAmount, entry.onTime]).then( () => {
       return database.close(db);
     });
   },

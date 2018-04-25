@@ -13,7 +13,6 @@
         <ul class="list-group">
           <li class="list-group-item"><router-link to="BulkNotification">Notify tenants</router-link></li>
           <li class="list-group-item"><router-link to="MyProperties">My properties</router-link></li>
-          <li class="list-group-item"><router-link to="Finances">View finances</router-link></li>
           <li class="list-group-item"><router-link to="AllMaintenanceRequests">Maintenance requests</router-link></li>
         </ul>
     </div>

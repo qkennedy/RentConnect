@@ -6,6 +6,14 @@ const maintRequestFactory = require('./MaintRequestFactory')
 const rentHistoryFactory = require('./rentHistoryFactory')
 const notificationsFactory = require('./notificationsFactory')
 
+//cross-reference the classes
+maintRequestFactory.userFactory = userFactory
+maintRequestFactory.notificationsFactory = notificationsFactory
+maintRequestFactory.propertyFactory = propertyFactory
+
+propertyFactory.userFactory = userFactory
+propertyFactory.notificationsFactory = notificationsFactory
+
 function respond(req, res, next) {
   res.send('you got' + req.params.resp);
   next();
@@ -173,6 +181,29 @@ server.post('/rest/property/create',
     });
 });
 
+server.post('/rest/property/:id/apply',
+  function(req, res, next) {
+    propertyFactory.createApplication(req.params.id, req.body.applicantId, req.body).then(property => {
+      res.send(201)
+      next()
+    });
+});
+
+server.get('/rest/application/:id',
+  function(req, res, next) {
+    propertyFactory.getApplicationById(req.params.id).then(application => {
+      res.send(application)
+      next()
+    })
+    .catch(e => {
+      if (e.description === 'No such application') {
+        res.send(400)
+      } else {
+        res.send(500)
+      }
+    });
+});
+
 server.post('/rest/property/:id/edit',
   function(req, res, next) {
     propertyFactory.editProperty(req.params.id, req.body).then(property => {
@@ -209,7 +240,15 @@ server.get('/rest/property/:propId/tenants',
 
 server.put('/rest/property/:propId/addTenant/:tenantId',
 function(req, res, next) {
-  propertyFactory.addTenant(req.params.propId, req.params.tenantId).then(() => {
+  propertyFactory.addTenant(req.params.tenantId, req.params.propId).then(() => {
+    res.send(201)
+    next()
+  });
+});
+
+server.put('/rest/property/application/:id/reject',
+function(req, res, next) {
+  propertyFactory.rejectApplication(req.params.id).then(() => {
     res.send(201)
     next()
   });
@@ -308,7 +347,7 @@ server.get('/rest/request/byWorkerId/:id',
 server.post('/rest/property/:propId/request/create',
   function(req, res, next) {
     //TODO Change calls on the backend to respond to these changes
-    maintRequestFactory.createRequest(req.body, req.body.creatorId, req.params.propId).then(request => {
+    maintRequestFactory.createRequest(req.body, req.body.creatorId, req.params.propId, propertyFactory).then(request => {
       res.send(request)
       next()
     });

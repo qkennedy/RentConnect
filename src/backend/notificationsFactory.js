@@ -9,7 +9,7 @@ module.exports = {
     let notifs;
       var db = database.open()
       return database.query(db, `
-        SELECT n.*,u.username,m.title AS mtitle,m.status AS mstatus FROM notifications AS n
+        SELECT n.*,u.username,m.title AS mtitle,m.status AS mstatus,p.address AS paddress FROM notifications AS n
         LEFT JOIN user AS u ON u.id=n.user_id
         LEFT JOIN property AS p ON p.id=n.property_id
         LEFT JOIN maint_request AS m ON m.id=n.maint_req_id
@@ -22,12 +22,12 @@ module.exports = {
      });
   },
 
-  createNotification: function(recId, subject, message, userId, propertyId, maint_req_id, type) {
+  createNotification: function(recId, subject, message, userId, propertyId, maint_req_id, type, application_id = null) {
     var db = database.open()
     return database.query(db, `INSERT INTO notifications
-      (id, recipient, subject, message, time, user_id, property_id, maint_req_id, type)
-      VALUES(Null, ?, ?, ?, now(), ?, ?, ?, ?);`,
-      [recId, subject, message, userId, propertyId, maint_req_id, type]).then(() => {
+      (recipient, subject, message, time, user_id, property_id, maint_req_id, application_id, type)
+      VALUES(?, ?, ?, now(), ?, ?, ?, ?, ?);`,
+      [recId, subject, message, userId, propertyId, maint_req_id, application_id, type]).then(() => {
       return database.close(db)
     })
   },

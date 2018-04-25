@@ -1,11 +1,11 @@
 var mysql = require('mysql');
 var Database = require('./database')
-const userFactory = require('./userFactory');
-const propertyFactory = require('./propertyFactory')
-const notificationsFactory = require('./notificationsFactory')
 
 var database = new Database();
 module.exports = {
+  propertyFactory: null,
+  notificationsFactory: null,
+  userFactory: null,
 
   getRequestById: function(id) {
     let request;
@@ -26,7 +26,7 @@ module.exports = {
 
   createRequest: function(request, creatorId, propertyId) {
     //first get the property info
-    return propertyFactory.getPropertyById(propertyId).then(propertyInfo => {
+    return this.propertyFactory.getPropertyById(propertyId).then(propertyInfo => {
       var db = database.open();
       const created = (new Date()).toISOString().substring(0,10)
       request.status = module.exports.convertStatusToInt(request)
@@ -35,7 +35,7 @@ module.exports = {
         VALUES(null,?,?,?,?,?,?,null,?);`,
         [propertyId, creatorId, created, request.title, request.description, request.attachedFiles, request.worker_id, 1])
         .then( data => {
-          notificationsFactory.createNotification(propertyInfo.landlord_id, '', '', creatorId, propertyId, data.insertId, 'newmaint') //notify the landlord
+          this.notificationsFactory.createNotification(propertyInfo.landlord_id, '', '', creatorId, propertyId, data.insertId, 'newmaint') //notify the landlord
           return {
             id: data.insertId
           }
@@ -89,7 +89,7 @@ module.exports = {
           }
           var i
           for (i = 0; i < toNotify.length; i++) {
-            notificationsFactory.createNotification(toNotify[i], '', '', request.creatorId, null, id, 'maintstatus')
+            this.notificationsFactory.createNotification(toNotify[i], '', '', request.creatorId, null, id, 'maintstatus')
           }
           return database.close(db)
         })
@@ -97,7 +97,7 @@ module.exports = {
   },
 
   assign: function(id, request) {
-    notificationsFactory.createNotification(request.worker, '', '', request.creatorId, null, id, 'maintassign')
+    this.notificationsFactory.createNotification(request.worker, '', '', request.creatorId, null, id, 'maintassign')
     this.addCommentForRequest(id, {
       creatorId: request.creatorId,
       text: 'Assigned request to worker',
@@ -121,7 +121,7 @@ module.exports = {
         comments = rows;
         var i;
         for (i = 0; i < comments.length; i++) {
-          comments[i].role = userFactory.convertRole(comments[i])
+          comments[i].role = this.userFactory.convertRole(comments[i])
         }
         return database.close(db)
       } )
@@ -156,7 +156,7 @@ module.exports = {
             }
             var i
             for (i = 0; i < toNotify.length; i++) {
-              notificationsFactory.createNotification(toNotify[i], '', '', comment.creatorId, null, requestId, 'maintcomment')
+              this.notificationsFactory.createNotification(toNotify[i], '', '', comment.creatorId, null, requestId, 'maintcomment')
             }
             return database.close(db)
           })

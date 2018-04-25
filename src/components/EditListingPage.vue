@@ -4,7 +4,7 @@
     <h2 v-else>Edit Listing</h2>
     <form class=".form-horizontal auth-form" id="loginForm" method="post" enctype="multipart/form-data" @submit.prevent="handleSubmit">
       <form-input v-for="element in formElements" v-bind:type="element.type" v-bind:caption="element.caption" v-bind:name="element.name" v-bind:value="element.value" v-bind:key="element.id"
-        divclass="form-group" labelclass="control-label auth-label" inputclass="form-control" />
+        v-bind:min="element.min" v-bind:max="element.max" divclass="form-group" labelclass="control-label auth-label" inputclass="form-control" />
       <p><input class="btn btn-primary" v-if="$route.params.id==null" type="submit" value="Submit Listing" /><input class="btn btn-primary" v-else type="submit" value="Update Listing" /></p>
     </form>
   </div>
@@ -28,24 +28,28 @@ export default {
         },
         {
           id: 1,
-          type: 'text',
+          type: 'number',
           name: 'rent',
           caption: 'Rent (monthly)',
-          value: ''
+          value: '',
+          min: 0
         },
         {
           id: 2,
           type: 'number',
           name: 'dueDate',
           caption: 'Rent due date (each month)',
-          value: ''
+          value: '',
+          min: 1,
+          max: 28
         },
         {
           id: 3,
           type: 'number',
           name: 'lateFee',
           caption: 'Rent late fee',
-          value: ''
+          value: '',
+          min: 0
         }
       ],
       myId: 0
