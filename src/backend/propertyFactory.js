@@ -116,6 +116,14 @@ module.exports = {
     })
   },
 
+  acceptApplication: function(applicationId) {
+    var db = database.open();
+    return database.query(db, `UPDATE application SET status='accepted' WHERE id=?`,
+                      [applicationId]).then( () => {
+      return database.close(db);
+    })
+  },
+
   createApplication: function(propertyId, applicantId, data) {
     var db = database.open();
     return database.query(db, 'SELECT landlord_id FROM property WHERE id=?', [propertyId])

@@ -144,10 +144,15 @@ export default {
   },
   methods: {
     handleAccept () {
-      // TODO: actually mark the request as accepted
       axios.put('/rest/property/' + this.propertyId + '/addTenant/' + this.applicantId)
         .then(response => {
-          this.$router.push('/LandlordPortal')
+          axios.put('/rest/property/application/' + this.$route.params.id + '/accept')
+            .then(response => {
+              this.$router.push('/LandlordPortal')
+            })
+            .catch(e => {
+              console.log(e)
+            })
         })
         .catch(e => {
           console.log(e)

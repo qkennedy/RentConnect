@@ -254,6 +254,14 @@ function(req, res, next) {
   });
 });
 
+server.put('/rest/property/application/:id/accept',
+function(req, res, next) {
+  propertyFactory.acceptApplication(req.params.id).then(() => {
+    res.send(201)
+    next()
+  });
+});
+
 server.put('/rest/property/:propId/removeTenant/:tenantId',
 function(req, res, next) {
   propertyFactory.removeTenant(req.params.propId, req.params.tenantId).then(() => {
