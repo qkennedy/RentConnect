@@ -6,8 +6,7 @@ class Database {
         host     : 'localhost',
         user     : 'root',
         password : 'postgres',
-        database : 'rentconnect',
-        socketPath: '/var/run/mysqld/mysqld.sock'
+        database : 'rentconnect'
       }
     }
     //Converts an array of
@@ -15,7 +14,7 @@ class Database {
       var newStr = '('
       for(var i = 0; i < array.length; i++) {
         newStr = newStr.concat('' + array[i])
-        if(i-1 < array.length) {
+        if(i < (array.length - 1)) {
           newStr = newStr.concat(', ')
         }
       }

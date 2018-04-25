@@ -20,21 +20,21 @@ module.exports = {
       var db = database.open();
       return database.query(db, 'select u.id,u.username,u.email,u.cell_number,u.role,t.property_id from user as u left join tenants as t on t.tenant_id=u.id where u.id = ?;', [id]).then( rows => {
         user = rows[0];
-        return database.close(db)
-      } )
-      .then( () => {
-        if (typeof user === 'undefined') {
-          user = {
-            id: -1
+        if(!user) {
+          let err = {
+            code: `User does not exist with id: ${id}`,
+            fatal: false
           }
-        } else {
-          user.role = module.exports.convertRole(user)
+          throw err;
         }
+        return database.close(db)
+      })
+      .then( () => {
+        user.role = module.exports.convertRole(user)
         return user;
      });
   },
-  getUserByUsername: function(username, getPassword = false) {
-    let user;
+  getUserByUsername: function(username, getPassword = false) {    let user;
       var pwdFields = ''
       if (getPassword) {
         pwdFields = 'password,auth_token,'
@@ -44,15 +44,28 @@ module.exports = {
         user = rows[0];
         if(!user) {
           err = {
-            description: `No user with username ${username}`
+            description: `No user with username ${username}`,
+            fatal: false
           }
+          throw err
         }
         return database.close(db)
       } )
       .then( () => {
         user.role = module.exports.convertRole(user)
         return user;
-     });
+     }).catch( err => {
+       console.log(err)
+       //If the error is fatal, don't close the database.
+       if(err.fatal) {
+         throw err;
+       } else {
+         return database.close(db).then(() => {
+           console.log(err)
+           throw err;
+         })
+       }
+     })
   },
 
   getBasicDetails: function(id) {
@@ -217,13 +230,13 @@ module.exports = {
 
   verifyToken: function(userId, token) {
     console.log(userId, token)
+    let verified = false
     var db = database.open()
     return database.query(db, 'SELECT id FROM user WHERE id=? AND auth_token=?', [userId, token]).then(rows => {
-      if (rows.length > 0) {
-        return true
-      } else {
-        return false
-      }
+      verified = rows.length > 0
+      return database.close(db);
+    }).then(() => {
+      return verified;
     })
   },
 

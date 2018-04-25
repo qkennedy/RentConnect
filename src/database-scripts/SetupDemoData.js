@@ -67,8 +67,7 @@ const tenant1 = {
   password: 'pass',
   email: 'qck@case.edu',
   phone: '3334445555',
-  role: 'tenant',
-  auth_token: 4
+  role: 'tenant'
 }
 
 const tenant2 = {
@@ -76,8 +75,7 @@ const tenant2 = {
   password: 'pass',
   email: 'jvvg@case.edu',
   phone: '1-800-962-9862',
-  role: 'tenant',
-  auth_token: 7
+  role: 'tenant'
 }
 
 const maint = {
@@ -85,8 +83,7 @@ const maint = {
   password: 'pass',
   email: 'maintenance@case.edu',
   phone: '1-800-411-PAIN',
-  role: 'maintenanceWorker',
-  auth_token: 656
+  role: 'maintenanceWorker'
 }
 
 userFactory.createUser(landlord).then(() => {
