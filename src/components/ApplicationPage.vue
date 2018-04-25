@@ -16,7 +16,7 @@
         <form-input v-for="element in formElements" v-bind:type="element.type" v-bind:caption="element.caption" v-bind:name="element.name"
           v-bind:key="element.id" divclass="form-group" labelclass="control-label auth-label" inputclass="form-control" />
       </table>
-      <p><input class="btn btn-primary" type="submit" value="Register" /></p>
+      <p><input class="btn btn-primary" type="submit" value="Submit Application" /></p>
     </form>
   </div>
 </template>

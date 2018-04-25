@@ -19,9 +19,9 @@
         <app-entry v-for="e in pageElements" v-bind:key="e.id" v-bind:caption="e.caption" v-bind:value="e.value"></app-entry>
       </dl>
       <p v-if="!alreadyProcessed">
-        <input type="submit" value="Accept" v-on:click.stop="handleAccept" />
-        <input type="submit" value="Reject" v-on:click.stop="handleReject" />
-        <input type="submit" value="Ignore" v-on:click.stop="handleIgnore" />
+        <input type="submit" value="Accept" class="btn btn-success" v-on:click.stop="handleAccept" />
+        <input type="submit" value="Reject" class="btn btn-danger" v-on:click.stop="handleReject" />
+        <input type="submit" value="Ignore" class="btn" v-on:click.stop="handleIgnore" />
       </p>
     </div>
   </div>

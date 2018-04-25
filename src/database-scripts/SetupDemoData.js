@@ -88,10 +88,13 @@ const maint = {
   auth_token: 656
 }
 
-userFactory.createUser(landlord);
-userFactory.createUser(tenant1)
-userFactory.createUser(tenant2)
-userFactory.createUser(maint)
+userFactory.createUser(landlord).then(() => {
+  userFactory.createUser(tenant1).then(() => {
+    userFactory.createUser(tenant2)
+  }).then(() => {
+    userFactory.createUser(maint)
+  })
+})
 
 //Initiate Properties
 

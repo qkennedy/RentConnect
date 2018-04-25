@@ -104,7 +104,7 @@ Vue.component('worker-entry', {
   props: ['id', 'username', 'landlordId'],
   template: '<tr>' +
   '<td>{{ username }}</td>' +
-  '<td><button v-on:click.stop="removeTenant(id, landlordId)">Remove</button></td>' +
+  '<td><button v-on:click.stop="removeTenant(id, landlordId)" class="btn btn-danger">Remove</button></td>' +
   '</tr>',
   methods: {
     removeTenant (id, landlordId) {
