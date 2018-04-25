@@ -22,6 +22,8 @@
             <li v-if="loggedIn"><router-link to="/Logout">Log Out</router-link></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
+            <li v-if="loggedIn"><router-link to="/UserProfile">Logged in as: <b>{{username}}</b></router-link></li>
+            <li v-if="!loggedIn"><router-link to="/Login">Not logged in</router-link></li>
           </ul>
         </div>
       </div>
