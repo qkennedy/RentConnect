@@ -114,9 +114,10 @@ CREATE TABLE `rentconnect`.`rent_history` (
     `type` varchar(32) NOT NULL,
     PRIMARY KEY (`id`)
   );
-ALTER TABLE `rentconnect`.`tenants`
+
+  ALTER TABLE notifications ADD application_id INT NULL;
+
+  ALTER TABLE `rentconnect`.`tenants`
 DROP FOREIGN KEY `property_id`;
 ALTER TABLE `rentconnect`.`tenants`
 DROP INDEX `property_id` ;
-
-  ALTER TABLE notifications ADD application_id INT NULL;

@@ -22,7 +22,7 @@ module.exports = {
     var db = database.open();
     return database.query(db, `INSERT INTO rent_history
       (payer_id, property_id, payment_date, payment_amount, on_time)
-      VALUES (?, ?, NOW(), ?, ?, ?);`,
+      VALUES (?, ?, NOW(), ?, ?);`,
       [entry.payerId, entry.propertyId, entry.paymentAmount, entry.onTime]).then( () => {
       return database.close(db);
     });

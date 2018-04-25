@@ -6,6 +6,9 @@ const maintRequestFactory = require('./../backend/MaintRequestFactory')
 const rentHistoryFactory = require('./../backend/rentHistoryFactory')
 const notificationsFactory = require('./../backend/notificationsFactory')
 
+propertyFactory.notificationsFactory = notificationsFactory
+propertyFactory.userFactory = userFactory
+
 var database = new Database();
 
 function isTableEmpty(tableName) {
@@ -53,21 +56,42 @@ const landlord = {
   username: 'babs',
   password: 'pass',
   email: 'babs@case.edu',
-  cell_number: 2168675309,
+  cell_number: '216-368-3333',
   role: "landlord",
   auth_token: 3
 }
 
-const tenant = {
+const tenant1 = {
   username: 'qck',
   password: 'pass',
   email: 'qck@case.edu',
-  cell_number: 3334445555,
+  cell_number: '3334445555',
   role: 'tenant',
   auth_token: 4
 }
+
+const tenant2 = {
+  username: 'jvvg',
+  password: 'pass',
+  email: 'jvvg@case.edu',
+  cell_number: '1-800-962-9862',
+  role: 'tenant',
+  auth_token: 7
+}
+
+const maint = {
+  username: 'sam',
+  password: 'pass',
+  email: 'maintenance@case.edu',
+  cell_number: '1-800-411-PAIN',
+  role: 'maintenanceWorker',
+  auth_token: 656
+}
+
 userFactory.createUser(landlord);
-userFactory.createUser(tenant)
+userFactory.createUser(tenant1)
+userFactory.createUser(tenant2)
+userFactory.createUser(maint)
 
 //Initiate Properties
 

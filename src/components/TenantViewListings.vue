@@ -16,11 +16,7 @@
         </tr>
       </thead>
       <tbody>
-<<<<<<< HEAD
-        <tenant-property-entry v-for="prop in properties" v-bind:key="prop.id" v-bind:address="prop.address" v-bind:rentamt="prop.rent" v-bind:rentdue="prop.due_date" v-bind:id="prop.id"></tenant-property-entry>
-=======
         <property-apply-entry v-for="prop in properties" v-bind:key="prop.id" v-bind:address="prop.address" v-bind:rentamt="prop.rent" v-bind:rentdue="prop.due_date" v-bind:id="prop.id"></property-apply-entry>
->>>>>>> 07a910ab0ff7db8fb2e5321e16a813bd432c31e8
       </tbody>
     </table>
   </div>
@@ -58,11 +54,7 @@ export default {
   }
 }
 
-<<<<<<< HEAD
-Vue.component('tenant-property-entry', {
-=======
 Vue.component('property-apply-entry', {
->>>>>>> 07a910ab0ff7db8fb2e5321e16a813bd432c31e8
   props: ['id', 'address', 'rentamt', 'rentdue'],
   template:
   `<tr>

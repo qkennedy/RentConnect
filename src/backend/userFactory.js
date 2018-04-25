@@ -214,7 +214,7 @@ module.exports = {
       });
     });
   },
-  
+
   verifyToken: function(userId, token) {
     console.log(userId, token)
     var db = database.open()
