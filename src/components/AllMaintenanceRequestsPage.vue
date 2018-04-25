@@ -7,16 +7,13 @@
     <table class="table" id="reqTable" style="width:100%" v-if="maintRequests.length > 0">
       <thead>
         <tr>
-          <th style="width:25%" scope="col">
+          <th style="width:34%" scope="col">
             Property
           </th>
-          <th style="width:25%" scope="col">
+          <th style="width:33%" scope="col">
             Status
           </th>
-          <th style="width:25%" scope="col">
-            Last Updated
-          </th>
-          <th style="width:25%" scope="col">
+          <th style="width:33%" scope="col">
             Actions
           </th>
         </tr>
@@ -92,7 +89,6 @@ Vue.component('maint-row', {
   <td v-if="status==='confirmed'" style="font-weight: bold; color:#060">Confirmed</td>
   <td v-if="status==='closed'">Closed</td>
   <td v-if="status==='pending'" style="font-weight: bold; color:#900">Pending</td>
-  <td>{{ lastUpdated }}</td>
   <td><router-link v-bind:to="'/ViewMaintenanceRequest/' + id">View</router-link></td>
   </tr>`
 })

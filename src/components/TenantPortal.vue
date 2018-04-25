@@ -12,7 +12,7 @@
         <h3>Options</h3>
         <ul class="list-group">
           <li class="list-group-item" v-if="assigned"><b>Contact landlord:</b><br />
-            Phone: <i v-if="landlordPhone===''">(not given)</i><span v-else>{{ landlordPhone }}</span><br />
+            Phone: <i v-if="landlordPhone===''||landlordPhone===null">(not given)</i><span v-else>{{ landlordPhone }}</span><br />
             Email: {{ landlordEmail }}
           </li>
           <li class="list-group-item" v-if="assigned"><b>My apartment:</b><br />Address: {{ address }}<br />Rent due: ${{ rentAmt }}, {{ rentDue }}</li>
@@ -65,6 +65,7 @@ export default {
           // assigned to a property
           axios.get('/rest/property/' + response.data.property_id)
             .then(response => {
+              console.log(response.data)
               this.assigned = true
               this.address = response.data.address
               this.rentAmt = response.data.rent

@@ -121,3 +121,5 @@ CREATE TABLE `rentconnect`.`rent_history` (
 DROP FOREIGN KEY `property_id`;
 ALTER TABLE `rentconnect`.`tenants`
 DROP INDEX `property_id` ;
+
+ALTER TABLE user ADD CONSTRAINT username_UNIQUE UNIQUE(username);

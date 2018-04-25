@@ -77,7 +77,11 @@ server.post('/rest/user/create',
     userFactory.createUser(req.body).then(() => {
       res.send(201)
       next()
-    });
+    })
+    .catch(() => {
+      res.send(400)
+      next()
+    })
 });
 
 server.post('/rest/user/addToRoster',

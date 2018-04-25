@@ -60,12 +60,6 @@ export default {
           type: 'text',
           name: 'phone',
           caption: 'Phone Number'
-        },
-        {
-          id: 5,
-          type: 'text',
-          name: 'name',
-          caption: 'Your Name'
         }
       ]
     }
@@ -117,7 +111,7 @@ export default {
               if (typeof e.response === 'undefined') {
                 console.log(e)
               } else if (e.response.status === 401) {
-                this.$refs.warning.innerHTML = 'Login failed. Please try again.'
+                this.$refs.warning.innerHTML = 'Failed to log you in.'
                 this.$refs.warning.style.display = 'block'
               } else {
                 console.log(e)
@@ -125,7 +119,14 @@ export default {
             })
         })
         .catch(e => {
-          console.log(e)
+          if (typeof e.response === 'undefined') {
+            console.log(e)
+          } else if (e.response.status === 400) {
+            this.$refs.warning.innerHTML = 'User or email address already registered. Please try again.'
+            this.$refs.warning.style.display = 'block'
+          } else {
+            console.log(e)
+          }
         })
     },
     resetWarning () {

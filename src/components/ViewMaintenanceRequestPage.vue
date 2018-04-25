@@ -7,6 +7,14 @@
         <div class="panel-body">
           <dl>
             <dt>
+              Address
+            </dt>
+            <dd>
+              {{ address }}
+            </dd>
+          </dl>
+          <dl>
+            <dt>
               Title
             </dt>
             <dd>
@@ -122,6 +130,7 @@ export default {
       status: '',
       canClose: false,
       assignedUsername: '',
+      address: '',
       workers: [
       ]
     }
@@ -195,7 +204,7 @@ export default {
           this.reqContent = response.data.description
           this.attachedImage = response.data.attachedImage
           this.status = response.data.status
-          console.log(JSON.stringify(response.data))
+          this.address = response.data.address
           if (response.data.worker_id !== null) {
             this.assignedUsername = response.data.worker_username
           }
@@ -251,7 +260,7 @@ Vue.component('maintenance-comment', {
           Person
         </dt>
         <dd>
-          {{person}} ({{role}})
+          {{person}} (<span v-if="role === 'maintenanceWorker'">maintenance worker</span><span v-else>{{role}}</span>)
         </dd>
       </dl>
       <dl>

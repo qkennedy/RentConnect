@@ -45,7 +45,8 @@ const releventTables =
   'maint_request',
   'comment',
   'rent_history',
-  'notifications']
+  'notifications',
+  'maint_roster']
 
 for(let table of releventTables) {
     clearDatabase(table);
@@ -56,7 +57,7 @@ const landlord = {
   username: 'babs',
   password: 'pass',
   email: 'babs@case.edu',
-  cell_number: '216-368-3333',
+  phone: '216-368-3333',
   role: "landlord",
   auth_token: 3
 }
@@ -65,7 +66,7 @@ const tenant1 = {
   username: 'qck',
   password: 'pass',
   email: 'qck@case.edu',
-  cell_number: '3334445555',
+  phone: '3334445555',
   role: 'tenant',
   auth_token: 4
 }
@@ -74,7 +75,7 @@ const tenant2 = {
   username: 'jvvg',
   password: 'pass',
   email: 'jvvg@case.edu',
-  cell_number: '1-800-962-9862',
+  phone: '1-800-962-9862',
   role: 'tenant',
   auth_token: 7
 }
@@ -83,7 +84,7 @@ const maint = {
   username: 'sam',
   password: 'pass',
   email: 'maintenance@case.edu',
-  cell_number: '1-800-411-PAIN',
+  phone: '1-800-411-PAIN',
   role: 'maintenanceWorker',
   auth_token: 656
 }

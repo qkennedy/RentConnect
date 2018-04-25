@@ -10,7 +10,7 @@ module.exports = {
   getRequestById: function(id) {
     let request;
       var db = database.open()
-      return database.query(db, `select m.*,p.landlord_id,w.username AS worker_username
+      return database.query(db, `select m.*,p.landlord_id,w.username AS worker_username,p.address
         from maint_request as m
         left join property as p on p.id=m.property_id
         LEFT JOIN user AS w ON w.id=m.worker_id
