@@ -64,6 +64,9 @@
       <h3>Comments</h3>
       <div class="panel-group">
         <maintenance-comment v-for="comment in comments" v-bind:image="comment.image" v-bind:person="comment.username" v-bind:date="comment.created_date" v-bind:assignedTo="comment.assignedTo" v-bind:comment="comment.comment_text" v-bind:role="comment.role" v-bind:key="comment.id"></maintenance-comment>
+        <p v-if="comments.length === 0">
+          There are no comments at this time.
+        </p>
       </div>
       <h3 v-if="landlord || status !== 'closed'">Leave a comment</h3>
       <form class="form-horizontal auth-form" v-if="landlord || status !== 'closed'" id="loginForm" method="post" enctype="multipart/form-data" @submit.prevent="handleSubmit">
