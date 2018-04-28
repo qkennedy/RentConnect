@@ -18,7 +18,7 @@
           <li class="list-group-item" v-if="assigned"><b>My apartment:</b><br />Address: {{ address }}<br />Rent due: ${{ rentAmt }}, {{ rentDue }}</li>
           <li class="list-group-item" v-if="assigned"><router-link to="Finances">View Finances</router-link></li>
           <li class="list-group-item" v-if="assigned"><router-link to="SubmitMaintenanceRequest">Submit Maintenance Request</router-link></li>
-          <li class="list-group-item" v-if="assigned"><router-link to="ManageDocuments">Manage Documents</router-link></li>
+          <!-- <li class="list-group-item" v-if="assigned"><router-link to="ManageDocuments">Manage Documents</router-link></li> -->
           <li class="list-group-item" v-if="assigned"><router-link to="AllMaintenanceRequests">Maintenance Requests</router-link></li>
           <li class="list-group-item" v-if="!assigned">
             <router-link to="ViewAvailableListings">View Available Listings</router-link>

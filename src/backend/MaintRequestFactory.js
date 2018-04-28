@@ -89,7 +89,7 @@ module.exports = {
           }
           var i
           for (i = 0; i < toNotify.length; i++) {
-            this.notificationsFactory.createNotification(toNotify[i], '', '', request.creatorId, null, id, 'maintstatus')
+            this.notificationsFactory.createNotification(toNotify[i], '', request.status, request.creatorId, null, id, 'maintstatus')
           }
           return database.close(db)
         })

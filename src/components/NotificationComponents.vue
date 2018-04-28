@@ -16,8 +16,8 @@ Vue.component('notification-entry', {
       v-bind:creatorUsername="notif.username" v-bind:title="notif.mtitle" />
     <maint-comment-notification v-if="notif.type === 'maintcomment'" v-bind:requestId="notif.maint_req_id"
       v-bind:creatorUsername="notif.username" v-bind:title="notif.mtitle" />
-    <maint-status-notification v-if="notif.type === 'maintcomment'" v-bind:requestId="notif.maint_req_id"
-      v-bind:creatorUsername="notif.username" v-bind:title="notif.mtitle" v-bind:status="notif.mstatus" />
+    <maint-status-notification v-if="notif.type === 'maintstatus'" v-bind:requestId="notif.maint_req_id"
+      v-bind:creatorUsername="notif.username" v-bind:title="notif.mtitle" v-bind:status="notif.message" />
     <maint-assign-notification v-if="notif.type === 'maintassign'" v-bind:requestId="notif.maint_req_id"
       v-bind:creatorUsername="notif.username" v-bind:title="notif.mtitle" />
     <prop-assign-notification v-if="notif.type === 'propassign'" v-bind:address="notif.paddress" />
@@ -89,12 +89,7 @@ Vue.component('maint-status-notification', {
     </div>
     <div class="panel-body">
       <p>
-        The status of the maintenance request <router-link v-bind:to="'/ViewMaintenanceRequest/' + requestId">{{ title }}</router-link> was changed to
-          <b v-if="status === 1">open</b>
-          <b v-if="status === 2">pending</b>
-          <b v-if="status === 3">closed</b>
-          <b v-if="status === 4">confirmed</b>
-         by {{ creatorUsername }}.
+        The status of the maintenance request <router-link v-bind:to="'/ViewMaintenanceRequest/' + requestId">{{ title }}</router-link> was changed to <b>{{ status }}</b> by {{ creatorUsername }}.
       </p>
       <router-link v-bind:to="'/ViewMaintenanceRequest/' + requestId" class="btn btn-primary">View Request</router-link>
     </div>

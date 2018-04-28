@@ -33,15 +33,17 @@ module.exports = {
   },
 
   sendBulkNotification: function(req) {
-    var db = database.open()
-    return database.query(db, 'SELECT tenant_id FROM tenants WHERE property_id IN(?)', [req.propIds])
-      .then(rows => {
-        var tenants = []
-        var i
-        for (i = 0; i < rows.length; i++) {
-          this.createNotification(rows[i].tenant_id, req.subject, req.body, this.landlordId, null, null, 'bulk')
-        }
-        return database.close(db)
-      })
+    if (req.propIds.length > 0) {
+      var db = database.open()
+      return database.query(db, 'SELECT tenant_id FROM tenants WHERE property_id IN(?)', [req.propIds])
+        .then(rows => {
+          var tenants = []
+          var i
+          for (i = 0; i < rows.length; i++) {
+            this.createNotification(rows[i].tenant_id, req.subject, req.body, this.landlordId, null, null, 'bulk')
+          }
+          return database.close(db)
+        })
+    }
   }
 }

@@ -28,12 +28,9 @@ server.post('/rest/login',
   function(req, res, next) {
     //Here is where we can process the login info
     //For now assume that password is being passed in directly
-    console.log(req.body.username, req.body.password)
     userFactory.verifyUser(req.body.username, req.body.password).then( user => {
-      console.log("Sending 200")
         res.send(200, user)
       }).catch( err => {
-        console.log(`Sending 401: ${err}`)
         res.send(401, err)
       });
       next()
@@ -63,7 +60,6 @@ server.get('/rest/user/:id/:token',
         res.send(user)
         next()
       }).catch(err => {
-        console.log(err)
         res.send(400, err)
         next()
       });
@@ -101,13 +97,11 @@ server.post('/rest/user/addToRoster',
 
 server.post('/rest/notifications/send',
   function(req, res, next) {
-    console.log(JSON.stringify(req.body.propIds))
     notificationsFactory.sendBulkNotification(req.body).then(() => {
       res.send(201)
       next()
     })
       .catch(err => {
-        console.log(err)
         res.send(400, err)
       });
 });
@@ -130,7 +124,6 @@ server.get('/rest/user/getRoster/:id',
       next()
     })
       .catch(err => {
-        console.log(err)
         res.send(400, err)
       });
 });
@@ -149,7 +142,6 @@ server.post('/rest/user/:id/changePassword',
       res.send(201)
       next()
     }).catch( err => {
-      console.log(`Sending 400: ${err}`)
       res.send(400, err)
     });
   }

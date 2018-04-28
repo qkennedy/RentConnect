@@ -117,9 +117,32 @@ CREATE TABLE `rentconnect`.`rent_history` (
 
   ALTER TABLE notifications ADD application_id INT NULL;
 
+  CREATE TABLE `maint_roster` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `landlord_id` int(11) DEFAULT NULL,
+  `worker_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+
+
   ALTER TABLE `rentconnect`.`tenants`
 DROP FOREIGN KEY `property_id`;
 ALTER TABLE `rentconnect`.`tenants`
 DROP INDEX `property_id` ;
 
 ALTER TABLE user ADD CONSTRAINT username_UNIQUE UNIQUE(username);
+
+ALTER TABLE notifications DROP time;
+ALTER TABLE notifications ADD time DATETIME;
+
+ALTER TABLE document DROP created_date;
+ALTER TABLE document ADD created_date DATETIME;
+
+ALTER TABLE maint_request DROP created_date;
+ALTER TABLE maint_request ADD created_date DATETIME;
+
+ALTER TABLE comment DROP created_date;
+ALTER TABLE comment ADD created_date DATETIME;
+
+ALTER TABLE rent_history DROP payment_date;
+ALTER TABLE rent_history ADD payment_date DATETIME;
