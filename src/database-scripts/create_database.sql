@@ -1,5 +1,5 @@
 
-CREATE DATABASE RentConnect;
+#CREATE DATABASE RentConnect;
 
 -- Create User Table
 -- TODO add actual name as a col
