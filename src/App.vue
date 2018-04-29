@@ -3,7 +3,7 @@
     <nav class="navbar navbar-default navbar-fixed-top">
       <div class="container-fluid">
         <div class="navbar-header">
-          <router-link class="navbar-brand" to="/">RentConnect</router-link>
+          <router-link class="navbar-brand" to="/" v-on:click="hideHeader">RentConnect</router-link>
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbarSupportedContent" aria-expanded="false" v-on:click.stop="toggleHeader">
             <span class="sr-only">Toggle navigation</span>
             <span class="icon-bar"></span>
@@ -13,17 +13,17 @@
         </div>
         <div class="collapse navbar-collapse" id="navbarSupportedContent" ref="navbar">
           <ul class="nav navbar-nav">
-            <li v-if="!loggedIn"><router-link to="/Login">Log In</router-link></li>
-            <li v-if="!loggedIn"><router-link to="/Register">Register</router-link></li>
-            <li v-if="loggedIn && role==='tenant'"><router-link to="/TenantPortal">My Portal</router-link></li>
-            <li v-if="loggedIn && role==='landlord'"><router-link to="/LandlordPortal">My Portal</router-link></li>
-            <li v-if="loggedIn && role==='maintenanceWorker'"><router-link to="/MaintenancePortal">My Portal</router-link></li>
-            <li v-if="loggedIn"><router-link to="/UserProfile">Edit Profile</router-link></li>
-            <li v-if="loggedIn"><router-link to="/Logout">Log Out</router-link></li>
+            <li v-if="!loggedIn" v-on:click="hideHeader"><router-link to="/Login">Log In</router-link></li>
+            <li v-if="!loggedIn" v-on:click="hideHeader"><router-link to="/Register">Register</router-link></li>
+            <li v-if="loggedIn && role==='tenant'" v-on:click="hideHeader"><router-link to="/TenantPortal">My Portal</router-link></li>
+            <li v-if="loggedIn && role==='landlord'" v-on:click="hideHeader"><router-link to="/LandlordPortal">My Portal</router-link></li>
+            <li v-if="loggedIn && role==='maintenanceWorker'" v-on:click="hideHeader"><router-link to="/MaintenancePortal">My Portal</router-link></li>
+            <li v-if="loggedIn" v-on:click="hideHeader"><router-link to="/UserProfile">Edit Profile</router-link></li>
+            <li v-if="loggedIn" v-on:click="hideHeader"><router-link to="/Logout">Log Out</router-link></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
-            <li v-if="loggedIn"><router-link to="/UserProfile">Logged in as: <b>{{username}}</b></router-link></li>
-            <li v-if="!loggedIn"><router-link to="/Login">Not logged in</router-link></li>
+            <li v-if="loggedIn" v-on:click="hideHeader"><router-link to="/UserProfile">Logged in as: <b>{{username}}</b></router-link></li>
+            <li v-if="!loggedIn" v-on:click="hideHeader"><router-link to="/Login">Not logged in</router-link></li>
           </ul>
         </div>
       </div>
@@ -81,6 +81,9 @@ export default {
       } else {
         this.$refs.navbar.style.display = 'none'
       }
+    },
+    hideHeader () {
+      this.$refs.navbar.style.display = 'none'
     }
   },
   mounted () {

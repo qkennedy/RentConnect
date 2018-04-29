@@ -145,7 +145,6 @@ export default {
     }
     axios.get('/rest/user/' + this.$session.get('userId') + '/' + this.$session.get('authToken'))
       .then(response => {
-        console.log(response.data)
         this.formElements[0].value = response.data.email
         this.formElements[1].value = response.data.cell_number
         this.myId = response.data.id
