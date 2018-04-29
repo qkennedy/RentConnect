@@ -4,14 +4,14 @@
       <div class="container-fluid">
         <div class="navbar-header">
           <router-link class="navbar-brand" to="/">RentConnect</router-link>
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbarSupportedContent" aria-expanded="false">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbarSupportedContent" aria-expanded="false" v-on:click.stop="toggleHeader">
             <span class="sr-only">Toggle navigation</span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
         </div>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="collapse navbar-collapse" id="navbarSupportedContent" ref="navbar">
           <ul class="nav navbar-nav">
             <li v-if="!loggedIn"><router-link to="/Login">Log In</router-link></li>
             <li v-if="!loggedIn"><router-link to="/Register">Register</router-link></li>
@@ -73,6 +73,13 @@ export default {
           .catch(e => {
             console.log(e)
           })
+      }
+    },
+    toggleHeader () {
+      if (this.$refs.navbar.style.display === 'none') {
+        this.$refs.navbar.style.display = 'block'
+      } else {
+        this.$refs.navbar.style.display = 'none'
       }
     }
   },
