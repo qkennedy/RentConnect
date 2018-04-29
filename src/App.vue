@@ -3,7 +3,7 @@
     <nav class="navbar navbar-default navbar-fixed-top">
       <div class="container-fluid">
         <div class="navbar-header">
-          <router-link class="navbar-brand" to="/" v-on:click="hideHeader">RentConnect</router-link>
+          <span v-on:click="hideHeader"><router-link class="navbar-brand" to="/">RentConnect</router-link></span>
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbarSupportedContent" aria-expanded="false" v-on:click.stop="toggleHeader">
             <span class="sr-only">Toggle navigation</span>
             <span class="icon-bar"></span>
@@ -76,10 +76,10 @@ export default {
       }
     },
     toggleHeader () {
-      if (this.$refs.navbar.style.display === 'none') {
-        this.$refs.navbar.style.display = 'block'
-      } else {
+      if (this.$refs.navbar.style.display === 'block') {
         this.$refs.navbar.style.display = 'none'
+      } else {
+        this.$refs.navbar.style.display = 'block'
       }
     },
     hideHeader () {
