@@ -15,10 +15,14 @@ var database = new Database();
 const saltRounds = 3;
 module.exports = {
 
-  getUserById: function(id) {
+  getUserById: function(id, getPassword = false) {
     let user;
+      var pwdFields = ''
+      if (getPassword) {
+        pwdFields = 'u.password,u.auth_token,'
+      }
       var db = database.open();
-      return database.query(db, 'select u.id,u.username,u.email,u.cell_number,u.role,t.property_id from user as u left join tenants as t on t.tenant_id=u.id where u.id = ?;', [id]).then( rows => {
+      return database.query(db, 'select ' + pwdFields + 'u.id,u.username,u.email,u.cell_number,u.role,t.property_id from user as u left join tenants as t on t.tenant_id=u.id where u.id = ?;', [id]).then( rows => {
         user = rows[0];
         if(!user) {
           let err = {
@@ -118,7 +122,7 @@ module.exports = {
   },
 
   changePassword: function(userId, oldPass, newPass) {
-    return this.getUserById(userId).then(user => {
+    return this.getUserById(userId, true).then(user => {
       return bcrypt.compare(oldPass, user.password).then( res => {
         if(res) {
           // Encrypt the new password, and update the database
