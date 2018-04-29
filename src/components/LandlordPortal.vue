@@ -1,14 +1,14 @@
 <template>
   <div class="portal" id="landlordPortal">
     <h2>Landlord Portal</h2>
-    <div class="two-thirds column notifications">
+    <div class="col-sm-8 col-md-8 col-lg-8 notifications">
       <h3>Notifications</h3>
       <notification-entry v-for="n in notifications" v-bind:notif="n" v-bind:key="n.id"></notification-entry>
       <p v-if="notifications.length === 0">
         You have no notifications at this time.
       </p>
     </div>
-    <div class="one-third column options">
+    <div class="col-sm-4 col-md-4 col-lg-4 options">
         <h3>Options</h3>
         <ul class="list-group">
           <li class="list-group-item"><router-link to="BulkNotification">Notify tenants</router-link></li>
@@ -53,18 +53,6 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.two-thirds {
-  width: 66.666667%
-}
-.one-third {
-  width: 33.333333%
-}
-.column {
-    float: left;
-    padding-right: 10px;
-    padding-left: 10px;
-}
-
 h1, h2 {
   font-weight: normal;
 }

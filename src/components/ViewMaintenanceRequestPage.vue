@@ -1,7 +1,7 @@
 <template>
   <div id="loginForm">
     <h2>View Maintenance Request</h2>
-    <div class="column one-third">
+    <div class="col-sm-4 col-md-4 col-lg-4">
       <div class="panel panel-default">
         <h3>Details</h3>
         <div class="panel-body">
@@ -60,7 +60,7 @@
         </div>
       </div>
     </div>
-    <div class="column two-thirds">
+    <div class="col-sm-8 col-md-8 col-lg-8">
       <h3>Comments</h3>
       <div class="panel-group">
         <maintenance-comment v-for="comment in comments" v-bind:image="comment.image" v-bind:person="comment.username" v-bind:date="comment.created_date" v-bind:assignedTo="comment.assignedTo" v-bind:comment="comment.comment_text" v-bind:role="comment.role" v-bind:key="comment.id"></maintenance-comment>
@@ -280,18 +280,6 @@ Vue.component('maintenance-comment', {
 </script>
 
 <style>
-.two-thirds {
-  width: 66.666667%
-}
-.one-third {
-  width: 33.333333%
-}
-.column {
-    float: left;
-    padding-right: 10px;
-    padding-left: 10px;
-}
-
 h1, h2 {
   font-weight: normal;
 }

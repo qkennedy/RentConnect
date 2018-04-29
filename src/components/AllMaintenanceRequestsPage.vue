@@ -70,10 +70,8 @@ export default {
         requestUrl = 'byWorkerId'
         break
     }
-    console.log('/rest/request/' + requestUrl + '/' + this.myId)
     axios.get('/rest/request/' + requestUrl + '/' + this.myId)
       .then(response => {
-        console.log(JSON.stringify(response.data))
         this.maintRequests = response.data
       })
       .catch(e => {
