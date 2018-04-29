@@ -19,6 +19,9 @@
         <property-apply-entry v-for="prop in properties" v-bind:key="prop.id" v-bind:address="prop.address" v-bind:rentamt="prop.rent" v-bind:rentdue="prop.due_date" v-bind:id="prop.id"></property-apply-entry>
       </tbody>
     </table>
+    <p v-if="properties.length === 0">
+      There are no available properties at this time.
+    </p>
   </div>
 </template>
 
