@@ -44,7 +44,8 @@ module.exports = {
           }
           return database.close(db)
         })
-    },
+    }
+  },
 
   //Testing Functions
 
