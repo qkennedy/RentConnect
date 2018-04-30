@@ -36,7 +36,18 @@ module.exports = {
       .then( () => {
         user.role = module.exports.convertRole(user)
         return user;
-     });
+     }).catch( err => {
+       console.log(err)
+       //If the error is fatal, don't close the database.
+       if(err.fatal) {
+         throw err;
+       } else {
+         return database.close(db).then(() => {
+           console.log(err)
+           throw err;
+         })
+       }
+     })
   },
   getUserByUsername: function(username, getPassword = false) {    let user;
       var pwdFields = ''

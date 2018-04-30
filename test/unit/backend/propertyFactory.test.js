@@ -1,4 +1,6 @@
+import userFactory from '@/backend/userFactory'
 import propertyFactory from '@/backend/propertyFactory'
+import notificationsFactory from '@/backend/notificationsFactory'
 import Database from '@/backend/database'
 jest.unmock('mysql')
 jest.mock('@/backend/database')
@@ -11,9 +13,7 @@ beforeEach(() => {
   const mockQuery = jest.fn()
   const mockClose = jest.fn()
 function setUpMockDatabase(retValue) {
-  const mockRows = [retValue]
-
-
+  const mockRows = retValue
 
   mockQuery.mockImplementation((sql, args) => {
     return Promise.resolve(mockRows)
@@ -32,7 +32,12 @@ function setUpMockDatabase(retValue) {
 
   var database = new Database();
   propertyFactory.setDatabase(database)
+  userFactory.setDatabase(database)
+  notificationsFactory.setDatabase(database)
 }
+
+propertyFactory.userFactory = userFactory
+propertyFactory.notificationsFactory = notificationsFactory
 
 test('get Property by Id', () => {
   const mockProperty = {
@@ -43,8 +48,58 @@ test('get Property by Id', () => {
     late_fee: 25
   }
 
-  setUpMockDatabase(mockProperty)
+  setUpMockDatabase([mockProperty])
   return propertyFactory.getPropertyById(1).then(property => expect(property).toEqual(mockProperty));
+});
+
+test('get Available Properties', () => {
+  const mockProperties = [
+    {
+      id : 1,
+      landlord_id : 2,
+      address: '123 Mock Strt',
+      rent: 420,
+      late_fee: 25
+    },
+    {
+      id : 2,
+      landlord_id : 3,
+      address: '221B Baker Strt',
+      rent: 600,
+      late_fee: 50
+    }
+  ]
+
+  setUpMockDatabase(mockProperties)
+  return propertyFactory.getAvailableProperties().then(properties => {
+    expect(properties).toContain(mockProperties[0]);
+    expect(properties).toContain(mockProperties[1]);
+  });
+});
+
+test('get Properties By Landlord Id', () => {
+  const mockProperties = [
+    {
+      id : 1,
+      landlord_id : 1,
+      address: '123 Mock Strt',
+      rent: 420,
+      late_fee: 25
+    },
+    {
+      id : 2,
+      landlord_id : 1,
+      address: '221B Baker Strt',
+      rent: 600,
+      late_fee: 50
+    }
+  ]
+
+  setUpMockDatabase(mockProperties)
+  return propertyFactory.getPropertiesByLandlordId(1).then(properties => {
+    expect(properties).toContain(mockProperties[0]);
+    expect(properties).toContain(mockProperties[1]);
+  });
 });
 
 test('Create Property', () => {
@@ -62,10 +117,132 @@ test('Create Property', () => {
   });
 });
 
+test('Edit A Property', () => {
+  var mockProperty = {
+    landlord_id : 2,
+    address: '123 Mock Strt',
+    rent: 420,
+    late_fee: 25,
+    due_date: 1
+  }
+  setUpMockDatabase({})
+  return propertyFactory.editProperty(1, mockProperty).then(() => {
+    expect(mockOpen.mock.calls.length).toEqual(1)
+    expect(mockQuery.mock.calls.length).toEqual(1)
+    expect(mockClose.mock.calls.length).toEqual(1)
+  });
+});
+
+
 test('Delete a Property', () => {
 
   setUpMockDatabase({})
   return propertyFactory.deleteProperty(2).then(() => {
+    expect(mockOpen.mock.calls.length).toEqual(1)
+    expect(mockQuery.mock.calls.length).toEqual(1)
+    expect(mockClose.mock.calls.length).toEqual(1)
+  });
+});
+
+test('Adding Tenant To A Property', () => {
+  let mockTenantId = 1
+  let mockPropertyId = 1
+  setUpMockDatabase({})
+  return propertyFactory.addTenant(mockTenantId, mockPropertyId).then(() => {
+    expect(mockOpen.mock.calls.length).toEqual(2)
+    expect(mockQuery.mock.calls.length).toEqual(2)
+    expect(mockClose.mock.calls.length).toEqual(2)
+  });
+});
+
+test('Reject an Application Creates a Notification', () => {
+  let applicationId = 1
+  let resp = {
+    applicant_id: 1,
+    property_id:1
+  }
+  setUpMockDatabase([resp])
+  return propertyFactory.rejectApplication(applicationId).then( () => {
+    expect(mockOpen.mock.calls.length).toEqual(2)
+    expect(mockQuery.mock.calls.length).toEqual(3)
+    expect(mockClose.mock.calls.length).toEqual(2)
+  });
+});
+
+test('Accept an Application', () => {
+  let propertyId = 5
+  let applicantId = 1
+  let mockData = {
+    insertId: 15
+  }
+  let resp = {
+    landlord_id: 1
+  }
+
+  setUpMockDatabase([resp])
+  return propertyFactory.createApplication(propertyId, applicantId, mockData).then(() => {
+    expect(mockOpen.mock.calls.length).toEqual(2)
+    expect(mockQuery.mock.calls.length).toEqual(3)
+    expect(mockClose.mock.calls.length).toEqual(2)
+  });
+});
+
+test('Create an Application', () => {
+  let applicationId = 1
+  let resp = {
+    applicant_id: 1,
+    property_id:1
+  }
+  setUpMockDatabase([resp])
+  return propertyFactory.acceptApplication(applicationId).then(() => {
+    expect(mockOpen.mock.calls.length).toEqual(1)
+    expect(mockQuery.mock.calls.length).toEqual(1)
+    expect(mockClose.mock.calls.length).toEqual(1)
+  });
+});
+
+test('Getting an Application By Id valid Id Succeeds', () => {
+  let applicationId = 1
+  let mockData = {
+    name: 'name',
+    felony: false,
+    insertId: 15
+  }
+  let resp = {
+    applicant_id: 1,
+    property_id:1,
+    status: 'open',
+    application_data: JSON.stringify(mockData)
+  }
+  let expectedApplication = {
+    applicantId: 1,
+    propertyId:1,
+    status: 'open',
+    application: mockData
+  }
+  setUpMockDatabase([resp])
+  return propertyFactory.getApplicationById(applicationId).then(application => {
+    expect(mockOpen.mock.calls.length).toEqual(1)
+    expect(mockQuery.mock.calls.length).toEqual(1)
+    expect(mockClose.mock.calls.length).toEqual(1)
+    expect(application).toEqual(expectedApplication)
+  });
+});
+
+test('Getting an Application By Invalid Id Throws Error', () => {
+  let applicationId = 1
+  let mockData = {
+    name: 'name',
+    felony: false,
+    insertId: 15
+  }
+  let expectedErr = {
+    description: 'No such application'
+  }
+  setUpMockDatabase([])
+  return propertyFactory.getApplicationById(applicationId).then(application => {
+  }).catch(err => {
+    expect(err).toEqual(expectedErr)
     expect(mockOpen.mock.calls.length).toEqual(1)
     expect(mockQuery.mock.calls.length).toEqual(1)
     expect(mockClose.mock.calls.length).toEqual(1)

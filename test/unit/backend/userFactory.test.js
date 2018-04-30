@@ -1,5 +1,6 @@
 import userFactory from '@/backend/userFactory'
 import Database from '@/backend/database'
+import bcrypt from 'bcrypt'
 jest.mock('@/backend/database')
 jest.unmock('mysql')
 
@@ -7,27 +8,42 @@ beforeEach(() => {
   return jest.clearAllMocks();
 });
 
-  const mockOpen = jest.fn()
-  const mockQuery = jest.fn()
-  const mockClose = jest.fn()
+const saltRounds = 3;
+
+const mockOpen = jest.fn()
+const mockQuery = jest.fn()
+const mockClose = jest.fn()
+const mockConvertArray = jest.fn()
 
   let connectRefusedCode = 'ECONNREFUSED'
   let invalidIdCode = 'User does not exist'
 
 function mockResolve(retValue) {
-  const mockRows = [retValue]
+  const mockRows = retValue
   mockQuery.mockImplementation((sql, args) => {
     return Promise.resolve(mockRows)
   })
    mockClose.mockImplementation(() => {
     return Promise.resolve()
   })
+  mockConvertArray.mockImplementation((array) => {
+    var newStr = '('
+    for(var i = 0; i < array.length; i++) {
+      newStr = newStr.concat('' + array[i])
+      if(i < (array.length - 1)) {
+        newStr = newStr.concat(', ')
+      }
+    }
+    newStr = newStr.concat(')');
+    return newStr;
+  })
 
     Database.mockImplementation( () => {
         return {
           open: mockOpen,
           query: mockQuery,
-          close: mockClose
+          close: mockClose,
+          convertArray: mockConvertArray
         };
   });
 
@@ -44,11 +60,25 @@ function mockResolve(retValue) {
       return Promise.resolve()
     })
 
+    mockConvertArray.mockImplementation((array) => {
+      var newStr = '('
+      for(var i = 0; i < array.length; i++) {
+        newStr = newStr.concat('' + array[i])
+        if(i < (array.length - 1)) {
+          newStr = newStr.concat(', ')
+        }
+      }
+      newStr = newStr.concat(')');
+      return newStr;
+    })
+
       Database.mockImplementation( () => {
           return {
             open: mockOpen,
             query: mockQuery,
-            close: mockClose
+            close: mockClose,
+            convertArray: mockConvertArray
+
           };
     });
     var database = new Database({
@@ -72,7 +102,7 @@ test('get User by Id', () => {
   }
   const output = resp
   output.role = 'tenant'
-  mockResolve(resp)
+  mockResolve([resp])
   return userFactory.getUserById(1).then(user => expect(user).toEqual(output));
 });
 
@@ -110,6 +140,38 @@ test('get User by Id, Database Not Running error', () => {
   });
 });
 
+test('get User by Username', () => {
+  const resp = {
+    id : 1,
+    username: "mockUser",
+    password: "mockPass",
+    email: "email@mock.com",
+    cell_number: "1112224444",
+    role: 1
+  }
+  const output = resp
+  output.role = 'tenant'
+  mockResolve([resp])
+  return userFactory.getUserByUsername('mockUser').then(user => expect(user).toEqual(output));
+});
+
+test('get User By UN no mapped user', () => {
+  const username = 'mockUser'
+  const mockError = {
+    "code": `No user with username ${username}` ,
+    "fatal": false
+  }
+
+  mockResolve([{}])
+  return userFactory.getUserByUsername(username).then(user => {
+  }).catch( err => {
+    expect(err.code).toEqual(mockError.code)
+    expect(err.fatal).toEqual(mockError.fatal)
+    expect(mockClose.mock.calls.length).toEqual(1)
+  });
+
+});
+
 test('get User Basic Details', () => {
   const resp = {
     username: "mockUser",
@@ -117,9 +179,31 @@ test('get User Basic Details', () => {
     cell_number: "1112224444"
   }
   const output = resp
-  mockResolve(resp)
+  mockResolve([resp])
   return userFactory.getBasicDetails(1).then(user => expect(user).toEqual(output));
 });
+
+test('get Users Basic Details', () => {
+  const resp = [
+    {
+      username: "mockUser",
+      email: "email@mock.com",
+      cell_number: "1112224444"
+    },
+    {
+      username: "mockUser2",
+      email: "email2@mock.com",
+      cell_number: "1800MOKCELL"
+    }
+  ];
+  mockResolve(resp)
+  return userFactory.getBasicDetForUsers([1,2]).then(users => {
+    expect(users).toContain(resp[0])
+    expect(users).toContain(resp[1])
+  });
+});
+
+
 
 test('Create User', () => {
   var user = {
@@ -144,6 +228,146 @@ test('Delete a User', () => {
     expect(mockOpen.mock.calls.length).toEqual(1)
     expect(mockQuery.mock.calls.length).toEqual(1)
     expect(mockClose.mock.calls.length).toEqual(1)
+  });
+});
+
+test('Edit a User', () => {
+  var user = {
+    username: "mockUser",
+    password: "mockPass",
+    email: "email@mock.com",
+    cell_number: "1112224444",
+    role: "tenant"
+  }
+  mockResolve({})
+  return userFactory.updateUser(user, 1).then(() => {
+    expect(mockOpen.mock.calls.length).toEqual(1)
+    expect(mockQuery.mock.calls.length).toEqual(1)
+    expect(mockClose.mock.calls.length).toEqual(1)
+  });
+});
+
+test('Can Send Notifications to Users in Properties', () => {
+  const propId = 1
+  const tenantIds = [1, 2]
+  const req = {
+    propIds: [propId],
+    subject: 'mockSubject',
+    body: 'mockBody'
+  }
+  const resp = tenantIds
+  mockResolve([resp])
+  return userFactory.sendNotifications(req).then(() => {
+    expect(mockOpen.mock.calls.length).toEqual(1)
+    expect(mockQuery.mock.calls.length).toEqual(2)
+    expect(mockClose.mock.calls.length).toEqual(1)
+  })
+});
+
+test('Can Add Maint. Workers To Roster', () => {
+  var mockUser = {
+    username: 'mockWorker',
+    landlordId: 1
+  }
+  var mockWorker = {
+    id: 2,
+    username: "mockWorker",
+    password: "mockPass",
+    email: "email@mock.com",
+    cell_number: "1112224444",
+    role: 3
+  }
+  mockResolve([mockWorker])
+  return userFactory.addUserToRoster(mockUser).then(() => {
+    expect(mockOpen.mock.calls.length).toEqual(2)
+    expect(mockQuery.mock.calls.length).toEqual(2)
+    expect(mockClose.mock.calls.length).toEqual(2)
+  });
+});
+
+test('Get Roster For Landlord', () => {
+  var resp = [
+    {
+      landlord_id: 1,
+      worker_id: 2
+    },
+    {
+      landlord_id: 1,
+      worker_id:3
+    }
+  ];
+  mockResolve(resp)
+  return userFactory.getRoster(1).then( rows => {
+    expect(mockOpen.mock.calls.length).toEqual(1)
+    expect(mockQuery.mock.calls.length).toEqual(1)
+    expect(mockClose.mock.calls.length).toEqual(1)
+    expect(rows.length).toEqual(2)
+    expect(rows).toContain(resp[0])
+    expect(rows).toContain(resp[1])
+  });
+});
+
+test('Can Delete Maint. Workers ', () => {
+  var mockRequest = {
+    workerId: 2,
+    landlordId: 1
+  }
+  mockResolve([{}])
+  return userFactory.removeFromRoster(mockRequest).then(() => {
+    expect(mockOpen.mock.calls.length).toEqual(1)
+    expect(mockQuery.mock.calls.length).toEqual(1)
+    expect(mockClose.mock.calls.length).toEqual(1)
+  });
+});
+
+test('Verify User passes on valid PW', () => {
+  const username = 'mockUser'
+  const password = 'mockPass'
+  const expectedUser = {
+    id: 1,
+    role: 'tenant',
+    auth_token: 10
+  }
+  return bcrypt.hash(password, saltRounds).then(function(hash) {
+    const resp = {
+      id : 1,
+      username: username,
+      password: hash,
+      email: "email@mock.com",
+      cell_number: "1112224444",
+      role: 1,
+      auth_token: 10
+    }
+    mockResolve([resp])
+
+    return userFactory.verifyUser(username, password).then( user => {
+      expect(user).toEqual(expectedUser)
+    });
+  });
+});
+
+test('Verify User Fails on invalid PW', () => {
+  const username = 'mockUser'
+  const password = 'mockPass'
+  const badPassword = 'notMockPass'
+  let expectedErr = {
+    description: "Invalid Password"
+  }
+  return bcrypt.hash(password, saltRounds).then(function(hash) {
+    const resp = {
+      id : 1,
+      username: username,
+      password: hash,
+      email: "email@mock.com",
+      cell_number: "1112224444",
+      role: 1
+    }
+    mockResolve([resp])
+
+    return userFactory.verifyUser(username, badPassword).then( user => {
+    }).catch(err => {
+      expect(err).toEqual(expectedErr)
+    })
   });
 });
 
