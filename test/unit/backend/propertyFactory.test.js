@@ -122,7 +122,8 @@ test('Edit A Property', () => {
     landlord_id : 2,
     address: '123 Mock Strt',
     rent: 420,
-    late_fee: 25
+    late_fee: 25,
+    due_date: 1
   }
   setUpMockDatabase({})
   return propertyFactory.editProperty(1, mockProperty).then(() => {
@@ -169,6 +170,24 @@ test('Reject an Application Creates a Notification', () => {
 });
 
 test('Accept an Application', () => {
+  let propertyId = 5
+  let applicantId = 1
+  let mockData = {
+    insertId: 15
+  }
+  let resp = {
+    landlord_id: 1
+  }
+
+  setUpMockDatabase([resp])
+  return propertyFactory.createApplication(propertyId, applicantId, mockData).then(() => {
+    expect(mockOpen.mock.calls.length).toEqual(2)
+    expect(mockQuery.mock.calls.length).toEqual(3)
+    expect(mockClose.mock.calls.length).toEqual(2)
+  });
+});
+
+test('Create an Application', () => {
   let applicationId = 1
   let resp = {
     applicant_id: 1,
@@ -176,6 +195,54 @@ test('Accept an Application', () => {
   }
   setUpMockDatabase([resp])
   return propertyFactory.acceptApplication(applicationId).then(() => {
+    expect(mockOpen.mock.calls.length).toEqual(1)
+    expect(mockQuery.mock.calls.length).toEqual(1)
+    expect(mockClose.mock.calls.length).toEqual(1)
+  });
+});
+
+test('Getting an Application By Id valid Id Succeeds', () => {
+  let applicationId = 1
+  let mockData = {
+    name: 'name',
+    felony: false,
+    insertId: 15
+  }
+  let resp = {
+    applicant_id: 1,
+    property_id:1,
+    status: 'open',
+    application_data: JSON.stringify(mockData)
+  }
+  let expectedApplication = {
+    applicantId: 1,
+    propertyId:1,
+    status: 'open',
+    application: mockData
+  }
+  setUpMockDatabase([resp])
+  return propertyFactory.getApplicationById(applicationId).then(application => {
+    expect(mockOpen.mock.calls.length).toEqual(1)
+    expect(mockQuery.mock.calls.length).toEqual(1)
+    expect(mockClose.mock.calls.length).toEqual(1)
+    expect(application).toEqual(expectedApplication)
+  });
+});
+
+test('Getting an Application By Invalid Id Throws Error', () => {
+  let applicationId = 1
+  let mockData = {
+    name: 'name',
+    felony: false,
+    insertId: 15
+  }
+  let expectedErr = {
+    description: 'No such application'
+  }
+  setUpMockDatabase([])
+  return propertyFactory.getApplicationById(applicationId).then(application => {
+  }).catch(err => {
+    expect(err).toEqual(expectedErr)
     expect(mockOpen.mock.calls.length).toEqual(1)
     expect(mockQuery.mock.calls.length).toEqual(1)
     expect(mockClose.mock.calls.length).toEqual(1)

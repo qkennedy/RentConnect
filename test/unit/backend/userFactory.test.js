@@ -275,7 +275,7 @@ test('Can Add Maint. Workers To Roster', () => {
     password: "mockPass",
     email: "email@mock.com",
     cell_number: "1112224444",
-    role: "maintenanceWorker"
+    role: 3
   }
   mockResolve([mockWorker])
   return userFactory.addUserToRoster(mockUser).then(() => {
