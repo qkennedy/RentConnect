@@ -22,10 +22,6 @@ class Database {
       return newStr;
     }
 
-    convertTimeFromDb(dbTime) {
-
-    }
-
     open() {
       return mysql.createConnection( this.conf )
     }

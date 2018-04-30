@@ -26,6 +26,7 @@ module.exports = {
 
   createRequest: function(request, creatorId, propertyId) {
     //first get the property info
+    let insertId;
     return this.propertyFactory.getPropertyById(propertyId).then(propertyInfo => {
       var db = database.open();
       const created = (new Date()).toISOString().substring(0,10)
@@ -36,13 +37,12 @@ module.exports = {
         [propertyId, creatorId, created, request.title, request.description, request.attachedFiles, request.worker_id, 1])
         .then( data => {
           this.notificationsFactory.createNotification(propertyInfo.landlord_id, '', '', creatorId, propertyId, data.insertId, 'newmaint') //notify the landlord
-          return {
-            id: data.insertId
-          }
+          insertId = data.insertId
         return database.close(db);
-      });
+      }).then( () => {
+        return {insertId: insertId};
+      })
     })
-
   },
 
   deleteRequest: function(id) {
