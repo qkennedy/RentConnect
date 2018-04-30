@@ -24,5 +24,8 @@ module.exports = {
     '!src/main.js',
     '!src/router/index.js',
     '!**/node_modules/**'
+  ],
+  testPathIgnorePatterns: [
+    'test/unit/specs/*'
   ]
 }

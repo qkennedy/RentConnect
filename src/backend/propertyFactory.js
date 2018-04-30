@@ -31,6 +31,18 @@ module.exports = {
      });
   },
 
+  getPropertiesByLandlordId: function(landLordId) {
+    let properties;
+      var db = database.open()
+      return database.query(db, 'select p.*,t.tenant_id,u.username AS tenant from property as p left join tenants as t on t.property_id=p.id left join user as u on u.id=t.tenant_id where p.landlord_id = ?;', [landLordId]).then( rows => {
+        properties = rows;
+        return database.close(db)
+      } )
+      .then( () => {
+      return properties;
+     });
+  },
+
   createProperty: function(property) {
     var db = database.open();
     return database.query(db, `INSERT INTO property
@@ -63,18 +75,6 @@ module.exports = {
       //Do I need to return results here?  Or does promise cover failure case
       return database.close(db);
     });
-  },
-
-  getPropertiesByLandlordId: function(landLordId) {
-    let properties;
-      var db = database.open()
-      return database.query(db, 'select p.*,t.tenant_id,u.username AS tenant from property as p left join tenants as t on t.property_id=p.id left join user as u on u.id=t.tenant_id where p.landlord_id = ?;', [landLordId]).then( rows => {
-        properties = rows;
-        return database.close(db)
-      } )
-      .then( () => {
-      return properties;
-     });
   },
 
   //Should this be here, or should it be in userFactory?
